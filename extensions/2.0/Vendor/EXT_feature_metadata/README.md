@@ -38,6 +38,7 @@ This extension is optional, meaning it should be placed in the `extensionsUsed` 
     - [Implicit Feature IDs](#implicit-feature-ids)
   - [Feature ID Textures](#feature-id-textures)
   - [Feature ID Instance Attributes](#feature-id-instance-attributes)
+  - [Null Feature IDs](#null-feature-ids)
 - [Feature Metadata](#feature-metadata)
   - [Schemas](#schemas)
   - [Feature Tables](#feature-tables)
@@ -233,6 +234,31 @@ Feature IDs may also be assigned to individual instances when using the [`EXT_me
           }
         }
       }
+    }
+  ]
+}
+```
+
+### Null Feature IDs
+
+It is possible to identify sections of a mesh or texture as not belonging to any feature. These vertices or texels are assigned the `nullFeatureId` value.
+
+`nullFeatureId` must be a whole number greater than or equal to `count`, where `count` is the total number of features in the feature table.
+
+This is useful for marking sections of a model that have not been semantically labelled. For example if a computer vision algorithm is trained to identify doors and sees ten doors on a textured building model, "door" texels would be assigned feature IDs [0, 9] and all other texels would be assigned the `nullFeatureId` value, in this case 10.
+
+```jsonc
+"EXT_feature_metadata": {
+  "featureIdTextures": [
+    {
+      "featureTable": "doors",
+      "featureIds": {
+        "texture": {
+          "index": 0
+        },
+        "channels": "r"
+      },
+      "nullFeatureId": 10
     }
   ]
 }

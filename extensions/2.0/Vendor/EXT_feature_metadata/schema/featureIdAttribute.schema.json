@@ -10,7 +10,11 @@
     },
     "featureIds": {
       "allOf": [ { "$ref": "featureIdAttribute.featureIds.schema.json" } ],
-      "description": "An object describing feature IDs to be used as indices to property arrays in the feature table. Feature IDs must be whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table."
+      "description": "An object describing feature IDs to be used as indices to property arrays in the feature table. Feature IDs must be whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table, or must equal `nullFeatureID` to indicate that no feature is assigned."
+    },
+    "nullFeatureId": {
+      "type": "number",
+      "description": "A value in the feature ID attribute that indicates that no feature is assigned. Must be a whole number greater than or equal to `count`, where `count` is the total number of features in the feature table."
     },
     "extensions": {},
     "extras": {}
