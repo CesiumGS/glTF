@@ -81,7 +81,7 @@ Features in a glTF primitive are identified in three ways:
 
 The most straightforward method for defining feature IDs is to store them in a glTF vertex attribute. Feature ID attributes must follow the naming convention `FEATURE_ID_X` where `X` is a non-negative integer. The first feature ID attribute is `FEATURE_ID_0`, the second `FEATURE_ID_1`, and so on.
 
-Feature IDs must be whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table.
+Feature IDs are whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table. Values outside this range indicate that no feature is associated.
 
 The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. There is no restriction on `componentType`.
 
@@ -180,7 +180,7 @@ Often per-texel feature IDs provide finer granularity than per-vertex feature ID
 }
 ```
 
-The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a positive integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs must be whole numbers — stored in linear space — in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table.
+The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a non-negative integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs are whole numbers in the range `[0, count - 1]` (inclusive), stored in linear space, where `count` is the total number of features in the feature table. Values outside this range indicate that no feature is associated.
 
 Texture filtering must be `9728` (NEAREST), or undefined, for any texture object referenced as a feature ID texture.
 
@@ -237,7 +237,7 @@ Schemas may be given a `name`, `description`, and `version`.
 
 ### Feature Tables
 
-A feature table stores property values in a parallel array format. Each property array corresponds to a class property. The values contained within a property array must match the data type of the class property. Furthermore, the set of property arrays must match one-to-one with the class properties. There is one exception - if a property is optional the feature table may omit that property.
+A feature table stores property values in a parallel array format. Each property array corresponds to a class property. The values contained within a property array must match the data type of the class property. Furthermore, the set of property arrays must match one-to-one with the class properties. There is one exception - if a property specifies a `noData` value, the feature table may omit that property.
 
 The schema and feature tables are defined in the root extension object in the glTF model. See the example below:
 
@@ -289,11 +289,13 @@ The schema and feature tables are defined in the root extension object in the gl
 
 `class` is the ID of the class in the schema. `count` is the number of features in the feature table, as well as the length of each property array. Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Table Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#table-format) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
 
+As in the core glTF specification, values of NaN, +Infinity, and -Infinity are never allowed.
+
 Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes.
 
 ### Feature Textures
 
-Feature textures (not to be confused with [Feature ID Textures](#feature-id-texture)) use textures rather than parallel arrays to store values. Feature textures are accessed directly by texture coordinates, rather than feature IDs. Feature textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces.
+Feature textures (not to be confused with [Feature ID Textures](#feature-id-texture)) use textures rather than parallel arrays to store values. Feature textures are accessed directly by texture coordinates, rather than feature IDs. Feature textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces. For each property that does not specify a `noData` value, a mapping to the corresponding texture channel or channels is required. Properties with a `noData` value are optional in feature textures instantiating a given class.
 
 Feature textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata) with a few additional constraints:
 

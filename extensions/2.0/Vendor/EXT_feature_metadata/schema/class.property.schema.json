@@ -62,38 +62,32 @@
       "default": false
     },
     "max": {
-      "type": [
-        "number",
-        "array"
+      "oneOf": [
+        {"type": "number"},
+        {"type": "array", "items": {"type": "number"}, "minItems": 1}
       ],
-      "items": {
-        "type": "number"
-      },
-      "description": "Maximum allowed values for property values. Only applicable for numeric types and fixed-length arrays of numeric types. For numeric types this is a single number. For fixed-length arrays this is an array with `componentCount` number of elements. The `normalized` property has no effect on these values: they always correspond to the integer values."
+      "description": "Maximum allowed value for the property. Only applicable for single-value numeric types, fixed-length arrays of numeric types, and `VECN` types. For single-value numeric types this is a single number. For fixed-length arrays and `VECN`, the maximum is an array with the same number of elements. The `normalized` property has no effect on the maximum, which always contains integer values."
     },
     "min": {
-      "type": [
-        "number",
-        "array"
+      "oneOf": [
+        {"type": "number"},
+        {"type": "array", "items": {"type": "number"}, "minItems": 1}
       ],
-      "items": {
-        "type": "number"
-      },
-      "description": "Minimum allowed values for property values. Only applicable for numeric types and fixed-length arrays of numeric types. For numeric types this is a single number. For fixed-length arrays this is an array with `componentCount` number of elements. The `normalized` property has no effect on these values: they always correspond to the integer values."
+      "description": "Minimum allowed value for the property. Only applicable for single-value numeric types, fixed-length arrays of numeric types, and `VECN` types. For single-value numeric types this is a single number. For fixed-length arrays and `VECN`, the minimum is an array with the same number of elements. The `normalized` property has no effect on the minimum, which always contains integer values."
     },
-    "default": {
-      "type": [
-        "boolean",
-        "number",
-        "string",
-        "array"
-      ],
-      "description": "A default value to use when the property value is not defined. If used, `optional` must be set to true. The type of the default value must match the property definition: For `BOOLEAN` use `true` or `false`. For `STRING` use a JSON string. For a numeric type use a JSON number. For `ENUM` use the enum `name`, not the integer value. For `ARRAY` use a JSON array containing values matching the `componentType`."
-    },
-    "optional": {
+    "required": {
       "type": "boolean",
-      "description": "If true, this property is optional.",
+      "description": "If required, the property must be present for every feature of its class. If not required, individual features may include `noData` values, or the entire property may be omitted from a feature table or texture. As a result, `noData` has no effect on a required property. Client implementations may use required properties to make performance optimizations.",
       "default": false
+    },
+    "noData": {
+      "oneOf": [
+        {"type": "number"},
+        {"type": "string"},
+        {"type": "array", "items": {"type": "number"}, "minItems": 1},
+        {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      ],
+      "description": "A `noData` value represents missing data — also known as a sentinel value — wherever it appears. If omitted (excluding variable-length `ARRAY` properties), property values exist for all features, and the property is required in feature tables or textures instantiating the class. For variable-length `ARRAY` elements, `noData` is implicitly `[]` and the property is never required; an additional `noData` array, such as `[\"UNSPECIFIED\"]`, may be provided if necessary. For fixed-length `ARRAY` properties, `noData` must be an array of length `componentCount`. For `VECN` properties, `noData` must be an array of length `N`. For `MATN` propperties, `noData` must be an array of length `N²`. `BOOLEAN` properties may not specify `noData` values. `ENUM` `noData` values must be a valid item name, not an integer value."
     },
     "semantic": {
       "type": "string",
@@ -106,9 +100,6 @@
   "dependencies": {
     "componentCount": [
       "type"
-    ],
-    "default": [
-      "optional"
     ]
   },
   "required": [
