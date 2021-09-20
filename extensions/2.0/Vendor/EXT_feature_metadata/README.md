@@ -101,14 +101,8 @@ The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be fals
       "mode": 4,
       "extensions": {
         "EXT_feature_metadata": {
-          "featureIdAttributes": [
-            {
-              "featureTable": "buildings",
-              "featureIds": {
-                "attribute": "FEATURE_ID_0"
-              }
-            }
-          ]
+          "featureTables": [0],
+          "featureIds": [{"attribute": 0}]
         }
       }
     }
@@ -147,15 +141,8 @@ For example
       "mode": 0,
       "extensions": {
         "EXT_feature_metadata": {
-          "featureIdAttributes": [
-            {
-              "featureTable": "placemarks",
-              "featureIds": {
-                "offset": 0,
-                "repeat": 1
-              }
-            }
-          ]
+          "featureTables": [0],
+          "featureIds": [{"offset": 0, "repeat": 1}]
         }
       }
     }
@@ -182,17 +169,9 @@ Often per-texel feature IDs provide finer granularity than per-vertex feature ID
       "material": 0,
       "extensions": {
         "EXT_feature_metadata": {
-          "featureIdTextures": [
-            {
-              "featureTable": "buildingFeatures",
-              "featureIds": {
-                "texture": {
-                  "texCoord": 0,
-                  "index": 0
-                },
-                "channels": "r"
-              }
-            }
+          "featureTables": [0],
+          "featureIds": [
+            {"index": 0, "texCoord": 0, "channel": 0}
           ]
         }
       }
@@ -201,7 +180,9 @@ Often per-texel feature IDs provide finer granularity than per-vertex feature ID
 }
 ```
 
-`texture` is a glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. `channels` must be a single channel (`"r"`, `"g"`, `"b"`, or `"a"`). Furthermore, feature IDs must be whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table. Texture filtering should be disabled when accessing feature IDs.
+The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a positive integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs must be whole numbers — stored in linear space — in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the feature table.
+
+Texture filtering must be `9728` (NEAREST), or undefined, for any texture object referenced as a feature ID texture.
 
 ### Feature ID Instance Attributes
 
@@ -222,14 +203,8 @@ Feature IDs may also be assigned to individual instances when using the [`EXT_me
           },
         },
         "EXT_feature_metadata": {
-          "featureIdAttributes": [
-            {
-              "featureTable": "trees",
-              "featureIds": {
-                "attribute": "FEATURE_ID_0"
-              }
-            }
-          ]
+          "featureTables": [0],
+          "featureIds": [{"attribute": 0}]
         }
       }
     }
@@ -290,24 +265,23 @@ The schema and feature tables are defined in the root extension object in the gl
           }
         }
       },
-      "featureTables": {
-        "trees": {
-          "class": "tree",
-          "count": 10,
-          "properties": {
-            "height": {
-              "bufferView": 0
-            },
-            "birdCount": {
-              "bufferView": 1
-            },
-            "species": {
-              "bufferView": 2,
-              "stringOffsetBufferView": 3
-            }
+      "featureTables": [{
+        "name": "tree",
+        "class": "tree",
+        "count": 10,
+        "properties": {
+          "height": {
+            "bufferView": 0
+          },
+          "birdCount": {
+            "bufferView": 1
+          },
+          "species": {
+            "bufferView": 2,
+            "stringOffsetBufferView": 3
           }
         }
-      }
+      }]
     }
   }
 }
@@ -346,28 +320,27 @@ _Class and feature texture_
         "classes": {
           "heatSample": {
             "properties": {
-              "heatSample": {
+              "heatLoss": {
                 "type": "UINT8",
                 "normalized": true
-              }
+              },
+              "insulation": {
+                "type": "UINT8",
+                "normalized": true
+              },
             }
           }
         }
       },
-      "featureTextures": {
-        "heatLossTexture": {
-          "class": "heatSample",
-          "properties": {
-            "heatLoss": {
-              "texture": {
-                "index": 0,
-                "texCoord": 0
-              },
-              "channels": "r"
-            }
-          }
+      "featureTextures": [{
+        "class": "heatSample",
+        "index": 0,
+        "texCoord": 0,
+        "properties": {
+          "heatLoss": [0],
+          "insulation": [1]
         }
-      }
+      }]
     }
   }
 }
@@ -387,7 +360,7 @@ _Primitive_
       "material": 0,
       "extensions": {
         "EXT_feature_metadata": {
-          "featureTextures": ["heatLossTexture"]
+          "featureTextures": [0]
         }
       }
     }
@@ -396,7 +369,9 @@ _Primitive_
 ```
 
 
-`texture` is a glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. `texCoord` refers to the texture coordinate set of the referring primitive. `channels` is a string matching the pattern `"^[rgba]{1,4}$"` that specifies which texture channels store property values.
+A `featureTexture` object extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. `texCoord` refers to the texture coordinate set of the referring primitive. The `properties` map specifies the texture channels providing data for all required class properties, and perhaps optional class properties. An array of integer index values identify channels, where multiple channels may be used only for fixed-length arrays of 2, 3, or 4 components. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. All values are stored in linear space.
+
+Texture filtering must be `9728` (NEAREST), `9729` (LINEAR), or undefined, for any texture object referenced as a feature texture.
 
 ## Binary Data Storage
 
@@ -460,3 +435,5 @@ Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanc
 * **Version 2.0.0** September 2021
   * Renamed `constant` to `offset`, and `divisor` to `repeat`
   * Removed `statistics` specification, to be considered as a future extension
+  * Removed `featureIdAttributes` and `featureIdTextures`, replaced with `featureIds` and `featureTables`.
+  * Removed string ID references to feature tables and textures, replaced with integer IDs.
