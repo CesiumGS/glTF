@@ -21,73 +21,82 @@ Draft
 
 Written against the glTF 2.0 specification.
 
-Adds new functionality to the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing).
+Optionally, this extension may be used in conjunction with [`EXT_mesh_gpu_instancing`](../../EXT_mesh_gpu_instancing). When used together, certain GPU instance attributes defined by `EXT_mesh_gpu_instancing` are employed by this extension for additional functionality.
 
 <!-- omit in toc -->
-## Optional vs. Required
-
-This extension is optional, meaning it should be placed in the `extensionsUsed` list, but not in the `extensionsRequired` list.
-
-<!-- omit in toc -->
-## Contents
+## Table of Contents
 
 - [Overview](#overview)
-- [Feature Identification](#feature-identification)
-  - [Feature ID Vertex Attributes](#feature-id-vertex-attributes)
-    - [Feature ID Accessors](#feature-id-accessors)
-    - [Implicit Feature IDs](#implicit-feature-ids)
-  - [Feature ID Textures](#feature-id-textures)
-  - [Feature ID Instance Attributes](#feature-id-instance-attributes)
+- [Feature IDs](#feature-ids)
+  - [Feature ID by Vertex](#feature-id-by-vertex)
+    - [Vertex Attribute](#vertex-attribute)
+    - [Implicit Vertex Attribute](#implicit-vertex-attribute)
+  - [Feature ID by Texture Coordinates](#feature-id-by-texture-coordinates)
+  - [Feature ID by GPU Instance](#feature-id-by-gpu-instance)
 - [Feature Properties](#feature-properties)
-  - [Schemas](#schemas)
+  - [Schema Definitions](#schema-definitions)
+    - [Schema](#schema)
+    - [Class](#class)
+    - [Enum](#enum)
+    - [Enum Values](#enum-values)
+    - [Class Property](#class-property)
   - [Property Tables](#property-tables)
   - [Property Textures](#property-textures)
 - [Binary Data Storage](#binary-data-storage)
+- [Optional vs. Required](#optional-vs-required)
+- [Schema](#schema-1)
 - [Examples](#examples)
-- [Schema](#schema)
 - [Revision History](#revision-history)
 
 ## Overview
 
-A **feature** is an entity that has both geometry and associated properties. In Geographic Information Systems (GIS) a feature is an entity such as a point, polyline, or polygon that represents some element on a map. In another domain like CAD/BIM a feature might be a component of a design model. A feature could also be a 3D building in a city, a tree in a forest, a sample point in a weather model, or a patch of texels on a 3D model.
+This extension defines a means of storing structured metadata associated with geometry and subcomponents of geometry within a glTF 2.0 asset.
 
-This extension allows batching features for efficient streaming to a client for rendering and interaction. Efficiency comes from transferring multiple features in the same glTF and rendering them in the least number of draw calls necessary.
+In most realtime 3D contexts, performance requirements demand minimizing the number of nodes and meshes in an asset. These requirements compete with interactivity, as applications may wish to merge static objects while still supporting some level of interaction or inspection on those objects. Common performance optimizations, like merging or GPU instancing, may destroy references to distinct objects, their features, and their behaviors.
 
-Feature IDs enable individual features to be identified and updated at runtime. For example, a selected feature could be shown/hidden, or highlighted a different color. Feature IDs may be assigned on a per-vertex, per-texel, or per-instance basis.
+By defining a representation of conceptual objects ("features") distinct from rendered geometry, and a means of associating structured metedata ("properties") with those features, this extension allows applications to preserve granular details of 3D assets for inspection and interaction without compromising runtime performance and draw calls.
 
-Feature IDs may be used to access associated properties, such as passing a building's ID to get its address. Feature properties are stored in a compact binary tabular format described in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
+Concepts and terminology used throughout this document are references to the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md), which should be considered a normative reference for definitions and requirements. This extension specification also provides inline definitions of terms where appropriate.
 
-![Building Example](figures/feature-table-buildings.png)
+See [Examples](#examples) for a more detailed list of use cases for this extension.
 
-In the image above, a glTF consists of two houses batched together into a single primitive. A feature ID attribute on the primitive indicates that all of the vertices making up the first house have a feature ID of 0, while all vertices making up the second house have the feature ID 1. The feature ID is then used to access the building's properties from the property table.
+> **Disambiguation:** glTF has other methods of storing details that could similarly be described as metadata or properties, including [`KHR_xmp_json_ld`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_xmp_json_ld), Extras, and Extensions. While those methods associate data with discrete objects in a glTF asset — nodes, materials, etc. — `EXT_mesh_features` is uniquely suited for properties of more granular conceptual features, like detailed subregions of a geometry or texture.
 
-Feature properties may also be stored directly in textures. This is especially useful when texture mapping high frequency data, such as material properties, to less detailed 3D surfaces. Property textures enable new styling and analytics capabilities, and complement glTF PBR textures.
+## Feature IDs
 
-See [Examples](#examples) for a full list of use cases for this extension.
+A **feature** is conceptual object associated with both geometry and properties. Similar concepts exist in various industries and domains. In Geographic Information Systems (GIS) a feature is an entity such as a point, polyline, or polygon that represents some element on a map. In another domain like CAD/BIM a feature might be a component of a design model, such as a pipe. A feature could also be a 3D building in a city, a tree in a forest, a sample point in a weather model, or a patch of texels on a 3D model.
 
-## Feature Identification
+Features are identified within a 3D asset by **Feature IDs** — unique identifiers associated with parts of the asset in one of three ways:
 
-Features in a glTF primitive are identified in three ways:
+* **Feature ID by Vertex:** Per-vertex ID, in a vertex attribute or implicitly by index
+* **Feature ID by Texture Coordinates:** Per-texel ID, in a channel of a Feature ID Texture
+* **Feature ID by GPU Instance:** Per-instance ID, in an instance attribute accessor (requires [`EXT_mesh_gpu_instancing`](../../EXT_mesh_gpu_instancing))
 
-* Per-vertex using a vertex attribute
-* Per-texel using a glTF texture
-* Per-instance using an instance attribute with the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing)
+```diff
+-! DO NOT SUBMIT: Several concepts in this illustration are not yet defined. !-
+```
 
 <img src="figures/metadata-access.png"  alt="Metadata Access" width="600">
 
-### Feature ID Vertex Attributes
+### Feature ID by Vertex
 
-#### Feature ID Accessors
+#### Vertex Attribute
 
-The most straightforward method for defining feature IDs is to store them in a glTF vertex attribute. Feature ID attributes must follow the naming convention `FEATURE_ID_X` where `X` is a non-negative integer. The first feature ID attribute is `FEATURE_ID_0`, the second `FEATURE_ID_1`, and so on.
+Per-vertex feature IDs may be defined explicitly in a vertex attribute accessor.
 
-Feature IDs are whole numbers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the property table. Values outside this range indicate that no feature is associated.
+Names of feature ID attribute semantics follow the naming convention `FEATURE_ID_n` where `n` must start with 0 and continue with consecutive positive integers: `FEATURE_ID_0`, `FEATURE_ID_1`, etc. Indices must not use leading zeroes to pad the number of digits (e.g., `FEATURE_ID_01` is not allowed).
 
-The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. There is no restriction on `componentType`.
+Values of feature IDs are non-negative integers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the property table. Values outside this range indicate that no feature is associated.
 
-> **Implementation Note:** since glTF accessors do not support `UNSIGNED_INT` types for 32-bit integers, `FLOAT` may be used instead. This allows for integer feature IDs up to 2²⁴. For smaller ranges of feature IDs, `UNSIGNED_BYTE` or `UNSIGNED_SHORT` can still be used. Note that this requires aligning each feature ID to 4-byte boundaries to adhere to glTF's alignment rules.
+The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. Accessor's `componentType` is not restricted.
 
-![Property Table](figures/feature-table.png)
+> **Implementation Note:** since glTF accessors do not support `UNSIGNED_INT` types for 32-bit integers, `FLOAT` may be used instead allowing integer feature IDs up to 2²⁴. For smaller ranges of feature IDs, `UNSIGNED_BYTE` or `UNSIGNED_SHORT` should be used. As with other vertex attributes, each element of a feature ID accessor must align to 4-byte boundaries.
+
+```diff
+-! DO NOT SUBMIT: Change illustration back to PNG. !-
+```
+
+![Property Table](figures/feature-table.svg)
 
 ```jsonc
 {
@@ -110,11 +119,11 @@ The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be fals
 }
 ```
 
-#### Implicit Feature IDs
+#### Implicit Vertex Attribute
 
-In some cases it is possible to define feature IDs implicitly, such as when all vertices in a primitive have the same feature ID or when each vertex in a primitive has a different feature ID.
+Per-vertex feature IDs may also be defined implicitly, as a function of vertex index within the primitive. Implicit feature IDs reduce storage costs in several common cases, when all vertices in a primitive share the same feature ID, or each sequential group of `N` vertices (such as a triangle face) share the same feature ID.
 
-This is accomplished by using `offset` and `repeat`.
+Implicit feature IDs are a strictly ascending function of the vertex index, configured by `offset` and `repeat` parameters.
 
 * `offset` specifies the initial value for the vertex feature ID range. The default is `0`.
 * `repeat`, if defined, specifies the number of vertices for which to repeat each feature ID before incrementing the ID by 1. If `repeat` is undefined, the feature ID for all vertices is `offset`.
@@ -128,6 +137,10 @@ For example
 * If `offset` is 2 and `repeat` is undefined, the feature IDs are `[2, 2, 2, ...]`
 
 `offset` and `repeat` must be omitted when `attribute` is used. These two methods of assigning feature IDs are mutually exclusive.
+
+```diff
+-! DO NOT SUBMIT: Update wording (Feature Table, constant, divisor) in illustration. !-
+```
 
 <img src="figures/placemarks.png"  alt="Placemarks" width="600">
 
@@ -149,11 +162,13 @@ For example
   ]
 }
 ```
-### Feature ID Textures
+### Feature ID by Texture Coordinates
 
-Feature ID textures classify the pixels of an image into different features. Some examples include image segmentation or marking regions on a map.
+Feature ID textures classify the pixels of an image into different features. Some examples include image segmentation or marking regions on a map. Often per-texel feature IDs provide finer granularity than per-vertex feature IDs, as in the example below.
 
-Often per-texel feature IDs provide finer granularity than per-vertex feature IDs as in the example below.
+```diff
+-! DO NOT SUBMIT: Update wording in illustration. !-
+```
 
 <img src="figures/feature-id-texture.png"  alt="Feature ID Texture" width="800">
 
@@ -180,13 +195,13 @@ Often per-texel feature IDs provide finer granularity than per-vertex feature ID
 }
 ```
 
-The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a non-negative integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs are whole numbers in the range `[0, count - 1]` (inclusive), stored in linear space, where `count` is the total number of features in the property table. Values outside this range indicate that no feature is associated.
+The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a non-negative integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs are non-negative integers in the range `[0, count - 1]` (inclusive), stored in linear space, where `count` is the total number of features in the property table. Values outside this range indicate that no feature is associated.
 
 Texture filtering must be `9728` (NEAREST), or undefined, for any texture object referenced as a feature ID texture.
 
-### Feature ID Instance Attributes
+### Feature ID by GPU Instance
 
-Feature IDs may also be assigned to individual instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing). This works the same way as assigning feature IDs to vertices. Feature IDs may be stored in accessors or generated implicitly. Nodes with `EXT_mesh_features` must also define an `EXT_mesh_gpu_instancing` extension providing feature ID instance attributes, and are invalid without this dependency.
+Feature IDs may also be assigned to individual GPU instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing). Feature IDs may be stored in instance attributes or generated implicitly by index, as with per-vertex feature IDs. Nodes with `EXT_mesh_features` must also define an `EXT_mesh_gpu_instancing` extension, and are invalid without this dependency.
 
 ```jsonc
 {
@@ -214,30 +229,91 @@ Feature IDs may also be assigned to individual instances when using the [`EXT_me
 
 ## Feature Properties
 
-Feature properties are structured according to a **schema**. A schema has a set of **classes** and **enums**. A class contains a set of **properties**, which may be numeric, boolean, string, enum, or array types.
+Feature properties describe attributes or characteristics of a feature. Data types and semantic meanings of these properties are defined by a schema. Schema definitions are generic, and do not describe storage location or layout of the data.
 
-A **feature** is a specific instantiation of class containing **property values**. Property values are stored in either a **property table** or a **property texture** depending on the use case. Both formats are designed for storing property values for a large number of features.
+Conceptually, a feature is an instantiation of a generic class defined in the schema, with specific property values and storage information. Properties may be associated with features in one of two ways:
 
-By default, properties do not have any inherent meaning. A property may be assigned a **semantic**, an identifier that describes how the property should be interpreted. Built-in semantics include `ID` and `NAME`, as defined below.
+- **Property Tables** store property values as numeric arrays in a parallel, column-based binary layout. Property tables are indexed by Feature IDs, used as the index for a given feature into each property array.
+- **Property Textures** store property values in channels of a texture, suitable for very high-frequency data mapped to less-detailed 3D surfaces. Property textures are indexed by texture coordinates, and do not have associated Feature IDs.
 
-- `ID`: Unique identifier for the feature.
-- `NAME`: Name of the feature; not required to be unique.
+Both storage formats are appropriate for storing property values in large quantities.
 
-Model authors may define their own application- or domain-specific semantics separately. For application-specific semantics, authoring implementations are encouraged to use a `_*` prefix. For semantics common to a particular domain or vendor, creation of new uppercase, alphanumeric prefixes is encouraged.
+### Schema Definitions
 
-This extension implements the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata), which describes the metadata format in full detail.
+Data types and semantic meanings of properties are provided by a schema, as defined in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/) and summarized below:
 
-### Schemas
+- **Schema:** Top-level definitions for type and semantic information. The schema provides a set of *classes* and *enums* the asset can reference.
+- **Class:** Template for features. Classes provide a list of properties with type and semantic information. Every feature must be associated with a class, and the feature's properties must conform to the class's property definitions. Features whose properties conform to a class are considered instances of that class.
+- **Class Property:** Properties are defined abstractly in a class by their semantic meaning and data type (numeric, boolean, string, enum, or array), and are instantiated in a feature with specific values conforming to that definition.
+- **Enum:** Set of categorical types, defined as `name: integer` pairs. Enum properties use an enum as their data type.
 
-A schema defines a set of classes and enums used in a model. Classes serve as templates for features - they provide a list of properties and the type information for those properties. Enums define the allowable values for enum properties. Schemas are defined in full detail in the [Schemas](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#schemas) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
+A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF assets may refer to the same external schema to avoid duplication.
 
-A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF models may refer to the same external schema to avoid duplication.
+#### Schema
 
-Schemas may be given a `name`, `description`, and `version`.
+A schema is defined by an `EXT_mesh_features` extension attached to the glTF root object.
+
+- `schema.name`: The name of the schema, e.g. for display purposes.
+- `schema.description`: The description of the schema.
+- `schema.version`: Application-specific version of the schema.
+- `schema.classes`: Dictionary, where each key is a class ID and each value is an object defining the class.
+- `schema.enums`: Dictionary, where each key is an enum ID and each value is an object defining the values for the enum.
+
+*Defined in [schema.schema.json](./schema/schema.schema.json).*
+
+#### Class
+
+Classes are defined as entries in the `schema.classes` dictionary, indexed by an alphanumeric class ID. Each class may contain:
+
+- `class.name`: The name of the class, e.g. for display purposes.
+- `class.description`: The description of the schema.
+- `class.properties`: Dictionary, where each key is a property ID and each value is an object defining the property.
+
+*Defined in [class.schema.json](./schema/class.schema.json).*
+
+#### Enum
+
+Enums are defined as entries in the `schema.enums` dictionary, indexed by an alphanumeric enum ID. Each enum may contain:
+
+- `enum.name`: The name of the enum, e.g. for display purposes.
+- `enum.description`: The description of the enum.
+- `enum.valueType`: The type of the integer enum value. Default is `"UINT16"`.
+- `enum.values`: Array of enum values.
+
+*Defined in [enum.schema.json](./schema/enum.schema.json).*
+
+#### Enum Values
+
+Enum values are defined as entries in the `enum.values` array. Duplicate names or duplicate integer values are not allowed. Each enum value may contain:
+
+- `enumValue.name`: The name of the enum value.
+- `enumValue.description`: The description of the enum value.
+- `enumValue.value`: The integer enum value.
+
+*Defined in [enum.value.schema.json](./schema/enum.value.schema.json).*
+
+#### Class Property
+
+Class properties are defined as entries in the `class.properties` dictionary, indexed by an alphanumeric property ID. Each property may contain:
+
+- `property.name`: The name of the property, e.g. for display purposes.
+- `property.description`: The description of the property.
+- `property.type`: Element type represented by each property value. `VECN` is a vector with `N` components. `MATN` is an `N ⨉ N` matrix. `ARRAY` is fixed-length when `componentCount` is defined, and is variable-length otherwise.
+- `property.componentType`: Data type of an element's components. When `type` is `SINGLE`, then `componentType` is also the data type of the element. When `componentType` is `ENUM`, `enumType` is required.
+- `property.componentCount`: Number of components per element for fixed-length `ARRAY` elements. Always undefined for variable-length `ARRAY` and all other element types.
+- `property.enumType`: Enum ID as declared in the `enums` dictionary. Required when `componentType` is `ENUM`.
+- `property.normalized`: Specifies whether integer values are normalized. When true, signed component types are normalized between `[-1, 1]` and unsigned component types are normalized between `[0, 1]`.
+- `property.min`: Minimum allowed value for the property.
+- `property.max`: Maximum allowed value for the property.
+- `property.required`:
+- `property.noData`:
+- `property.semantic`:
+
+*Defined in [class.property.schema.json](./schema/class.property.schema.json).*
 
 ### Property Tables
 
-A property table stores property values in a parallel array format. Each property array corresponds to a class property. The values contained within a property array must match the data type of the class property. Furthermore, the set of property arrays must match one-to-one with the class properties. There is one exception - if a property specifies a `noData` value, the property table may omit that property.
+A property table stores property values as arrays in a parallel, column-based binary layout. Each property array corresponds to a class property. The values contained within a property array must match the data type of the class property. Furthermore, the set of property arrays must match one-to-one with the class properties. There is one exception - if a property specifies a `noData` value, the property table may omit that property.
 
 The schema and property tables are defined in the root extension object in the glTF model. See the example below:
 
@@ -293,9 +369,21 @@ As in the core glTF specification, values of NaN, +Infinity, and -Infinity are n
 
 Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes.
 
+```diff
+-! DO NOT SUBMIT: Update wording in illustration below. !-
+```
+
+> **Example:**
+>
+> ![Building Example](figures/feature-table-buildings.png)
+>
+> In the image above, a glTF consists of two houses batched together into a single primitive. A feature ID attribute on the primitive indicates that all of the vertices making up the first house have a feature ID of 0, while all vertices making up the second house have the feature ID 1. The feature ID is then used to access the building's properties from the property table.
+
 ### Property Textures
 
-Property textures use textures rather than parallel arrays to store values. Property textures are accessed directly by texture coordinates, and do not require feature IDs. Property textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces. For each property that does not specify a `noData` value, a mapping to the corresponding texture channel or channels is required. Properties with a `noData` value are optional in property textures instantiating a given class.
+Property textures use textures rather than parallel arrays to store values. Property textures are accessed directly by texture coordinates, and do not require feature IDs. Property textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene.
+
+For each property that does not specify a `noData` value, a mapping to the corresponding texture channel or channels is required. Properties with a `noData` value are optional in property textures instantiating a given class.
 
 Property textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata) with a few additional constraints:
 
@@ -377,12 +465,22 @@ Texture filtering must be `9728` (NEAREST), `9729` (LINEAR), or undefined, for a
 
 ## Binary Data Storage
 
-`EXT_mesh_features` imposes additional binary data alignment requirements on an asset, extending the 4-byte alignment in the core glTF specification:
+Feature properties are stored in a compact binary tabular format described in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata). `EXT_mesh_features` imposes additional binary data alignment requirements on an asset, extending the 4-byte alignment in the core glTF specification:
 
 - GLB-stored `JSON` chunk must be padded with trailing `Space` characters (`0x20`) to 8-byte boundary.
 - GLB-stored `BIN` chunk must be padded with trailing zeroes (`0x00`) to 8-byte boundary.
 
 As a result, byte length of the `BIN` chunk may be up to 7 bytes larger than JSON-defined `buffer.byteLength` to satisfy alignment requirements.
+
+## Optional vs. Required
+
+This extension is optional, meaning it should be placed in the `extensionsUsed` list, but not in the `extensionsRequired` list.
+
+## Schema
+
+* [gltf.EXT_mesh_features.schema.json](./schema/gltf.EXT_mesh_features.schema.json)
+* [primitive.EXT_mesh_features.schema.json](./schema/primitive.EXT_mesh_features.schema.json)
+* [node.EXT_mesh_features.schema.json](./schema/node.EXT_mesh_features.schema.json)
 
 ## Examples
 
@@ -398,15 +496,9 @@ Per-triangle metadata|An implicit feature ID is assigned to each set of three ve
 Per-point metadata|An implicit feature ID is assigned to each point. The property table stores `FLOAT64` , `STRING`, and `ENUM` properties, which are not possible through glTF vertex attribute accessors alone.|![Point features](figures/point-features.png)
 Per-node metadata|Vertices in node 0 and node 1, not batched together, are assigned different `offset` feature IDs.|![Per-node metadata](figures/per-node-metadata.png)
 Multi-point features|A point cloud with two property tables, one storing metadata for groups of points and the other storing metadata for individual points.|![Multi-point features](figures/point-cloud-layers.png)
-Multi-instance features|Instanced tree models where trees are assigned to groups with a per-instance feature ID attribute. One property table stores per-group metadata and the other stores per-tree metadata.|![Multi-instance features](figures/multi-instance-metadata.png)
+Multi-instance features|Instanced tree models where trees are assigned to groups with a per-GPU-instance feature ID attribute. One property table stores per-group metadata and the other stores per-tree metadata.|![Multi-instance features](figures/multi-instance-metadata.png)
 Material classification|A textured mesh using a property texture to store both material enums and normalized `UINT8` thermal temperatures.|![Material Classification](figures/material-classification.png)
 Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanced models (fencing) with three property tables.|![Composite Example](figures/composite-example.png)
-
-## Schema
-
-* [gltf.EXT_mesh_features.schema.json](./schema/gltf.EXT_mesh_features.schema.json)
-* [primitive.EXT_mesh_features.schema.json](./schema/primitive.EXT_mesh_features.schema.json)
-* [node.EXT_mesh_features.schema.json](./schema/node.EXT_mesh_features.schema.json)
 
 ## Revision History
 
