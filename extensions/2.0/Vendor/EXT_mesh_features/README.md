@@ -28,18 +28,22 @@ Optionally, this extension may be used in conjunction with [`EXT_mesh_gpu_instan
 
 - [Overview](#overview)
 - [Feature IDs](#feature-ids)
+  - [Overview](#overview-1)
   - [Feature ID by Vertex](#feature-id-by-vertex)
     - [Vertex Attribute](#vertex-attribute)
     - [Implicit Vertex Attribute](#implicit-vertex-attribute)
   - [Feature ID by Texture Coordinates](#feature-id-by-texture-coordinates)
   - [Feature ID by GPU Instance](#feature-id-by-gpu-instance)
+  - [Specifying Feature IDs](#specifying-feature-ids)
 - [Feature Properties](#feature-properties)
+  - [Overview](#overview-2)
   - [Schema Definitions](#schema-definitions)
+    - [Overview](#overview-3)
     - [Schema](#schema)
     - [Class](#class)
+    - [Class Property](#class-property)
     - [Enum](#enum)
     - [Enum Values](#enum-values)
-    - [Class Property](#class-property)
   - [Property Tables](#property-tables)
   - [Property Textures](#property-textures)
 - [Binary Data Storage](#binary-data-storage)
@@ -64,6 +68,8 @@ See [Examples](#examples) for a more detailed list of use cases for this extensi
 
 ## Feature IDs
 
+### Overview
+
 A **feature** is conceptual object associated with both geometry and properties. Similar concepts exist in various industries and domains. In Geographic Information Systems (GIS) a feature is an entity such as a point, polyline, or polygon that represents some element on a map. In another domain like CAD/BIM a feature might be a component of a design model, such as a pipe. A feature could also be a 3D building in a city, a tree in a forest, a sample point in a weather model, or a patch of texels on a 3D model.
 
 Features are identified within a 3D asset by **Feature IDs** — unique identifiers associated with parts of the asset in one of three ways:
@@ -71,12 +77,6 @@ Features are identified within a 3D asset by **Feature IDs** — unique identifi
 * **Feature ID by Vertex:** Per-vertex ID, in a vertex attribute or implicitly by index
 * **Feature ID by Texture Coordinates:** Per-texel ID, in a channel of a Feature ID Texture
 * **Feature ID by GPU Instance:** Per-instance ID, in an instance attribute accessor (requires [`EXT_mesh_gpu_instancing`](../../EXT_mesh_gpu_instancing))
-
-```diff
--! DO NOT SUBMIT: Several concepts in this illustration are not yet defined. !-
-```
-
-<img src="figures/metadata-access.png"  alt="Metadata Access" width="600">
 
 ### Feature ID by Vertex
 
@@ -92,32 +92,30 @@ The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be fals
 
 > **Implementation Note:** since glTF accessors do not support `UNSIGNED_INT` types for 32-bit integers, `FLOAT` may be used instead allowing integer feature IDs up to 2²⁴. For smaller ranges of feature IDs, `UNSIGNED_BYTE` or `UNSIGNED_SHORT` should be used. As with other vertex attributes, each element of a feature ID accessor must align to 4-byte boundaries.
 
-```diff
--! DO NOT SUBMIT: Change illustration back to PNG. !-
-```
-
-![Property Table](figures/feature-table.svg)
-
-```jsonc
-{
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0,
-        "FEATURE_ID_0": 1
-      },
-      "indices": 2,
-      "mode": 4,
-      "extensions": {
-        "EXT_mesh_features": {
-          "propertyTables": [0],
-          "featureIds": [{"attribute": 0}]
-        }
-      }
-    }
-  ]
-}
-```
+> **Example:** A primitive defines two quads, where each quad is a distinct feature. The quads are composed of four vertices, distinguished by different `FEATURE_ID_0` vertex attribute values. Each feature is associated with "Name", "Year", and "Coordinates" values in a [property table](#property-tables).
+>
+> ![Property Table](figures/feature-table.svg)
+>
+> ```jsonc
+> {
+>   "primitives": [
+>     {
+>       "attributes": {
+>         "POSITION": 0,
+>         "FEATURE_ID_0": 1
+>       },
+>       "indices": 2,
+>       "mode": 4,
+>       "extensions": {
+>         "EXT_mesh_features": {
+>           "propertyTables": [0],
+>           "featureIds": [{"attribute": 0}]
+>         }
+>       }
+>     }
+>   ]
+> }
+> ```
 
 #### Implicit Vertex Attribute
 
@@ -136,64 +134,59 @@ For example
 * If `offset` is 2 and `repeat` is 3, the feature IDs are `[2, 2, 2, 3, 3, 3, 4, 4, 4, ...]`
 * If `offset` is 2 and `repeat` is undefined, the feature IDs are `[2, 2, 2, ...]`
 
-`offset` and `repeat` must be omitted when `attribute` is used. These two methods of assigning feature IDs are mutually exclusive.
+> **Example:** Each point in the point cloud below represents a distinct feature. Points are identified by feature IDs `[0, 1, 2, ... N]`. Each point is associated "Name" and "Elevation" values a [property table](#property-tables).
+>
+> <img src="figures/placemarks.jpg"  alt="Placemarks" width="600">
+>
+> ```jsonc
+> {
+>   "primitives": [
+>     {
+>       "attributes": {
+>         "POSITION": 0
+>       },
+>       "mode": 0,
+>       "extensions": {
+>         "EXT_mesh_features": {
+>           "propertyTables": [0],
+>           "featureIds": [{"offset": 0, "repeat": 1}]
+>         }
+>       }
+>     }
+>   ]
+> }
+> ```
 
-```diff
--! DO NOT SUBMIT: Update wording (Feature Table, constant, divisor) in illustration. !-
-```
-
-<img src="figures/placemarks.png"  alt="Placemarks" width="600">
-
-```jsonc
-{
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0
-      },
-      "mode": 0,
-      "extensions": {
-        "EXT_mesh_features": {
-          "propertyTables": [0],
-          "featureIds": [{"offset": 0, "repeat": 1}]
-        }
-      }
-    }
-  ]
-}
-```
 ### Feature ID by Texture Coordinates
 
 Feature ID textures classify the pixels of an image into different features. Some examples include image segmentation or marking regions on a map. Often per-texel feature IDs provide finer granularity than per-vertex feature IDs, as in the example below.
 
-```diff
--! DO NOT SUBMIT: Update wording in illustration. !-
-```
-
-<img src="figures/feature-id-texture.png"  alt="Feature ID Texture" width="800">
-
-```jsonc
-{
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0,
-        "TEXCOORD_0": 1
-      },
-      "indices": 2,
-      "material": 0,
-      "extensions": {
-        "EXT_mesh_features": {
-          "propertyTables": [0],
-          "featureIds": [
-            {"index": 0, "texCoord": 0, "channel": 0}
-          ]
-        }
-      }
-    }
-  ]
-}
-```
+> **Example:** Building facade, represented by a simple quad. The primitive's `baseColorTexture` displays the visible appearance of the building, and its feature ID texture identifies regions of the quad (walls, door, roof, window) as distinct features. Both textures use the same texture coordinates, `TEXCOORD_0`, in this case. Each feature is associated with "Component" and "Year Built" values in a [property table](#property-tables).
+>
+> <img src="figures/feature-id-texture.png"  alt="Feature ID Texture" width="800">
+>
+> ```jsonc
+> {
+>   "primitives": [
+>     {
+>       "attributes": {
+>         "POSITION": 0,
+>         "TEXCOORD_0": 1
+>       },
+>       "indices": 2,
+>       "material": 0,
+>       "extensions": {
+>         "EXT_mesh_features": {
+>           "propertyTables": [0],
+>           "featureIds": [
+>             {"index": 0, "texCoord": 0, "channel": 0}
+>           ]
+>         }
+>       }
+>     }
+>   ]
+> }
+> ```
 
 The `featureId` entry for a feature ID texture extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. Each `channel` must be a non-negative integer corresponding to a channel of the source texture. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. Feature IDs are non-negative integers in the range `[0, count - 1]` (inclusive), stored in linear space, where `count` is the total number of features in the property table. Values outside this range indicate that no feature is associated.
 
@@ -203,31 +196,59 @@ Texture filtering must be `9728` (NEAREST), or undefined, for any texture object
 
 Feature IDs may also be assigned to individual GPU instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing). Feature IDs may be stored in instance attributes or generated implicitly by index, as with per-vertex feature IDs. Nodes with `EXT_mesh_features` must also define an `EXT_mesh_gpu_instancing` extension, and are invalid without this dependency.
 
-```jsonc
-{
-  "nodes": [
-    {
-      "mesh": 0,
-      "extensions": {
-        "EXT_mesh_gpu_instancing": {
-          "attributes": {
-            "TRANSLATION": 0,
-            "ROTATION": 1,
-            "SCALE": 2,
-            "FEATURE_ID_0": 3
-          },
-        },
-        "EXT_mesh_features": {
-          "propertyTables": [0],
-          "featureIds": [{"attribute": 0}]
-        }
-      }
-    }
-  ]
-}
-```
+> **Example:** A node defining instances of mesh `0`, with each instance having a feature ID in the `FEATURE_ID_0` instance attribute.
+>
+> ```jsonc
+> {
+>   "nodes": [
+>     {
+>       "mesh": 0,
+>       "extensions": {
+>         "EXT_mesh_gpu_instancing": {
+>           "attributes": {
+>             "TRANSLATION": 0,
+>             "ROTATION": 1,
+>             "SCALE": 2,
+>             "FEATURE_ID_0": 3
+>           },
+>         },
+>         "EXT_mesh_features": {
+>           "propertyTables": [0],
+>           "featureIds": [{"attribute": 0}]
+>         }
+>       }
+>     }
+>   ]
+> }
+> ```
+
+### Specifying Feature IDs
+
+A primitive or node may specify multiple feature IDs using one or more of the three methods, as entries in its `featureIds` array. However, each element of the `featureIds` array may include only a single source: `featureId.attribute`, `featureId.[offset | repeat]`, and `featureId.index` are mutually exclusive.
+
+The `featureIds` and `propertyTables` arrays must have the same length, with feature ID at each array index corresponding to the property table at the same index.
+
+Empty feature IDs (e.g. `{}`) are disallowed, a feature ID must explicitly set at least one property.
+
+> **Example:** Multiple property tables and feature IDs may be defined on a single primitive.
+>
+> ```jsonc
+> // Primitive:
+> "extensions": {
+>   "EXT_mesh_features": {
+>     "propertyTables": [0, 1, 2],
+>     "featureIds": [
+>       {"attribute": 0},
+>       {"offset": 1},
+>       {"index": 0, "texCoord": 0, "channel": 0},
+>     ]
+>   }
+> }
+> ```
 
 ## Feature Properties
+
+### Overview
 
 Feature properties describe attributes or characteristics of a feature. Data types and semantic meanings of these properties are defined by a schema. Schema definitions are generic, and do not describe storage location or layout of the data.
 
@@ -236,230 +257,311 @@ Conceptually, a feature is an instantiation of a generic class defined in the sc
 - **Property Tables** store property values as numeric arrays in a parallel, column-based binary layout. Property tables are indexed by Feature IDs, used as the index for a given feature into each property array.
 - **Property Textures** store property values in channels of a texture, suitable for very high-frequency data mapped to less-detailed 3D surfaces. Property textures are indexed by texture coordinates, and do not have associated Feature IDs.
 
-Both storage formats are appropriate for storing property values in large quantities.
+Both storage formats are appropriate for storing large quantities of property values.
 
 ### Schema Definitions
 
-Data types and semantic meanings of properties are provided by a schema, as defined in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/) and summarized below:
+#### Overview
 
-- **Schema:** Top-level definitions for type and semantic information. The schema provides a set of *classes* and *enums* the asset can reference.
-- **Class:** Template for features. Classes provide a list of properties with type and semantic information. Every feature must be associated with a class, and the feature's properties must conform to the class's property definitions. Features whose properties conform to a class are considered instances of that class.
-- **Class Property:** Properties are defined abstractly in a class by their semantic meaning and data type (numeric, boolean, string, enum, or array), and are instantiated in a feature with specific values conforming to that definition.
-- **Enum:** Set of categorical types, defined as `name: integer` pairs. Enum properties use an enum as their data type.
-
-A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF assets may refer to the same external schema to avoid duplication.
+Data types and semantic meanings of properties are provided by a schema, as defined in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/) and summarized below.
 
 #### Schema
 
-A schema is defined by an `EXT_mesh_features` extension attached to the glTF root object.
+Top-level definitions for type and semantic information. The schema provides a set of *classes* and *enums* the asset can reference.
 
-- `schema.name`: The name of the schema, e.g. for display purposes.
-- `schema.description`: The description of the schema.
-- `schema.version`: Application-specific version of the schema.
-- `schema.classes`: Dictionary, where each key is a class ID and each value is an object defining the class.
-- `schema.enums`: Dictionary, where each key is an enum ID and each value is an object defining the values for the enum.
+A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF assets may refer to the same external schema to avoid duplication. A schema is defined by an `EXT_mesh_features` extension attached to the glTF root object.
 
 *Defined in [schema.schema.json](./schema/schema.schema.json).*
 
+> **Example:**
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": {
+>         "name": "Schema 001",
+>         "description": "An example schema.",
+>         "version": "3.5.1",
+>         "enums": { ... },
+>         "classes": { ... }
+>       }
+>     }
+>   }
+> }
+> ```
+
 #### Class
 
-Classes are defined as entries in the `schema.classes` dictionary, indexed by an alphanumeric class ID. Each class may contain:
+Template for features. Classes provide a list of properties with type and semantic information. Every feature must be associated with a class, and the feature's properties must conform to the class's property definitions. Features whose properties conform to a class are considered instances of that class.
 
-- `class.name`: The name of the class, e.g. for display purposes.
-- `class.description`: The description of the schema.
-- `class.properties`: Dictionary, where each key is a property ID and each value is an object defining the property.
+Classes are defined as entries in the `schema.classes` dictionary, indexed by an alphanumeric class ID.
 
 *Defined in [class.schema.json](./schema/class.schema.json).*
 
-#### Enum
-
-Enums are defined as entries in the `schema.enums` dictionary, indexed by an alphanumeric enum ID. Each enum may contain:
-
-- `enum.name`: The name of the enum, e.g. for display purposes.
-- `enum.description`: The description of the enum.
-- `enum.valueType`: The type of the integer enum value. Default is `"UINT16"`.
-- `enum.values`: Array of enum values.
-
-*Defined in [enum.schema.json](./schema/enum.schema.json).*
-
-#### Enum Values
-
-Enum values are defined as entries in the `enum.values` array. Duplicate names or duplicate integer values are not allowed. Each enum value may contain:
-
-- `enumValue.name`: The name of the enum value.
-- `enumValue.description`: The description of the enum value.
-- `enumValue.value`: The integer enum value.
-
-*Defined in [enum.value.schema.json](./schema/enum.value.schema.json).*
+> **Example:**
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": {
+>         "classes": {
+>           "tree": {
+>             "name": "Tree",
+>             "description": "Woody, perennial plant.",
+>             "properties": {
+>               "species": { ... },
+>               "height": { ... },
+>               "diameter": { ... }
+>             }
+>           }
+>         }
+>       }
+>     }
+>   }
+> }
+> ```
 
 #### Class Property
 
-Class properties are defined as entries in the `class.properties` dictionary, indexed by an alphanumeric property ID. Each property may contain:
+Properties are defined abstractly in a class by their semantic meaning and data type (numeric, boolean, string, enum, or array), and are instantiated in a feature with specific values conforming to that definition.
 
-- `property.name`: The name of the property, e.g. for display purposes.
-- `property.description`: The description of the property.
-- `property.type`: Element type represented by each property value. `VECN` is a vector with `N` components. `MATN` is an `N ⨉ N` matrix. `ARRAY` is fixed-length when `componentCount` is defined, and is variable-length otherwise.
-- `property.componentType`: Data type of an element's components. When `type` is `SINGLE`, then `componentType` is also the data type of the element. When `componentType` is `ENUM`, `enumType` is required.
-- `property.componentCount`: Number of components per element for fixed-length `ARRAY` elements. Always undefined for variable-length `ARRAY` and all other element types.
-- `property.enumType`: Enum ID as declared in the `enums` dictionary. Required when `componentType` is `ENUM`.
-- `property.normalized`: Specifies whether integer values are normalized. When true, signed component types are normalized between `[-1, 1]` and unsigned component types are normalized between `[0, 1]`.
-- `property.min`: Minimum allowed value for the property.
-- `property.max`: Maximum allowed value for the property.
-- `property.required`:
-- `property.noData`:
-- `property.semantic`:
+Class properties are defined as entries in the `class.properties` dictionary, indexed by an alphanumeric property ID.
 
 *Defined in [class.property.schema.json](./schema/class.property.schema.json).*
 
+> **Example:**
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": {
+>         "classes": {
+>           "tree": {
+>             "name": "Tree",
+>             "description": "Woody, perennial plant.",
+>             "properties": {
+>               "species": {
+>                 "description": "Type of tree.",
+>                 "componentType": "STRING",
+>               },
+>               "height": {
+>                 "description": "Height of tree measured from ground level, in meters.",
+>                 "componentType": "UINT8"
+>               },
+>               "diameter": {
+>                 "description": "Diameter at trunk base, in meters.",
+>                 "componentType": "FLOAT32"
+>               },
+>               "birdCount": {
+>                 "description": "Number of birds perching on the tree",
+>                 "type": "UINT8"
+>               }
+>             }
+>           }
+>         }
+>       }
+>     }
+>   }
+> }
+> ```
+
+#### Enum
+
+Set of categorical types, defined as `name: integer` pairs. Enum properties use an enum as their data type.
+
+Enums are defined as entries in the `schema.enums` dictionary, indexed by an alphanumeric enum ID.
+
+*Defined in [enum.schema.json](./schema/enum.schema.json).*
+
+> **Example:**
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": {
+>         "enums": {
+>           "colorEnum": {
+>             "name": "Color",
+>             "description": "An example class for color data.",
+>             "values": [
+>               {"name": "Unspecified", "value": 0},
+>               {"name": "Red", "value": 1},
+>               {"name": "Green", "value": 2},
+>               {"name": "Blue", "value": 3}
+>             ]
+>           }
+>         }
+>       }
+>     }
+>   }
+> }
+> ```
+
+#### Enum Values
+
+Pairs of `name: integer` entries representing possible values of an enum property.
+
+Enum values are defined as entries in the `enum.values` array. Duplicate names or duplicate integer values are not allowed.
+
+*Defined in [enum.value.schema.json](./schema/enum.value.schema.json).*
+
 ### Property Tables
 
-A property table stores property values as arrays in a parallel, column-based binary layout. Each property array corresponds to a class property. The values contained within a property array must match the data type of the class property. Furthermore, the set of property arrays must match one-to-one with the class properties. There is one exception - if a property specifies a `noData` value, the property table may omit that property.
+Each property table defines `count` features conforming to a particular class (identified by ID `class`), with property values stored as value arrays in a parallel, column-based binary layout.
 
-The schema and property tables are defined in the root extension object in the glTF model. See the example below:
+The property table may provide value arrays for only a subset of the properties of its class, but class properties marked `required: true` must not be omitted. Each property value array given by the property table must be defined by a class property with the same alphanumeric property ID, with values matching the data type of the class property.
 
-```jsonc
-{
-  "extensions": {
-    "EXT_mesh_features": {
-      "schema": {
-        "classes": {
-          "tree": {
-            "properties": {
-              "height": {
-                "description": "Height of tree measured from ground level",
-                "type": "FLOAT32"
-              },
-              "birdCount": {
-                "description": "Number of birds perching on the tree",
-                "type": "UINT8"
-              },
-              "species": {
-                "description": "Species of the tree",
-                "type": "STRING"
-              }
-            }
-          }
-        }
-      },
-      "propertyTables": [{
-        "name": "tree",
-        "class": "tree",
-        "count": 10,
-        "properties": {
-          "height": {
-            "bufferView": 0
-          },
-          "birdCount": {
-            "bufferView": 1
-          },
-          "species": {
-            "bufferView": 2,
-            "stringOffsetBufferView": 3
-          }
-        }
-      }]
-    }
-  }
-}
-```
+Property tables are defined as entries in the `propertyTables` array of the root-level `EXT_mesh_features` extension, and may be referenced by extensions on primitive or node objects.
 
-`class` is the ID of the class in the schema. `count` is the number of features in the property table, as well as the length of each property array. Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Table Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#table-format) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
+> **Example:**
+>
+> The example below shows a `tree_survey_2021-09-29` property table, implementing the `tree` class defined earlier.
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": { ... },
+>       "propertyTables": [{
+>         "name": "tree_survey_2021-09-29",
+>         "class": "tree",
+>         "count": 10,
+>         "properties": {
+>           "height": {
+>             "bufferView": 0
+>           },
+>           "birdCount": {
+>             "bufferView": 1
+>           },
+>           "species": {
+>             "bufferView": 2,
+>             "stringOffsetBufferView": 3
+>           }
+>         }
+>       }]
+>     }
+>   }
+> }
+> ```
+
+Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Table Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#table-format) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
 
 As in the core glTF specification, values of NaN, +Infinity, and -Infinity are never allowed.
 
 Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes.
 
-```diff
--! DO NOT SUBMIT: Update wording in illustration below. !-
-```
-
-> **Example:**
+> **Example:** In the image below, a glTF asset consists of three houses batched together into a single mesh primitive. A vertex attribute identifies vertices as belonging to one of the three houses with Feature IDs 0, 1, and 2 respectively. The feature ID is then used to access the building's properties from the property table, "Houses".
 >
-> ![Building Example](figures/feature-table-buildings.png)
->
-> In the image above, a glTF consists of two houses batched together into a single primitive. A feature ID attribute on the primitive indicates that all of the vertices making up the first house have a feature ID of 0, while all vertices making up the second house have the feature ID 1. The feature ID is then used to access the building's properties from the property table.
+> ![Building Example](figures/table-format.jpg)
 
 ### Property Textures
 
-Property textures use textures rather than parallel arrays to store values. Property textures are accessed directly by texture coordinates, and do not require feature IDs. Property textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene.
+Property textures use texture channels to store property values conforming to a particular class (identified by ID `class`), with those values accessed directly by texture coordinates. Property textures do not require feature IDs, and are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene.
 
-For each property that does not specify a `noData` value, a mapping to the corresponding texture channel or channels is required. Properties with a `noData` value are optional in property textures instantiating a given class.
+A property texture may provide channels for only a subset of the properties of its class, but class properties marked `required: true` must not be omitted.
 
-Property textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata) with a few additional constraints:
+Property textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata), with additional constraints:
 
 * A scalar property cannot be encoded into multiple channels. For example, it is not possible to encode a `UINT32` property in an `RGBA8` texture.
 * Components of fixed-length array properties must be separate channels within the same texture.
 * Variable-length arrays are not supported.
+* Data type and bit depth of the image must be compatible with the property type.
 
-Additionally, the data type and bit depth of the image must be compatible with the property type. An 8-bit per pixel RGB image is only compatible with `UINT8` or normalized `UINT8` properties, and array properties thereof with three components or less. Likewise, a floating point property requires a floating point-compatible image format like KTX2 which may require additional extensions.
+Consequently, an 8-bit per pixel RGB image is only compatible with `UINT8` or normalized `UINT8` properties, and array properties thereof with three components or fewer.
 
-Property textures are defined with the following steps:
+> **Implementation note:** Use of floating-point properties in a property texture would require a floating point-compatible image format like KTX2 provided by an additional extension.
 
-1. A class is defined in the root `EXT_mesh_features` extension object. This is used to describe the properties in the texture.
-2. A property texture is defined in the root `EXT_mesh_features.propertyTextures` object. This must reference the class ID defined in step 1.
-3. A property texture is associated with a primitive by listing the property texture ID in the `primitive.EXT_mesh_features.propertyTextures` array.
-<img src="figures/feature-texture.png"  alt="Property Texture" width="500">
+Property textures are defined as entries in the `propertyTextures` array of the root-level `EXT_mesh_features` extension, and may be referenced by extensions on primitive or node objects.
 
-_Class and property texture_
+> **Example:** Property texture implementing a "thermalSample" class, with property values stored in a glTF texture at index 0 and indexed by `TEXCOORD_0`.
+>
+> <img src="figures/feature-texture.png"  alt="Property Texture" width="500">
+>
+> _Class and property texture_
+>
+> ```jsonc
+> {
+>   "extensions": {
+>     "EXT_mesh_features": {
+>       "schema": {
+>         "classes": {
+>           "thermalSample": {
+>             "name": "Thermal Texture",
+>             "properties": {
+>               "thermalTemp": {
+>                 "name": "Thermal Temp",
+>                 "type": "UINT8",
+>                 "normalized": true
+>               },
+>               "insulation": {
+>                 "name": "Insulation",
+>                 "type": "UINT8",
+>                 "normalized": true
+>               },
+>             }
+>           }
+>         }
+>       },
+>       "propertyTextures": [{
+>         "class": "thermalSample",
+>         "index": 0,
+>         "texCoord": 0,
+>         "properties": {
+>           "heatLoss": [0],
+>           "insulation": [1]
+>         }
+>       }]
+>     }
+>   }
+> }
+> ```
+>
+> _Primitive_
+>
+> ```jsonc
+> {
+>   "primitives": [
+>     {
+>       "attributes": {
+>         "POSITION": 0,
+>         "TEXCOORD_0": 1
+>       },
+>       "indices": 2,
+>       "material": 0,
+>       "extensions": {
+>         "EXT_mesh_features": {
+>           "propertyTextures": [0]
+>         }
+>       }
+>     }
+>   ]
+> }
+> ```
 
-```jsonc
-{
-  "extensions": {
-    "EXT_mesh_features": {
-      "schema": {
-        "classes": {
-          "heatSample": {
-            "properties": {
-              "heatLoss": {
-                "type": "UINT8",
-                "normalized": true
-              },
-              "insulation": {
-                "type": "UINT8",
-                "normalized": true
-              },
-            }
-          }
-        }
-      },
-      "propertyTextures": [{
-        "class": "heatSample",
-        "index": 0,
-        "texCoord": 0,
-        "properties": {
-          "heatLoss": [0],
-          "insulation": [1]
-        }
-      }]
-    }
-  }
-}
-```
 
-_Primitive_
+A `propertyTexture` object extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. `texCoord` refers to the texture coordinate set of the referring primitive.
 
-```jsonc
-{
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0,
-        "TEXCOORD_0": 1
-      },
-      "indices": 2,
-      "material": 0,
-      "extensions": {
-        "EXT_mesh_features": {
-          "propertyTextures": [0]
-        }
-      }
-    }
-  ]
-}
-```
+The `properties` map specifies the texture channels providing data for all required class properties, and perhaps optional class properties. An array of integer index values identifies channels, where multiple channels may be used only for fixed-length arrays of 2, 3, or 4 components. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. All values are stored in linear space.
 
-
-A `propertyTexture` object extends the glTF [`textureInfo`](../../../../../specification/2.0/schema/textureInfo.schema.json) object. `texCoord` refers to the texture coordinate set of the referring primitive. The `properties` map specifies the texture channels providing data for all required class properties, and perhaps optional class properties. An array of integer index values identify channels, where multiple channels may be used only for fixed-length arrays of 2, 3, or 4 components. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. All values are stored in linear space.
+> **Example:** A property texture specifying that "heatLoss" property values are stored in channel `R`, and "insulation" property values are stored in channel `G`, both indexed by UV coordinates in a `TEXCOORD_0` attribute.
+>
+> ```jsonc
+> // Root EXT_mesh_features extension:
+> {
+>   "propertyTextures": [{
+>     "class": "thermalSample",
+>     "index": 0,
+>     "texCoord": 0,
+>     "properties": {
+>       "heatLoss": [0],
+>       "insulation": [1]
+>     }
+>   }]
+> }
 
 Texture filtering must be `9728` (NEAREST), `9729` (LINEAR), or undefined, for any texture object referenced as a property texture.
 
