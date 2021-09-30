@@ -238,7 +238,7 @@ Feature IDs may also be assigned to individual GPU instances when using the [`EX
 
 A primitive or node may specify multiple feature IDs using one or more of the three methods, as entries in its `featureIds` array. However, each element of the `featureIds` array may include only a single source: `featureId.attribute`, `featureId.[offset | repeat]`, and `featureId.index` are mutually exclusive.
 
-The `featureIds` and `propertyTables` arrays must have the same length, with feature ID definition at index `i` corresponding to the property table at the same index. Each `featureIds:propertyTable` pair must be unique, but individual feature IDs and property tables may be repeated within a primitive or node.
+The `featureIds` and `propertyTables` arrays must have the same length, with the feature ID definition at index `i` corresponding to the property table at the same index. Each `featureIds:propertyTable` pair must be unique, but individual feature IDs and property tables may be repeated within a primitive or node.
 
 Empty feature IDs (e.g. `{}`) are disallowed — a feature ID must explicitly set at least one property.
 
