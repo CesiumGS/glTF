@@ -64,13 +64,13 @@ Concepts and terminology used throughout this document refer to the [Cesium 3D M
 
 See [Examples](#examples) for a more detailed list of use cases for this extension.
 
-> **Disambiguation:** glTF has other methods of storing details that could similarly be described as metadata or properties, including [`KHR_xmp_json_ld`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_xmp_json_ld), Extras, and Extensions. While those methods associate data with discrete objects in a glTF asset — nodes, materials, etc. — `EXT_mesh_features` is uniquely suited for properties of more granular conceptual features, like detailed subregions of a specific geometry or texture.
+> **Disambiguation:** glTF has other methods of storing details that could similarly be described as metadata or properties, including [`KHR_xmp_json_ld`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_xmp_json_ld), Extras, and Extensions. While those methods associate data with discrete objects in a glTF asset — nodes, materials, etc. — `EXT_mesh_features` is uniquely suited for properties of more granular conceptual features as small as individual vertices or texels.
 
 ## Feature IDs
 
 ### Overview
 
-A **feature** is conceptual object associated with both geometry and properties. Similar concepts exist in various industries and domains. In Geographic Information Systems (GIS) a feature is an entity such as a point, polyline, or polygon that represents some element on a map. In another domain like CAD/BIM a feature might be a component of a design model, such as a pipe. A feature could also be a 3D building in a city, a tree in a forest, a sample point in a weather model, or a patch of texels on a 3D asset.
+A **feature** is a conceptual object associated with both geometry and properties. Similar concepts exist in various industries and domains. In Geographic Information Systems (GIS) a feature is an entity such as a point, polyline, or polygon that represents some element on a map. In another domain like CAD/BIM a feature might be a component of a design model, such as a pipe. A feature could also be a 3D building in a city, a tree in a forest, a sample point in a weather model, or a patch of texels on a 3D asset.
 
 Features are identified within a 3D asset by **Feature IDs** (unique identifiers) associated with parts of the asset in one of three ways:
 
@@ -88,7 +88,7 @@ Names of feature ID attribute semantics follow the naming convention `FEATURE_ID
 
 Values of feature IDs are non-negative integers in the range `[0, count - 1]` (inclusive), where `count` is the total number of features in the [property table](#property-tables). Values outside this range indicate that no feature is associated.
 
-The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. Accessor's `componentType` is not restricted.
+The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. The accessor's `componentType` is not restricted.
 
 > **Implementation Note:** since glTF accessors do not support `UNSIGNED_INT` types for 32-bit integers, `FLOAT` may be used instead allowing integer feature IDs up to 2²⁴. For smaller ranges of feature IDs, `UNSIGNED_BYTE` or `UNSIGNED_SHORT` should be used. As with other vertex attributes, each element of a feature ID accessor must align to 4-byte boundaries.
 
@@ -264,7 +264,7 @@ Empty feature IDs (e.g. `{}`) are disallowed — a feature ID must explicitly se
 
 ### Overview
 
-Feature properties describe attributes or characteristics of a feature. Schemas describe the data types and semantic meanings of these properties. Schema definitions are generic, and do not describe storage location or layout of the data.
+Feature properties describe attributes or characteristics of a feature. Schemas describe the data types and semantic meanings of these properties. Schema definitions are generic, and do not describe the storage location or layout of the data.
 
 Conceptually, a feature is an instantiation of a generic template defined in the schema, with specific property values and storage information. Properties may be associated with features in one of two ways:
 
@@ -425,7 +425,7 @@ Enum values are defined as entries in the `enum.values` array. Duplicate names o
 
 ### Property Tables
 
-Each property table defines a specified number (`count`) of features conforming to a particular class (`class`), with property values stored as arrays in a parallel, column-based binary layout.
+Each property table defines a specified number (`count`) of features conforming to a particular class (`class`), with property values stored as parallel arrays in a column-based binary layout.
 
 Property tables are defined as entries in the `propertyTables` array of the root-level `EXT_mesh_features` extension, and may be referenced by extensions on primitive or node objects.
 
