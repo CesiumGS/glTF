@@ -82,6 +82,8 @@ Features are identified within a 3D asset by **Feature IDs** (unique identifiers
 
 #### Vertex Attribute
 
+*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
+
 Per-vertex feature IDs may be defined explicitly in a vertex attribute accessor.
 
 Names of feature ID attribute semantics follow the naming convention `FEATURE_ID_n` where `n` must start with 0 and continue with consecutive positive integers: `FEATURE_ID_0`, `FEATURE_ID_1`, etc. Indices must not use leading zeroes to pad the number of digits (e.g., `FEATURE_ID_01` is not allowed).
@@ -119,9 +121,9 @@ The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be fals
 > }
 > ```
 
-*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
-
 #### Implicit Vertex Attribute
+
+*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
 
 Per-vertex feature IDs may also be defined implicitly, as a function of vertex index within the primitive. Implicit feature IDs reduce storage costs in several common cases, such as when all vertices in a primitive share the same feature ID, or each sequential group of `N` vertices (e.g. each triangle face) share the same feature ID.
 
@@ -161,9 +163,9 @@ For example
 > }
 > ```
 
-*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
-
 ### Feature ID by Texture Coordinates
+
+*Defined in [featureIdTexture.schema.json](./schema/featureIdTexture.schema.json).*
 
 Feature ID textures classify the pixels of an image into different features. Some use cases include image segmentation or marking regions on a map. Often per-texel feature IDs provide finer granularity than per-vertex feature IDs, as in the example below.
 
@@ -200,9 +202,9 @@ Feature ID values stored in a texture are non-negative integers in the range `[0
 
 Texture filtering must be `9728` (NEAREST), or undefined, for any texture object referenced as a feature ID texture.
 
-*Defined in [featureIdTexture.schema.json](./schema/featureIdTexture.schema.json).*
-
 ### Feature ID by GPU Instance
+
+*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
 
 Feature IDs may also be assigned to individual GPU instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing). Similar to per-vertex IDs, per-instance IDs are stored in instance attributes or generated implicitly by instance index. Nodes with `EXT_mesh_features` must also define an `EXT_mesh_gpu_instancing` extension, and are invalid without this dependency.
 
@@ -231,8 +233,6 @@ Feature IDs may also be assigned to individual GPU instances when using the [`EX
 >   ]
 > }
 > ```
-
-*Defined in [featureIdAttribute.schema.json](./schema/featureIdAttribute.schema.json).*
 
 ### Specifying Feature IDs
 
@@ -281,6 +281,8 @@ Data types and semantic meanings of properties are provided by a schema, as defi
 
 #### Schema
 
+*Defined in [schema.schema.json](./schema/schema.schema.json).*
+
 Top-level definitions for type and semantic information. The schema provides a set of *classes* and *enums* the asset can reference.
 
 A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF assets may refer to the same external schema to avoid duplication. A schema is defined by an `EXT_mesh_features` extension attached to the glTF root object.
@@ -303,9 +305,9 @@ A schema may be embedded in the extension directly or referenced externally with
 > }
 > ```
 
-*Defined in [schema.schema.json](./schema/schema.schema.json).*
-
 #### Class
+
+*Defined in [class.schema.json](./schema/class.schema.json).*
 
 Template for features. Classes provide a list of properties with type and semantic information. Every feature must be associated with a class, and the feature's properties must conform to the class's property definitions. Features whose properties conform to a class are considered instances of that class.
 
@@ -335,9 +337,9 @@ Classes are defined as entries in the `schema.classes` dictionary, indexed by an
 > }
 > ```
 
-*Defined in [class.schema.json](./schema/class.schema.json).*
-
 #### Class Property
+
+*Defined in [class.property.schema.json](./schema/class.property.schema.json).*
 
 Properties are defined abstractly in a class by their semantic meaning and data type (numeric, boolean, string, enum, or array), and are instantiated in a feature with specific values conforming to that definition.
 
@@ -380,9 +382,9 @@ Class properties are defined as entries in the `class.properties` dictionary, in
 > }
 > ```
 
-*Defined in [class.property.schema.json](./schema/class.property.schema.json).*
-
 #### Enum
+
+*Defined in [enum.schema.json](./schema/enum.schema.json).*
 
 Set of categorical types, defined as `name: integer` pairs. Enum properties use an enum as their data type.
 
@@ -413,17 +415,17 @@ Enums are defined as entries in the `schema.enums` dictionary, indexed by an alp
 > }
 > ```
 
-*Defined in [enum.schema.json](./schema/enum.schema.json).*
-
 #### Enum Values
+
+*Defined in [enum.value.schema.json](./schema/enum.value.schema.json).*
 
 Pairs of `name: integer` entries representing possible values of an enum property.
 
 Enum values are defined as entries in the `enum.values` array. Duplicate names or duplicate integer values are not allowed.
 
-*Defined in [enum.value.schema.json](./schema/enum.value.schema.json).*
-
 ### Property Tables
+
+*Defined in [propertyTable.schema.json](./schema/propertyTable.schema.json).*
 
 Each property table defines a specified number (`count`) of features conforming to a particular class (`class`), with property values stored as parallel arrays in a column-based binary layout.
 
@@ -471,6 +473,8 @@ Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes.
 > ![Building Example](figures/table-format.jpg)
 
 ### Property Textures
+
+*Defined in [propertyTexture.schema.json](./schema/propertyTexture.schema.json).*
 
 Property textures use texture channels to store property values conforming to a particular class (identified by ID `class`), with those values accessed directly by texture coordinates. Property textures do not require feature IDs, and are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene.
 
@@ -576,8 +580,6 @@ The `properties` map specifies the texture channels providing data for available
 > }
 
 Texture filtering must be `9728` (NEAREST), `9729` (LINEAR), or undefined, for any texture object referenced as a property texture.
-
-*Defined in [propertyTexture.schema.json](./schema/propertyTexture.schema.json)*
 
 ## Binary Data Storage
 
