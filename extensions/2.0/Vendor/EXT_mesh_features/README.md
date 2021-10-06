@@ -8,6 +8,7 @@
 * Sean Lilley, Cesium
 * Sam Suhag, Cesium
 * Patrick Cozzi, Cesium
+* Don McCurdy, Independent
 * Bao Tran, Cesium
 * Samuel Vargas, Cesium
 
