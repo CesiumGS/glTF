@@ -349,7 +349,19 @@ Properties are defined abstractly in a class by their semantic meaning and data 
   - **Type:** `string`
   - **Required:** ✓ Yes
   - **Allowed values:**
-    - `"INT8"`, `"UINT8"`, `"INT16"`, `"UINT16"`, `"INT32"`, `"UINT32"`, `"INT64"`, `"UINT64"`, `"FLOAT32"`, `"FLOAT64"`, `"BOOLEAN"`, `"STRING"`, `"ENUM"`
+    - `"INT8"`
+    - `"UINT8"`
+    - `"INT16"`
+    - `"UINT16"`
+    - `"INT32"`
+    - `"UINT32"`
+    - `"INT64"`
+    - `"UINT64"`
+    - `"FLOAT32"`
+    - `"FLOAT64"`
+    - `"BOOLEAN"`
+    - `"STRING"`
+    - `"ENUM"`
 
 A property may compose multiple components into higher-level types (vector, matrix, and array), defined by `property.type`:
 
@@ -357,7 +369,14 @@ A property may compose multiple components into higher-level types (vector, matr
   - **Type:** `string`
   - **Required:** No, default: `"SINGLE"`
   - **Allowed values:**
-    - `"SINGLE"`, `"VEC2"`, `"VEC3"`, `"VEC4"`, `"MAT2"`, `"MAT3"`, `"MAT4"`, `"ARRAY"`
+    - `"SINGLE"`
+    - `"VEC2"`
+    - `"VEC3"`
+    - `"VEC4"`
+    - `"MAT2"`
+    - `"MAT3"`
+    - `"MAT4"`
+    - `"ARRAY"`
 
 Class properties are defined as entries in the `class.properties` dictionary, indexed by an alphanumeric property ID.
 
@@ -486,30 +505,34 @@ Property arrays are stored in glTF buffer views and use the binary encoding defi
 
 As in the core glTF specification, values of NaN, +Infinity, and -Infinity are never allowed.
 
-Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes.
+Each buffer view `byteOffset` must be aligned to a multiple of its component size.
+
+> **Implementation note:** Authoring tools may choose to align all buffer views to 8-byte boundaries for consistency, but client implementations should only depend on 8-byte alignment for buffer views containing 64-bit component types.
 
 ### Property Textures
 
 *Defined in [propertyTexture.schema.json](./schema/propertyTexture.schema.json).*
 
-Property textures use texture channels to store property values conforming to a particular class (identified by ID `class`), with those values accessed directly by texture coordinates. Property textures do not require feature IDs, and are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene.
+Property textures use texture channels to store property values conforming to a particular class (identified by ID `class`), with those values accessed directly by texture coordinates. Property textures do not require feature IDs, and are especially useful when texture mapping high frequency data to less detailed 3D surfaces. Unlike textures used in glTF materials, property textures are not necessarily visible in a rendered scene. Like property tables, property textures are implementations of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata).
 
-Property textures are defined as entries in the `propertyTextures` array of the root-level `EXT_mesh_features` extension, and may be referenced by extensions on primitive or node objects.
+Property textures are defined as entries in the `propertyTextures` array of the root-level `EXT_mesh_features` extension, and may be referenced by extensions on primitive objects. Property textures do not provide per-instance values with `EXT_mesh_gpu_instancing`, and must not be used by extensions on node objects.
 
 A property texture may provide channels for only a subset of the properties of its class, but class properties marked `required: true` must not be omitted.
 
-Property textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata), with additional constraints:
+Several constraints are imposed to ensure compatibility of texture storage with various property types:
 
 * A scalar property cannot be encoded into multiple channels. For example, it is not possible to encode a `UINT32` property in an `RGBA8` texture.
-* Components of fixed-length array properties must be separate channels within the same texture.
+* Components of array and vector properties must be separate channels within a texture.
 * Variable-length arrays are not supported.
 * Data type and bit depth of the image must be compatible with the property type.
 
-Consequently, an 8-bit per pixel RGB image is only compatible with `UINT8` or normalized `UINT8` properties, and array properties thereof with three components or fewer.
+For example, an 8-bit per pixel RGB image may only contain `SINGLE`, fixed-length `ARRAY` (length ≤3), `VEC2`, or `VEC3` values composed of 8-bit component types.
 
-> **Implementation note:** Use of floating-point properties in a property texture would require a floating point-compatible image format like KTX2 provided by an additional extension.
+Enum values may be encoded in images, as integer values according to their enum value type (see [Enum](#enum)).
 
-> **Example:** Property texture implementing a "thermalSample" class, with property values stored in a glTF texture at index 0 and indexed by `TEXCOORD_0`.
+> **Implementation note:** Use of floating-point properties in a property texture would require a floating point-compatible image format like KTX2, provided by an additional extension.
+
+> **Example:** Property texture implementing a "wall" class, with property values stored in a glTF texture at index 0 and indexed by `TEXCOORD_0`.
 >
 > <img src="figures/feature-texture.png"  alt="Property Texture" width="500">
 >
@@ -583,18 +606,18 @@ A `propertyTexture` object extends the glTF [`textureInfo`](../../../../../speci
 
 The `properties` map specifies the texture channels providing data for available properties. An array of integer index values identifies channels, where multiple channels may be used only for fixed-length arrays of 2, 3, or 4 components. Channels of an `RGBA` texture are numbered 0–3 respectively, although specialized texture formats may allow additional channels. All values are stored in linear space.
 
-> **Example:** A property texture specifying that "insideTemp" property values are stored in the red channel, and "insulation" property values are stored in the green channel, both indexed by UV coordinates in a `TEXCOORD_0` attribute.
+> **Example:** A property texture for wind velocity samples. The "speedKPH" property values are stored in the red channel, and "direction" property values are stored as a unit-length vector, with X/Y components in the green and blue channels. Both properties are indexed by UV coordinates in a `TEXCOORD_0` attribute.
 >
 > ```jsonc
 > // Root EXT_mesh_features extension:
 > {
 >   "propertyTextures": [{
->     "class": "wall",
+>     "class": "wind",
 >     "index": 0,
 >     "texCoord": 0,
 >     "properties": {
->       "insideTemp": [0],
->       "insulation": [1]
+>       "speedKPH": [0],
+>       "direction": [1, 2]
 >     }
 >   }]
 > }
@@ -635,7 +658,7 @@ Per-point properties|An implicit feature ID is assigned to each point. The prope
 Per-node properties|Vertices in node 0 and node 1, not batched together, are assigned different `offset` feature IDs.|![Per-node properties](figures/per-node-metadata.png)
 Multi-point features|A point cloud with two property tables, one storing properties for groups of points and the other storing properties for individual points.|![Multi-point features](figures/point-cloud-layers.png)
 Multi-instance features|Instanced tree meshes, where trees are assigned to groups with a per-GPU-instance feature ID attribute. One property table stores per-group properties and the other stores per-tree properties.|![Multi-instance features](figures/multi-instance-metadata.png)
-Material classification|A textured mesh using a property texture to store both material enums and normalized `UINT8` thermal temperatures.|![Material Classification](figures/material-classification.png)
+Material classification|A textured mesh using a property texture to store both material enums and normalized `UINT8` insulation values.|![Material Classification](figures/material-classification.png)
 Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanced meshes (fencing) with three property tables.|![Composite Example](figures/composite-example.png)
 
 ## Revision History
