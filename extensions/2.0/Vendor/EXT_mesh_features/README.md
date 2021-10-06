@@ -695,3 +695,5 @@ Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanc
   * Renamed `featureTable` → `propertyTable` and `featureTexture` → `propertyTexture`
   * Removed `featureIdAttributes` and `featureIdTextures`, replaced with `featureIds`
   * Removed string ID references to property tables and textures, replaced with integer IDs
+  * Relaxed buffer view alignment to component size, rather than strict 8-byte boundaries
+  * Clarified that nodes with GPU instancing cannot reference property textures
