@@ -48,8 +48,6 @@ This extension currently supports only a single CRS: EPSG:4978, an [Earth-center
 
 > **Source:** [Earth-centered, Earth-fixed coordinate system](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system), Wikipedia.
 
-
-
 > **Implementation note:** EPSG:4978 defines `0,0,0` as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
 
 > **Implementation note:** Scenes are annotated with `EPSG:4978` as an informative declaration of their contents. Client implementations are not required to transform content to or from any particular CRS, and may choose simply to reject input not matching their expected CRS. Notably, 3D Tiles implementations require EPSG:4978 for glTF assets included with `3DTILES_content_gltf` and will have undefined behavior when the `crs` property is set to other values or omitted. Providing the CRS is an indication that required pre-processing has been done, and not a replacement for such pre-processing.
