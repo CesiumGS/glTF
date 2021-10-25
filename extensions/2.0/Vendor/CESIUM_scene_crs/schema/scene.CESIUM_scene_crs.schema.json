@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "CESIUM_scene_crs glTF scene extension",
+    "type": "object",
+    "description": "glTF extension for declaring the Coordinate Reference System (CRS) of a scene.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "crs": {
+            "type": "string",
+            "description": "Coordinate Reference System for the scene. Implementations currently allow \"EPSG:4978\" only."
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}
