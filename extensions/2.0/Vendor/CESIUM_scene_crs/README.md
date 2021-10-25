@@ -43,11 +43,10 @@ Scenes annotated with the `crs` property are declared to have been authored for 
 This extension currently supports only a single CRS: EPSG:4978, an [Earth-centered, Earth-fixed (ECEF)](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system) coordinate system.
 
 <figure>
-    <img alt="Illustration of ECEF coordinate system." src="./figures/ecef_coordinates.png" alt="" style="max-width: 500px;">
-    <figcaption>
-        <small><b>Source:</b> <a href="https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system" target="_blank">Earth-centered, Earth-fixed coordinate system</a>, Wikipedia, October 2021.</small>
-    </figcaption>
+    <img alt="Illustration of ECEF coordinate system." src="./figures/ecef_coordinates.png" style="max-width: 500px;">
 </figure>
+
+> **Source:** [Earth-centered, Earth-fixed coordinate system](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system), Wikipedia.
 
 
 
