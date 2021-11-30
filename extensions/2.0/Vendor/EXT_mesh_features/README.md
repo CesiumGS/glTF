@@ -462,7 +462,7 @@ Property tables are defined as entries in the `propertyTables` array of the root
 
 The property table may provide value arrays for only a subset of the properties of its class, but class properties marked `required: true` must not be omitted. Each property value array given by the property table must be defined by a class property with the same alphanumeric property ID, with values matching the data type of the class property.
 
-> **Example:** A `tree_survey_2021-09-29` property table, implementing the `tree` class defined in earlier examples. The table contains observations for 10 trees, with each property defined by a buffer view containing 10 values.
+> **Example:** A `tree_survey_2021-09-29` property table, implementing the `tree` class defined in earlier examples. The table contains observations for 10 trees, with each property defined by an accessor containing 10 values.
 >
 > ```jsonc
 > {
@@ -475,14 +475,14 @@ The property table may provide value arrays for only a subset of the properties 
 >         "count": 10,
 >         "properties": {
 >           "species": {
->             "bufferView": 2,
->             "stringOffsetBufferView": 3
+>             "values": 2,
+>             "stringOffsets": 3
 >           },
 >           "birdCount": {
->             "bufferView": 1
+>             "values": 1
 >           },
 >           "height": {
->             "bufferView": 0
+>             "values": 0
 >           },
 >           // "diameter" is not required and has been omitted from this table.
 >         }
@@ -498,7 +498,7 @@ As in the core glTF specification, values of NaN, +Infinity, and -Infinity are n
 
 Each accessor `byteOffset` must be aligned to 4-byte boundaries, or to 8-byte boundaries for 64-bit property types.
 
-> **Implementation note:** Authoring tools may choose to align all buffer views to 8-byte boundaries for consistency, but client implementations should only depend on 8-byte alignment for buffer views containing 64-bit component types.
+> **Implementation note:** Authoring tools may choose to align all accessors to 8-byte boundaries for consistency, but client implementations should only depend on 8-byte alignment for accessors containing 64-bit component types.
 
 ### Property Textures
 
@@ -696,17 +696,17 @@ _This section is non-normative_
 
 The examples below shows the breadth of possible use cases for this extension.
 
-Example|Description|Image
---|--|--
-Triangle mesh|Feature IDs are assigned to each vertex to distinguish components of a building.|![Building Components](figures/building-components.png)
-Per-vertex properties<img width=700/>|An implicit feature ID is assigned to each vertex. The property table stores `FLOAT64` accuracy values. |![Per-vertex properties](figures/per-vertex-metadata.png)
-Per-triangle properties|An implicit feature ID is assigned to each set of three vertices. The property table stores `FLOAT64` area values.|![Per-triangle properties](figures/per-triangle-metadata.png)
-Per-point properties|An implicit feature ID is assigned to each point. The property table stores `FLOAT64` , `STRING`, and `ENUM` properties, which are not possible through glTF vertex attribute accessors alone.|![Point features](figures/point-features.png)
-Per-node properties|Vertices in node 0 and node 1, not batched together, are assigned different `offset` feature IDs.|![Per-node properties](figures/per-node-metadata.png)
-Multi-point features|A point cloud with two property tables, one storing properties for groups of points and the other storing properties for individual points.|![Multi-point features](figures/point-cloud-layers.png)
-Multi-instance features|Instanced tree meshes, where trees are assigned to groups with a per-GPU-instance feature ID attribute. One property table stores per-group properties and the other stores per-tree properties.|![Multi-instance features](figures/multi-instance-metadata.png)
-Material classification|A textured mesh using a property texture to store both material enums and normalized `UINT8` insulation values.|![Material Classification](figures/material-classification.png)
-Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanced meshes (fencing) with three property tables.|![Composite Example](figures/composite-example.png)
+| Example                               | Description                                                                                                                                                                                      | Image                                                           |
+|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| Triangle mesh                         | Feature IDs are assigned to each vertex to distinguish components of a building.                                                                                                                 | ![Building Components](figures/building-components.png)         |
+| Per-vertex properties<img width=700/> | An implicit feature ID is assigned to each vertex. The property table stores `FLOAT64` accuracy values.                                                                                          | ![Per-vertex properties](figures/per-vertex-metadata.png)       |
+| Per-triangle properties               | An implicit feature ID is assigned to each set of three vertices. The property table stores `FLOAT64` area values.                                                                               | ![Per-triangle properties](figures/per-triangle-metadata.png)   |
+| Per-point properties                  | An implicit feature ID is assigned to each point. The property table stores `FLOAT64` , `STRING`, and `ENUM` properties, which are not possible through glTF vertex attribute accessors alone.   | ![Point features](figures/point-features.png)                   |
+| Per-node properties                   | Vertices in node 0 and node 1, not batched together, are assigned different `offset` feature IDs.                                                                                                | ![Per-node properties](figures/per-node-metadata.png)           |
+| Multi-point features                  | A point cloud with two property tables, one storing properties for groups of points and the other storing properties for individual points.                                                      | ![Multi-point features](figures/point-cloud-layers.png)         |
+| Multi-instance features               | Instanced tree meshes, where trees are assigned to groups with a per-GPU-instance feature ID attribute. One property table stores per-group properties and the other stores per-tree properties. | ![Multi-instance features](figures/multi-instance-metadata.png) |
+| Material classification               | A textured mesh using a property texture to store both material enums and normalized `UINT8` insulation values.                                                                                  | ![Material Classification](figures/material-classification.png) |
+| Composite                             | A glTF containing a 3D mesh (house), a point cloud (tree), and instanced meshes (fencing) with three property tables.                                                                            | ![Composite Example](figures/composite-example.png)             |
 
 ## Revision History
 
