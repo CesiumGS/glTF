@@ -49,6 +49,7 @@ Optionally, this extension may be used in conjunction with [`EXT_mesh_gpu_instan
   - [Property Tables](#property-tables)
   - [Property Textures](#property-textures)
 - [Binary Data Storage](#binary-data-storage)
+  - [Property Accessors](#property-accessors)
 - [Optional vs. Required](#optional-vs-required)
 - [Schema](#schema-1)
 - [Examples](#examples)
@@ -491,11 +492,11 @@ The property table may provide value arrays for only a subset of the properties 
 > }
 > ```
 
-Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Binary Table Format](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata#binary-table-format) section of the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata).
+Property arrays are stored in glTF accessors and use the binary encoding defined in the [Binary Table Format](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata#binary-table-format) section of the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata).
 
 As in the core glTF specification, values of NaN, +Infinity, and -Infinity are never allowed.
 
-Each buffer view `byteOffset` must be aligned to a multiple of its component size.
+Each accessor `byteOffset` must be aligned to 4-byte boundaries, or to 8-byte boundaries for 64-bit property types.
 
 > **Implementation note:** Authoring tools may choose to align all buffer views to 8-byte boundaries for consistency, but client implementations should only depend on 8-byte alignment for buffer views containing 64-bit component types.
 
@@ -616,12 +617,68 @@ Texture filtering must be `9728` (NEAREST), `9729` (LINEAR), or undefined, for a
 
 ## Binary Data Storage
 
-Feature properties are stored in a compact binary tabular format described in the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata), with each property table array occupying a glTF buffer view. `EXT_mesh_features` imposes 8-byte binary data alignment requirements on an asset, allowing support for 64-bit data types while remaining compatible with the 4-byte alignments in the core glTF specification:
+Feature properties are stored in a compact binary tabular format described in the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Metadata), with each property table array occupying a glTF accessor. `EXT_mesh_features` imposes 8-byte binary data alignment requirements on an asset, allowing support for 64-bit data types while remaining compatible with the 4-byte alignments in the core glTF specification:
 
 - GLB-stored `JSON` chunk must be padded with trailing `Space` characters (`0x20`) to 8-byte boundary.
 - GLB-stored `BIN` chunk must be padded with trailing zeroes (`0x00`) to 8-byte boundary.
 
 As a result, byte length of the `BIN` chunk may be up to 7 bytes larger than JSON-defined `buffer.byteLength` to satisfy alignment requirements.
+
+### Property Accessors
+
+Each property table array occupies a glTF accessor. Because glTF accessors support only a subset of the data types allowed by class schema, additional property data types are mapped to `UINT8` accessors used as general-purpose binary containers. Array types are mappedto `"SCALAR"` accessor types.
+
+The table below describes the mappings from properties to accessors exhaustively.
+
+| `property.componentType` | `accessor.componentType` | `property.type` | `accessor.type`        |
+|--------------------------|--------------------------|-----------------|------------------------|
+| `"UINT8"`                | `5121`                   | `"SINGLE"`      | `"SCALAR"`             |
+| `"UINT8"`                | `5121`                   | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"UINT8"`                | `5121`                   | `"VEC2"`        | `"VEC2"`               |
+| `"UINT8"`                | `5121`                   | `"VEC3"`        | `"VEC3"`               |
+| `"UINT8"`                | `5121`                   | `"VEC4"`        | `"VEC4"`               |
+| `"UINT8"`                | `5121`                   | `"MAT2"`        | `"MAT2"`               |
+| `"UINT8"`                | `5121`                   | `"MAT3"`        | `"MAT3"`               |
+| `"UINT8"`                | `5121`                   | `"MAT4"`        | `"MAT4"`               |
+| `"UINT16"`               | `5123`                   | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"UINT32"`               | `5125` <sup>2</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"UINT64"`               | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"INT8"`                 | `5120` (BYTE)            | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"INT16"`                | `5122` (SHORT)           | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"INT32"`                | `5124` (INT)<sup>4</sup> | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"INT64"`                | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"FLOAT32"`              | `5126` (FLOAT)           | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"FLOAT64"`              | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| ...                      | ...                      | ...             | ...                    |
+| `"BOOLEAN"`              | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"BOOLEAN"`              | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"STRING"`               | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"STRING"`               | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"ENUM"`                 | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"ENUM"`                 | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+
+<small><sup>1</sup> Use "SCALAR" accessors for "ARRAY" property types, with `componentCount` for fixed-length arrays.</small><br>
+<small><sup>3</sup> `5125` (UNSIGNED_INT) disallowed by base glTF 2.0 specification except as `primitive.indices`. `EXT_mesh_features` overrides this restriction.</small><br>
+<small><sup>3</sup> `5121` (UNSIGNED_BYTE) used as general-purpose binary storage.</small><br>
+<small><sup>4</sup> `5124` (INT) disallowed by base glTF 2.0 specification. `EXT_mesh_features` overrides this restriction.</small>
+
+Each accessor `byteOffset` must be aligned to 4-byte boundaries, or to 8-byte boundaries for 64-bit property types.
+
+Buffer views used for property value accessors must be used only for that purpose — the same buffer view cannot also be used for vertex data, indices, or other values.
+
+Buffer views used for property value accessors may have a `byteStride` property, in which case row values are interleaved. Components of array, vector, and matrix values remain contiguous. Note that because `accessor.type` is defined as `"SCALAR"` for fixed- and variable-length arrays, `accessor.type` may correspond to a smaller component width than `bufferView.byteStride`.
+
+> **Implementation note:** Interleaved property value accessors may assist client applications with GPU upload, but will significantly reduce the compression efficiency during transmission. In general, non-interleaved property values should be preferred.
+
+> **Implementation note:** Authoring tools may group property value accessors in buffer views to enable GPU upload as vertex attributes. Certain data types (e.g. boolean bitstreams) cannot be directly uploaded, and should ideally be stored separately.
 
 ## Optional vs. Required
 
@@ -704,3 +761,8 @@ Composite|A glTF containing a 3D mesh (house), a point cloud (tree), and instanc
   * Each property texture now contains only a single texture
   * Property textures are now assumed to be in linear space, and must use nearest or linear filtering
   * Added a `schema.id` property
+* **Version 2.0.1** November 2021
+  * Replaced property table buffer views with accessors
+    * Renamed `property.bufferView` to `property.values`
+    * Renamed `property.arrayOffsetBufferView` to `property.arrayOffsets`
+    * Renamed `property.stringOffsetBufferView` to `property.stringOffsets`
