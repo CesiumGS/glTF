@@ -666,9 +666,9 @@ The table below describes the mappings from properties to accessors exhaustively
 | `"ENUM"`                 | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
 
 <small><sup>1</sup> Use "SCALAR" accessors for "ARRAY" property types, with `componentCount` for fixed-length arrays.</small><br>
-<small><sup>3</sup> `5125` (UNSIGNED_INT) disallowed by base glTF 2.0 specification except as `primitive.indices`. `EXT_mesh_features` overrides this restriction.</small><br>
-<small><sup>3</sup> `5121` (UNSIGNED_BYTE) used as general-purpose binary storage.</small><br>
-<small><sup>4</sup> `5124` (INT) disallowed by base glTF 2.0 specification. `EXT_mesh_features` overrides this restriction.</small>
+<small><sup>3</sup> `5125` (UNSIGNED_INT) is disallowed by the base glTF 2.0 specification except as `primitive.indices`. `EXT_mesh_features` overrides this restriction.</small><br>
+<small><sup>3</sup> `5121` (UNSIGNED_BYTE) is used as general-purpose binary storage.</small><br>
+<small><sup>4</sup> `5124` (INT) is disallowed by the base glTF 2.0 specification. `EXT_mesh_features` overrides this restriction.</small>
 
 Each accessor `byteOffset` must be aligned to 4-byte boundaries, or to 8-byte boundaries for 64-bit property types.
 
