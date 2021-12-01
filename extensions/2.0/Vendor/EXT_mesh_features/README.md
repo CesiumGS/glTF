@@ -644,31 +644,31 @@ The table below describes the mappings from properties to accessors exhaustively
 | ...                      | ...                      | ...             | ...                    |
 | `"UINT32"`               | `5125` <sup>2</sup>      | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
-| `"UINT64"`               | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"UINT64"`               | `5135`                   | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
 | `"INT8"`                 | `5120` (BYTE)            | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
 | `"INT16"`                | `5122` (SHORT)           | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
-| `"INT32"`                | `5124` (INT)<sup>4</sup> | `"SINGLE"`      | `"SCALAR"`             |
+| `"INT32"`                | `5124` (INT)<sup>3</sup> | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
-| `"INT64"`                | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"INT64"`                | `5134`                   | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
 | `"FLOAT32"`              | `5126` (FLOAT)           | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
-| `"FLOAT64"`              | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"FLOAT64"`              | `5121` <sup>4</sup>      | `"SINGLE"`      | `"SCALAR"`             |
 | ...                      | ...                      | ...             | ...                    |
-| `"BOOLEAN"`              | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
-| `"BOOLEAN"`              | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
-| `"STRING"`               | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
-| `"STRING"`               | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
-| `"ENUM"`                 | `5121` <sup>3</sup>      | `"SINGLE"`      | `"SCALAR"`             |
-| `"ENUM"`                 | `5121` <sup>3</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"BOOLEAN"`              | `5121` <sup>4</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"BOOLEAN"`              | `5121` <sup>4</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"STRING"`               | `5121` <sup>4</sup>      | `"SINGLE"`      | `"SCALAR"`             |
+| `"STRING"`               | `5121` <sup>4</sup>      | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
+| `"ENUM"`                 | Use enum `valueType`     | `"SINGLE"`      | `"SCALAR"`             |
+| `"ENUM"`                 | Use enum `valueType`     | `"ARRAY"`       | `"SCALAR"`<sup>1</sup> |
 
 <small><sup>1</sup> Use "SCALAR" accessors for "ARRAY" property types, with `componentCount` for fixed-length arrays.</small><br>
-<small><sup>3</sup> `5125` (UNSIGNED_INT) is disallowed by the base glTF 2.0 specification except as `primitive.indices`. `EXT_mesh_features` overrides this restriction.</small><br>
-<small><sup>3</sup> `5121` (UNSIGNED_BYTE) is used as general-purpose binary storage.</small><br>
-<small><sup>4</sup> `5124` (INT) is disallowed by the base glTF 2.0 specification. `EXT_mesh_features` overrides this restriction.</small>
+<small><sup>2</sup> `5125` (UNSIGNED_INT) is disallowed by the base glTF 2.0 specification except as `primitive.indices`. `EXT_mesh_features` overrides this restriction.</small><br>
+<small><sup>3</sup> `5124` (INT) is disallowed by the base glTF 2.0 specification. `EXT_mesh_features` overrides this restriction.</small><br>
+<small><sup>4</sup> `5121` (UNSIGNED_BYTE) is used as general-purpose binary storage.</small><br>
 
 Each accessor `byteOffset` must be aligned to 4-byte boundaries, or to 8-byte boundaries for 64-bit property types.
 
