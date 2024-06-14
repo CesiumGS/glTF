@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "bounds.schema.json",
+    "title": "Bounds",
+    "type": "object",
+    "description": "The bounds property describes which section of the primitive is mapped to the voxel grid. bounds.min and bounds.max specify a rectangular region of the voxel grid in the appropriate coordinate system.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "min": {
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+        },
+        "max": {
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+        }
+    },
+    "required": [
+        "min",
+        "max"
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "padding.schema.json",
+    "title": "Padding",
+    "type": "object",
+    "description": "The padding property specifies how many rows of attribute data in each dimension come from neighboring grids.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "before": {
+            "type": "array",
+            "items": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "minItems": 3,
+            "maxItems": 3
+        },
+        "after": {
+            "type": "array",
+            "items": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "minItems": 3,
+            "maxItems": 3
+        }
+    },
+    "required": [
+        "before",
+        "after"
+    ]
+}
