@@ -3,7 +3,7 @@
     "$id": "padding.schema.json",
     "title": "Padding",
     "type": "object",
-    "description": "The padding property specifies how many rows of attribute data in each dimension come from neighboring grids.",
+    "description": "The padding around a voxel grid. Specifies how many rows of attribute data come from neighboring grids in each dimension.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"

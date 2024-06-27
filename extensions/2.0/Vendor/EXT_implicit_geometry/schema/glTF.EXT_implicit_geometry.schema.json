@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "glTF.EXT_implicit_geometry.schema.json",
+    "title": "EXT_implicit_geometry glTF extension",
+    "type": "object",
+    "description": "`EXT_implicit_geometry` extension to represent implicit 3D geometry in a glTF model",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "geometries": {
+            "type": "array",
+            "description": "An array of implicit geometry definitions.",
+            "minItems": 1,
+            "items": {
+                "$ref": "geometry.schema.json"
+            }
+        }
+    }
+}
