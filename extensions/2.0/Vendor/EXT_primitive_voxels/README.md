@@ -19,9 +19,9 @@ Written against the glTF 2.0 specification.
 
 ## Overview
 
-This extension allows mesh primitives to represent volumetric (voxel) data via custom attributes. Primitives that use this extension must set their `mode` to the constant `0x80000000` (`2147483648`), which is used to indicate voxels.
+This extension allows mesh primitives to represent volumetric (voxel) data via custom attributes. Primitives that use this extension must set their `mode` to the constant `0x7FFFFFFF` (`2147483647`), which is used to indicate voxels.
 
-Typically, glTF mesh primitives use the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by this extension. Instead, `EXT_primitive_voxels` relies on the [`EXT_implicit_geometry` extension](../EXT_implicit_geometry/) to describe the shape of the voxel grid.  
+Typically, glTF mesh primitives use the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by this extension. Instead, `EXT_primitive_voxels` relies on the [`KHR_implicit_shapes` extension](TODO) to describe the shape of the voxel grid.  
 
 ```
 "primitives": [
@@ -44,7 +44,7 @@ Typically, glTF mesh primitives use the `POSITION` attribute to store positional
 ]
 ```
 
-Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry from `EXT_implicit_geometry`. This includes cylinders and regions, visualized below.
+Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry from `KHR_implicit_shapes`. This includes cylinders, as well as ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/), visualized below.
 
 |Box|Cylinder|Region|
 | ------------- | ------------- | ------------- |
@@ -66,7 +66,7 @@ These properties may be used to define the scale of the box grid, independent of
 ![Non-uniform box grid](figures/non-uniform-box.png)
 <p align="center"><i>A box grid that is non-uniformly scaled due to its min and max properties. It is also non-uniformly subdivided.</i></p>
 
-### Cylindrical Grid
+### Cylinder Grid
 
 A **cylinder** grid is subdivided along the radius, height, and angle ranges of the cylinder, visualized below.
 
@@ -76,12 +76,13 @@ The cylinder is aligned with the `y`-axis in the primitive's local space. As suc
 
 [TODO](image)
 
-### Ellipsoidal Grid
+### Ellipsoid-based Region Grid
 
-For **ellipsoid** geometry, the `bounds` refer to the section of the ellipsoid that the voxel data occupies. `(-pi, -pi/2, 0)` and `(pi, pi/2, 1)`
+For **EXT_implicit_ellipsoid_region** geometry, TODO.
+
+The `bounds` refer to the section of the ellipsoid that the voxel data occupies. `(-pi, -pi/2, 0)` and `(pi, pi/2, 1)`
 
  Elements are laid out in memory on a first-axis-contiguous basis. For instance, with box-shaped voxels, the `x` data is contiguous (up to stride).
-
 
 contains minimum and maximum values along the axes and/or parameters that control the grid's shape. These ranges are interpreted relative to the geometry of the grid, as indicated by the primitive's `mode`.
 
@@ -131,7 +132,7 @@ The padding data must be supplied with the rest of the voxel data - this means i
 ```
 ### Metadata
 
-This extension may be paired with the `EXT_structural_metadata` extension.
+This extension may be paired with the `EXT_structural_metadata` extension to convey more semantic information about the voxel attributes.
 
 ```
 {

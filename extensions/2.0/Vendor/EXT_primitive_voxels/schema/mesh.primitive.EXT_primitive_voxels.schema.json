@@ -16,11 +16,11 @@
                     "$ref": "glTFid.schema.json"
                 }
             ],
-            "description": "The index of the shape in `EXT_implicit_geometry` that the voxel grid adheres to."
+            "description": "The index of the shape in `KHR_implicit_shapes` that the voxel grid adheres to."
         },
         "dimensions": {
             "type": "array",
-            "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape indicated by `EXT_implicit_geometry`.",
+            "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape indicated by `KHR_implicit_shapes`.",
             "items": {
                 "type": "integer",
                 "minimum": 1
