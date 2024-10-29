@@ -24,7 +24,7 @@ The reference ellipsoid is centered at the origin. The `semiMajorAxisRadius` ind
 
 The `semiMinorAxisRadius` indicates the radius of the ellipsoid in meters along the `y` axis.
 
-The `minHeight` and `maxHeight` properties indicates the heights of the region from the ellipsoid's surface, in meters. The `minimum` height should be lower a value, but not necessarily closer to the surface of the ellipsoid. For example, `maxHeight` may be `10` while `minHeight` is `-100`.
+The `minHeight` and `maxHeight` properties indicates the heights of the region from the ellipsoid's surface, in meters. The `minimum` height should be a lower value, but not necessarily lower in magnitude. For example, `maxHeight` may be `10` while `minHeight` is `-100`.
 
 <table>
   <tr>
@@ -46,6 +46,43 @@ The `minHeight` and `maxHeight` properties indicates the heights of the region f
                   "semiMinorAxisRadius": 2,
                   "minHeight": 0,
                   "maxHeight": 0.5
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+    </pre></td>
+    <td>
+    **TODO** visual example
+    </td>
+  </tr>
+</table>
+
+An ellipsoid region may also be confined to a specific latitude and/or longitude range. The `minLatitude` and `maxLatitude` properties represent the latitude values at which the region starts and stops, defined in the range `[-pi/2, pi/2]`. Similarly, the `minLatitude` and `maxLatitude` properties represent the longitude bounds within the range `[-pi, pi]`.
+
+<table>
+  <tr>
+    <th>
+    Example
+    </th>
+  </tr>
+  <tr>
+    <td><pre>
+    "extensions": [
+      {
+        "KHR_implicit_shapes": {
+          "shapes": [
+            {
+              "type": "ellipsoid region",
+              "extensions": {
+                "EXT_implicit_ellipsoid_region": {
+                  "semiMajorAxisRadius": 4,
+                  "semiMinorAxisRadius": 2,
+                  "minHeight": 0,
+                  "maxHeight": 0.5,
+                  // TODO
                 }
               }
             }

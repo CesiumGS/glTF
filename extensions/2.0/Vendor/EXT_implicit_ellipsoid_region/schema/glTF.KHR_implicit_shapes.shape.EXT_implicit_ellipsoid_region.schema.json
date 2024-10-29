@@ -3,7 +3,7 @@
     "$id": "glTF.KHR_implicit_shapes.shape.EXT_implicit_ellipsoid_region.schema.json",
     "title": "EXT_implicit_ellipsoid_region extension on KHR_implicit_shapes.shape",
     "type": "object",
-    "description": "`EXT_implicit_ellipsoid_region` extension on `KHR_implicit_shapes.shape` to represent an implicit ellipsoid region in a glTF model. Useful for geospatial applications, such as Earth-conforming voxel data.",
+    "description": "Extension of `KHR_implicit_shapes.shape` to represent an implicit ellipsoid region in a glTF model.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
