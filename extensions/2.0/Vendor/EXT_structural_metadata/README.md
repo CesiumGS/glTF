@@ -95,6 +95,8 @@ Template for metadata entities. Classes provide a list of property definitions. 
 
 Classes are defined as entries in the `schema.classes` dictionary, indexed by class ID. Class IDs must be alphanumeric identifiers matching the regular expression `^[a-zA-Z_][a-zA-Z0-9_]*$`.
 
+A class may specify a `parent` class, forming a class hierarchy. A class instance contains property values for its class as well as ancestor classes. Classes in a hierarchy cannot have the same property ID. Cyclical inheritance is disallowed.
+
 > **Example:** A "Tree" class, which might describe a table of tree measurements taken in a park. Property definitions are abbreviated here, and introduced in the next section.
 >
 > ```jsonc
