@@ -44,7 +44,7 @@ Typically, glTF mesh primitives use the `POSITION` attribute to store positional
 ]
 ```
 
-Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry from `KHR_implicit_shapes`. This includes cylinders, as well as ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/), visualized below.
+Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry from `KHR_implicit_shapes`. This includes cylinder-based regions specified by [`EXT_implicit_cylinder_region`](../EXT_implicit_cylinder_region/, as well as ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/), visualized below.
 
 |Box|Cylinder|Region|
 | ------------- | ------------- | ------------- |
@@ -103,6 +103,16 @@ The padding data must be supplied with the rest of the voxel data - this means i
 
 ```
 {
+  "extensions": {
+    "KHR_implicit_shapes": {
+      "shapes": [
+        {
+          "box": {
+            "size": [2, 2, 2]
+          }
+        }
+      ]
+    },
   "meshes": [
     {
       "primitives": [
@@ -113,6 +123,7 @@ The padding data must be supplied with the rest of the voxel data - this means i
           "mode": 2147483648,
           "extensions": {
             "EXT_primitive_voxels": {
+              "shape": 0,
               "dimensions": [8, 8, 8],
               "bounds": {
                 "min": [0.25, 0.5, 0.5],
@@ -137,10 +148,10 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
 ```
 {
   "extensions": {
-    "EXT_implicit_geometry": {
-      geometries: [
+    "KHR_implicit_shapes": {
+      "shapes": [
         {
-          "box":{
+          "box": {
             "size": [2, 2, 2]
           }
         }
@@ -158,7 +169,7 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
           }
         }
       }
-      propertyAttributes: [
+      "propertyAttributes": [
         {
           "class": "voxels",
           "properties": {
@@ -185,8 +196,8 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
                 "after": [1, 1, 1]
               }
             },
-            EXT_structural_metadata: {
-              propertyAttributes: [0]
+            "EXT_structural_metadata": {
+              "propertyAttributes": [0]
             }
           }
         }
