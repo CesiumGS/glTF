@@ -41,18 +41,18 @@ This approach allows for an easy fallback in the event the glTF is loaded within
 
 ## Adding Gaussian Splats to Primitives
 
-As Gaussian splats are defined by a position color, rotation and scale, we both map to existing attributes and define new ones. These are attached to a primitive  by defining the `extensions.KHR_gaussian_splatting` property on that mesh.
+As Gaussian splats are defined by a position color, rotation and scale, we both map to existing attributes and define new ones. These are attached to a primitive  by defining the `extensions.KHR_gaussian_splatting` property on that primitive.
 
 ### Splat Data Mapping
 
 To define a Gaussian splat, it must contain the following attributes:
 
-| Splat Data | glTF Attribute | Accessor Type | Component Type |
+| glTF Attribute | Accessor Type | Component Type | Description |
 | --- | --- | --- | --- |
-| Position | POSITION | VEC3 | float |
-| Color (Spherical Harmonic 0 (Diffuse) and opacity) | COLOR_0 | VEC4 | unsigned byte normalized |
-| Rotation | _ROTATION | VEC4 | float |
-| Scale | _SCALE | VEC3 | float |
+| POSITION | "VEC3" | 5126(FLOAT) | Gaussian Splat position |
+| COLOR_0 | "VEC4" | 5121(UNSIGNED BYTE) normalized | Color (Spherical Harmonic 0 (Diffuse) and opacity) |
+| _ROTATION | "VEC4" | 5126(FLOAT) | Gaussian Splat rotation |
+| _SCALE | "VEC3" | 5126(FLOAT) | Gaussian Splat scale |
 
 Standard PLY splat formats have opacity and color separate, however they are combined into the COLOR_0 attribute here.
 
@@ -79,6 +79,8 @@ Utilizing the standard position and color attributes allows us to easily fall ba
 ```
 
 ### Transforming Gaussian Splat Data for glTF
+
+_This section is non-normative_
 
 The data output from the Gaussian splat training process that is stored in the typical PLY must be transformed before storing in glTF. These transformations make the data suitable for direct usage in glTF.
 
@@ -107,7 +109,7 @@ $$\hat{q} = \frac{q}{\|q\|} = \frac{q}{\sqrt{q_w^2 + q_x^2 + q_y^2 + q_z^2}}$$
 
 #### Sample
 
-Basic example shown below. This sample shows adding Guassian splats to the first primitive of a mesh. No
+Basic example shown below. This sample shows adding Guassian splats to the first primitive of a mesh.
 ```json
 {
     "accessors": [
@@ -328,7 +330,7 @@ It is recommended to do some sort of spatial sorting prior to compression like M
 
 ### Position Attribute
 
-It is recommended to quantize to `half float` utilizing `KHR_mesh_quantization` with an `unsigned int` accessor type. If using scaled quantization values, you may set the `quantizedPositionScale` value in `extensions.KHR_gaussian_splatting`.
+It is recommended to quantize to `unsigned short` utilizing `KHR_mesh_quantization`.
 
 | meshopt configuration | value |
 | --- | --- |
