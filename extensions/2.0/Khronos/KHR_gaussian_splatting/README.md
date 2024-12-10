@@ -60,24 +60,6 @@ This implementation only contains the channel 0 spherical harmonic for diffuse c
 
 Utilizing the standard position and color attributes allows us to easily fall back in situations where `extensions.KHR_gaussian_splatting` isn't available. Or simply for alternative rendering.
 
-### Extension attributes
-
-`extensions.KHR_gaussian_splatting` may contain the following values:
-
-| Attributes | Type | Description | Required |
-| --- | --- | --- | --- |
-| quantizedPositionScale | number | Scale value for dequantizing POSITION attribute values | No, default: `1.0` |
-
-```json
-{
-    "extensions": {
-        "KHR_gaussian_splatting": {
-            "quantizedPositionScale": 13.228187255859375
-        }
-    }
-}
-```
-
 ### Transforming Gaussian Splat Data for glTF
 
 _This section is non-normative_
@@ -141,11 +123,6 @@ Basic example shown below. This sample shows adding Guassian splats to the first
                         "COLOR_0": 1,
                         "_ROTATION": 2,
                         "_SCALE": 3
-                    },
-                    "extensions": {
-                        "KHR_gaussian_splatting": {
-                            "quantizedPositionScale": 1.0
-                        }
                     }
                 }
             ]
