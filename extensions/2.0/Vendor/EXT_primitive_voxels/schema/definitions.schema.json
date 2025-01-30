@@ -1,0 +1,35 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "definitions.schema.json",
+    "title": "Definitions",
+    "description": "Common definitions used in schema files.",
+    "definitions": {
+        "noDataValue": {
+            "title": "No Data Value",
+            "oneOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "minItems": 1
+                    },
+                    "minItems": 1
+                }
+            ],
+            "description": "For `SCALAR` attributes this is a number. For `VECN` attributes this is an array of `N` numbers. For `MATN` attributes this is `N` arrays of `N` numbers."
+        }
+    }
+}

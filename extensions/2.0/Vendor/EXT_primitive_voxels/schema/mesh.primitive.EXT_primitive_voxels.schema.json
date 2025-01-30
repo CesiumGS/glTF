@@ -31,6 +31,18 @@
         "padding": {
             "description": "The optional padding of the voxels.",
             "$ref": "padding.schema.json"
+        },
+        "noData": {
+            "description": "A plain JSON object, where each key corresponds to a mesh attribute semantic and each value is the attribute's `noData` value. A `noData` value represents missing data — also known as a sentinel value — wherever it appears.",
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+                "allOf": [
+                    {
+                        "$ref": "definitions.schema.json#/definitions/noDataValue"
+                    }
+                ]
+            }
         }
     },
     "required": [
