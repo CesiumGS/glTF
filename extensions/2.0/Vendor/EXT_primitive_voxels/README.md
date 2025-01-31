@@ -63,7 +63,7 @@ Typical mesh primitives make use of the `POSITION` attribute to store positional
 
 Though voxels are commonly associated with cubic geometry on a box-based grid, this extension also allows voxels to be based on other shapes, including cylinder-based regions specified by [`EXT_implicit_cylinder_region`](../EXT_implicit_cylinder_region/) and ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/). The supported shapes are visualized below.
 
-|Box|Cylinder|Region|
+|Box|Cylinder|Ellipsoid|
 | ------------- | ------------- | ------------- |
 |![Box Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
 
