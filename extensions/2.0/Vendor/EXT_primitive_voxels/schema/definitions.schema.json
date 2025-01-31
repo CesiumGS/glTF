@@ -29,7 +29,7 @@
                     "minItems": 1
                 }
             ],
-            "description": "For `SCALAR` attributes this is a number. For `VECN` attributes this is an array of `N` numbers. For `MATN` attributes this is `N` arrays of `N` numbers."
+            "description": "A `noData` value represents missing data — also known as a sentinel value — wherever it appears. For `SCALAR` attributes this is a number. For `VECN` attributes this is an array of `N` numbers. For `MATN` attributes this is `N` arrays of `N` numbers."
         }
     }
 }

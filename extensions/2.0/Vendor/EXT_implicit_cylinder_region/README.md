@@ -89,7 +89,7 @@ Angles are given in radians within the range `[-pi, pi]` and open clockwise arou
               "minRadius": 0.5,
               "maxRadius": 1,
               "height": 2,
-              "minAngle": 0
+              "minAngle": 0,
               "maxAngle": 3.1415
             }
           }
