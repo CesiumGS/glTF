@@ -6,10 +6,10 @@
 
 ## Contributors
 
+- Janine Liu, Cesium
 - Daniel Krupka, Cesium
 - Ian Lilley, Cesium
 - Sean Lilley, Cesium
-- Janine Liu, Cesium
 - Jeshurun Hembd, Cesium
 
 ## Status
@@ -24,7 +24,7 @@ Written against the glTF 2.0 specification. Depends on the [`KHR_implicit_shapes
 
 This extension allows mesh primitives to represent volumetric (voxel) data via custom attributes. Primitives that use this extension must set their `mode` to the constant `0x7FFFFFFF` (`2147483647`) used to indicate voxels.
 
-Typical mesh primitives make use of the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by `EXT_primitive_voxels` Instead, this extension relies on the `KHR_implicit_shapes` extension to describe the shape of the voxel grid.
+Typical mesh primitives make use of the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by `EXT_primitive_voxels`. Instead, this extension relies on the `KHR_implicit_shapes` extension to describe the shape of the voxel grid.
 
 ```json
 {
@@ -73,7 +73,9 @@ The relationship between `dimensions` and the grid geometry is explained below.
 
 ### Box Grid
 
-A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively. Elements are laid out in memory where the `x` data is contiguous up to stride.
+A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
+
+Elements are laid out in memory where the `x` data is contiguous in strides along the `y` axis, and each group of `y` strides represents a `z` slice.
 
 ![Uniform box grid](figures/uniform-box.png)
 <p align="center"><i>A uniform box grid that is subdivided into two cells along each axis.</i></p>
@@ -83,13 +85,13 @@ A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equall
 
 ### Cylinder Region Grid
 
-A **cylinder** region grid is subdivided along the radius, height, and angle ranges of the region, visualized below.
+A **cylinder** region grid is subdivided along the radius, height, and angle ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
 The cylinder is aligned with the `y`-axis in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds subdivided clockwise around the circumference of the cylinder.
 
-Elements are laid out in memory where data along the radius is contiguous up to stride.
+Elements are laid out in memory where the radial data is contiguous in strides along the cylinder's height, as if stacked in a column. Each group of height strides represents an angular slice on the cylinder.
 
 ![Whole cylinder grid](figures/whole-cylinder.png)
 <p align="center"><i>A cylinder that is subdivided into two cells along each axis.</i></p>
@@ -101,7 +103,7 @@ Elements are laid out in memory where data along the radius is contiguous up to 
 
 An **ellipsoid** region grid is subdivided along the longitude, latitude, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
-Elements are laid out in memory where the `longitude` data is contiguous (up to stride).
+Elements are laid out in memory where the longitude data is contiguous in strides along the region's latitude. Each group of latitude strides represents a height slice on the region.
 
 ![Region grid](figures/part-ellipsoid.png)
 <p align="center"><i>An ellipsoid region that is subdivided into two cells along each axis.</i></p>
@@ -142,7 +144,7 @@ The "No Data" values for attributes must be defined in the `noData` object. Any 
 
 For instance, if a voxel primitive references the following accessors...
 
-```json
+```jsonc
 "accessors": [
   {
     "type": "SCALAR",
@@ -175,7 +177,7 @@ For instance, if a voxel primitive references the following accessors...
               "shape": 0,
               "dimensions": [8, 8, 8],
               "noData": {
-                "_TEMPERATURE": -32768,
+                "_TEMPERATURE": [-32768],
                 "_DIRECTION": [-999.99, -999.99, -999.99]
               }
           }
@@ -249,7 +251,7 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
 }
 ```
 
-`EXT_structural_metadata` may also specify a `noData` value for a property attribute property. Runtimes have the liberty to decide what will happen if `EXT_primitive_voxels` also provides a different `noData` value for the same attribute.
+`EXT_structural_metadata` may also specify a `noData` value for a property attribute property. If `EXT_primitive_voxels` contains an entry in `noData` for the same attribute, the values **SHOULD** match betwen the two extensions.
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.

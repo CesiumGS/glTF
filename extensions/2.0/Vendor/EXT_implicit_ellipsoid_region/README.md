@@ -1,13 +1,16 @@
 # EXT_implicit_ellipsoid_region
 
 ## Contributors
-- Sean Lilley, Cesium
+
 - Janine Liu, Cesium
+- Sean Lilley, Cesium
 
 ## Status
+
 Draft
 
 ## Dependencies
+
 Written against the glTF 2.0 specification. Depends on the [`KHR_implicit_shapes`](https://github.com/eoineoineoin/glTF/tree/refs/heads/collisionShapeMerge/extensions/2.0/Khronos/KHR_implicit_shapes) extension.
 
 ## Overview

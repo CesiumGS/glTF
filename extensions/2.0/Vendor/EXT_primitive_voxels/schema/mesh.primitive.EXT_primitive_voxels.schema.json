@@ -37,11 +37,13 @@
             "type": "object",
             "minProperties": 1,
             "additionalProperties": {
-                "allOf": [
-                    {
-                        "$ref": "definitions.schema.json#/definitions/noDataValue"
-                    }
-                ]
+                "type": "array",
+                    "description": "The `noData` value for the corresponding attribute. Array elements **MUST** follow the accessor's `componentType`, and its length must align with the accessor's `type`.",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1,
+                    "maxItems": 16
             }
         }
     },

@@ -2,8 +2,8 @@
 
 ## Contributors
 
-- Sean Lilley, Cesium
 - Janine Liu, Cesium
+- Sean Lilley, Cesium
 
 ## Status
 
