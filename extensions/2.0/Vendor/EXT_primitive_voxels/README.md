@@ -67,9 +67,10 @@ Though voxels are commonly associated with cubic geometry on a box-based grid, t
 | ------------- | ------------- | ------------- |
 |![Box Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
 
-Voxels exist inside a bounding volume that conforms to the shape of the grid. The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer.
+Voxels exist inside a bounding volume that conforms to the shape of the grid. The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer. The way that `dimensions` is interpreted depends on the grid geometry, as explained below.
 
-The relationship between `dimensions` and the grid geometry is explained below.
+> [!NOTE]
+> The following examples use small voxel `dimensions` for illustrative purposes. In practice, voxel primitives will use much larger values for their `dimensions`.
 
 ### Box Grid
 
