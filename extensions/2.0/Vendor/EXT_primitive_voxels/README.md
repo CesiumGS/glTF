@@ -90,7 +90,7 @@ A **cylinder** region grid is subdivided along the radius, height, and angle ran
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
-The cylinder is aligned with the `y`-axis in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds subdivided counter-clockwise around the circumference of the cylinder.
+The cylinder is aligned with the `y`-axis in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
 Elements are laid out in memory where the radial data is contiguous in strides along the cylinder's height, as if stacked in a column. Each group of height strides represents an angular slice on the cylinder.
 
