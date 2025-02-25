@@ -64,7 +64,7 @@ The cylinder is centered at the origin, where the radius is measured along the `
 
 A cylinder region may also be confined to a certain angular range. The `minAngle` and `maxAngle` properties define the angles at which the region starts and stops on the cylinder.
 
-Angles are given in radians within the range `[-pi, pi]` and open counter-clockwise around the cylinder. The bounds are aligned such that an angle of `0` aligns with the glTF forward axis, i.e., the `-x` axis (see figure below.)
+Angles are given in radians within the range `[-pi, pi]` and open counter-clockwise around the cylinder. The bounds are aligned such that an angle of `0` aligns with the glTF right axis, i.e., the `-x` axis (see figure below.)
 
 ![](figures/cylinder-angle.png)
 
