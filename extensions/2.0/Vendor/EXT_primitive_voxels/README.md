@@ -122,7 +122,7 @@ The `padding` property specifies how many rows of attribute data in each dimensi
 
 `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g. a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of `[d1, d2, d3]`, `padding.before` of `[b1, b2, b3]`, and `padding.after` of `[a1, a2, a3]`, the voxel primitive's attributes must contain `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements. In the following example, the attributes on this voxel primitive must supply `(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 100` elements.
+Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of `[d1, d2, d3]`, `padding.before` of `[b1, b2, b3]`, and `padding.after` of `[a1, a2, a3]`, the voxel primitive's attributes must contain `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements. In the following example, the attributes on this voxel primitive must supply `(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 1000` elements.
 
 ```json
 "extensions": {
