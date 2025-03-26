@@ -28,6 +28,11 @@
                 "$ref": "class.property.schema.json"
             }
         },
+        "parent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent class ID. The class inherits all properties of its parent class and ancestor classes."
+        },
         "extensions": {},
         "extras": {}
     }
