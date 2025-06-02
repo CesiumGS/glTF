@@ -1,8 +1,9 @@
 # EXT_primitive_voxels
 
 <p align="center">
-  <img src="figures/voxel_cube.png">
+  <img src="figures/voxels.png">
 </p>
+<p align="center"><i>Geothermal temperature data surrounding Lake Thunseree, Switzerland, visualized in CesiumJS using <code>EXT_primitive_voxels</code>. Data courtesy of Swisstopo.</i></p>
 
 ## Contributors
 
