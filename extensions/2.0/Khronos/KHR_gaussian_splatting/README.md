@@ -3,6 +3,8 @@ Copyright 2015-2024 The Khronos Group Inc.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
+### ⚠️ `KHR_gaussian_splatting` has been replaced by [`KHR_spz_gaussian_splats_compression`](https://github.com/CesiumGS/glTF/tree/draft-splat-spz/extensions/2.0/Khronos/KHR_spz_gaussian_splats_compression) [#2490](https://github.com/KhronosGroup/glTF/pull/2490). ⚠️
+
 # KHR_gaussian_splatting
 
 ## Contributors
