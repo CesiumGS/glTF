@@ -30,7 +30,9 @@ The `BENTLEY_materials_line_style` extension is applied to a material. If that m
 The `width` property specifies the width in pixels of the lines. For each line segment, extrude by half this width perpendicularly on both sides.
 
 > Potential generalization: permit width to be specified in meters.
+> 
 > Potential generalization: permit pixel width to scale with distance between a minimum and maximum.
+> 
 > Potential generalization: we currently assume lines face the camera, which is sensible when using pixels as units of measure. But the glTF spec permits for lines to have normal and tangent attributes for purposes of lighting; this could also be used to specify the plane in which they should be extruded.
 
 The `pattern` property specifies a pixel pattern to be repeated along the length of the line. It is an arbitrary length bitfield expressed as a string in which a `-` (hyphen) indicates a lit pixel and a ` ` (space) indicates an unlit pixel. The first character in the string determines whether the first pixel drawn by the line is lit or not, and so on until the last character, at which point the pattern repeats from the first character.
