@@ -21,7 +21,7 @@ Written against the glTF 2.0 spec.
 
 This specification describes a minimal extension sufficient to meet Bentley Systems' requirements, with some suggestions for how it might be broadened and/or generalized while retaining a focus on CAD visualization.
 
-## Specifying Line Styles
+## Specifying Point Styles
 
 The `BENTLEY_materials_point_style` extension is applied to a material. When that material is used by a POINTS primitive, the extension dictates the size of the points.
 
