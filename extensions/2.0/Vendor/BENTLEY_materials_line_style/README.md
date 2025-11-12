@@ -20,12 +20,14 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-Lines are fundamental elements in many 3D modeling and computer-aided design (CAD) environments, such as SketchUp, MicroStation, and Revit. They are used to annotate two- and three-dimensional visualizations, with variations in width and dash patterns conveying semantic meaning or emphasis.  
+Lines are fundamental elements in many 3D modeling and computer-aided design (CAD) environments. They are used to annotate two- and three-dimensional visualizations, with variations in width and dash patterns conveying semantic meaning or emphasis.  
 
-The `BENTLEY_materials_line_style` extension augments a material with a minimal description of a CAD-style line representation.  
-It specifies **line width** and a **repeating dash pattern**, sufficient for typical CAD and engineering visualization workflows.
+The `BENTLEY_materials_line_style` extension defines a method for describing the visual style of lines within glTF materials. It enables authors to specify line thickness and a repeating dash pattern.  
 
-This specification intentionally remains minimal to meet Bentley Systems’ requirements, while also providing a clear foundation for potential future generalization.
+This extension introduces two primary properties controlling line appearance:
+
+- `width`: the pixel width of the rendered line  
+- `pattern`: a string of arbitrary length representing a repeating sequence of lit (`-`) and unlit (` `) pixels
 
 ## Specifying Line Styles
 
@@ -35,15 +37,15 @@ When that material is used by any line-type primitive, or by the edges described
 ### Width
 
 The `width` property specifies the line’s thickness **in screen pixels**.  
-For each line segment, implementations **SHOULD** extrude geometry by half this width perpendicularly on both sides.
+For each line segment, implementations should extrude geometry by half this width perpendicularly on both sides.
 
 ### Pattern
 
 The `pattern` property specifies a **repeating on/off pixel sequence** to be applied along the length of the line.  
 It is expressed as a string of arbitrary length, where each character corresponds to one pixel:
 
-- `"-"` (hyphen): lit pixel (on)  
-- `" "` (space): unlit pixel (off)
+- `-` (hyphen): lit pixel (on)  
+- ` ` (space): unlit pixel (off)
 
 The pattern repeats cyclically once the end of the string is reached.  
 The first character determines whether the first pixel drawn is lit or unlit.
@@ -52,10 +54,10 @@ Example patterns:
 
 | Pattern | Description |
 |----------|--------------|
-| `"---"` | solid line |
-| `"- -"` | dotted line |
-| `"--  "` | dashed line |
-| `"- - --  -"` | custom pattern |
+| `---` | solid line |
+| `- -` | dotted line |
+| `--  ` | dashed line |
+| `- - --  -` | custom pattern |
 
 The pattern is applied continuously along each continuous line string or loop.
 
