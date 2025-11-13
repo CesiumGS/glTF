@@ -43,8 +43,7 @@ For each line segment, implementations should extrude geometry by half this widt
 
 ### Pattern
 
-The `pattern` property specifies a **repeating on/off pixel sequence** to be applied along the length of the line.  
-It is expressed as a string of arbitrary length, where each character corresponds to one pixel:
+The `pattern` property specifies a **repeating on/off pixel sequence** to be applied along the length of the line.  It is expressed as a string of arbitrary length, where each character corresponds to one pixel:
 
 - `-` (hyphen): lit pixel (on)  
 - ` ` (space): unlit pixel (off)
