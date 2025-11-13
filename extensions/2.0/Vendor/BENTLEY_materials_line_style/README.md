@@ -37,7 +37,10 @@ When that material is used by any line-type primitive, or by the edges described
 ### Width
 
 The `width` property specifies the line’s thickness **in screen pixels**.  
-For each line segment, implementations should extrude geometry by half this width perpendicularly on both sides.
+The value of `width` must be greater than `0`.  
+
+For each line segment, implementations should extrude geometry by half this width on each side of the segment’s centerline, perpendicular to its direction.
+
 
 ### Pattern
 
@@ -63,7 +66,7 @@ The pattern is applied continuously along each continuous line string or loop.
 
 ## Implementation Notes
 
-Because many graphics APIs do not support line primitives with a width larger than 1, tesselation is generally required to draw wide lines. Implementations may smooth out the tesselated lines by, e.g., inserting additional triangles at the joints to round them.
+Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines. Implementations may smooth out the tesselated lines by, e.g., inserting additional triangles at the joints to round them.
 
 The pattern should be continuous along the length of each continuous line string or line loop.
 
