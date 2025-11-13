@@ -36,8 +36,7 @@ When that material is used by any line-type primitive, or by the edges described
 
 ### Width
 
-The `width` property specifies the line’s thickness **in screen pixels**.  
-The value of `width` must be greater than `0`.  
+The `width` property specifies the line’s thickness **in screen pixels**. The value of `width` must be greater than `0`.  
 
 For each line segment, implementations should extrude geometry by half this width on each side of the segment’s centerline, perpendicular to its direction. Implementations should also insert triangles at the joints between line segments comprising a continuous line string or line loop, when appropriate to visually round out the joints.
 
