@@ -31,7 +31,7 @@ This extension introduces two primary properties controlling line appearance:
 
 ## Specifying Line Styles
 
-The `BENTLEY_material_line_style` extension is applied to a material. When that material is used by any line-type primitive, or by the edges described by the `EXT_mesh_primitive_edge_visibility` extension, it defines the **width** and **pattern** with which those lines are rendered.
+The `BENTLEY_material_line_style` extension is applied to a material. When that material is used by any line-type primitive, or by the edges described by the [`EXT_mesh_primitive_edge_visibility`](https://github.com/KhronosGroup/glTF/pull/2479) extension, it defines the **width** and **pattern** with which those lines are rendered.
 
 ### Width
 
