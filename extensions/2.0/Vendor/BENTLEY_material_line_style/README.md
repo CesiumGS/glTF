@@ -3,7 +3,7 @@ Copyright 2025 Bentley Systems, Incorporated
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# BENTLEY_material_line_style
+# BENTLEY_materials_line_style
 
 ## Contributors
 
@@ -23,7 +23,7 @@ Written against the glTF 2.0 spec.
 
 Lines are fundamental elements in many 3D modeling and computer-aided design (CAD) environments. They are used to annotate two- and three-dimensional visualizations, with variations in width and dash patterns conveying semantic meaning or emphasis.  
 
-The `BENTLEY_material_line_style` extension defines a method for describing the visual style of lines within glTF material. It enables authors to specify line thickness and a repeating dash pattern.  
+The `BENTLEY_materials_line_style` extension defines a method for describing the visual style of lines within glTF material. It enables authors to specify line thickness and a repeating dash pattern.  
 
 This extension introduces two primary properties controlling line appearance:
 
@@ -32,7 +32,7 @@ This extension introduces two primary properties controlling line appearance:
 
 ## Specifying Line Styles
 
-The `BENTLEY_material_line_style` extension is applied to a material. When that material is used by any line-type primitive, or by the edges described by the [`EXT_mesh_primitive_edge_visibility`](https://github.com/KhronosGroup/glTF/pull/2479) extension, it defines the **width** and **pattern** with which those lines are rendered.
+The `BENTLEY_materials_line_style` extension is applied to a material. When that material is used by any line-type primitive, or by the edges described by the [`EXT_mesh_primitive_edge_visibility`](https://github.com/KhronosGroup/glTF/pull/2479) extension, it defines the **width** and **pattern** with which those lines are rendered.
 
 ### Width
 
@@ -72,4 +72,4 @@ Implementations may choose to aggregate the set of unique dash patterns into a t
 
 ## JSON Schema
 
-* [material.BENTLEY_material_line_style.schema.json](schema/material.BENTLEY_material_line_style.schema.json)
+* [materials.BENTLEY_material_line_style.schema.json](schema/materials.BENTLEY_material_line_style.schema.json)

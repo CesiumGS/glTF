@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "BENTLEY_material_line_style extension",
+  "title": "BENTLEY_materials_line_style extension",
   "type": "object",
   "description": "Specifies line width and dash pattern for CAD-style visualization.",
   "allOf": [
