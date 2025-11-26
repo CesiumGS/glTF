@@ -28,7 +28,7 @@ The `BENTLEY_materials_line_style` extension defines a method for describing the
 This extension introduces two primary properties controlling line appearance:
 
 - `width`: the pixel width of the rendered line  
-- `pattern`: a string of arbitrary length representing a repeating sequence of lit (`-`) and unlit (` `) pixels
+- `pattern`: an unsigned integer whose bits represent a repeating on/off pattern along the line
 
 ## Specifying Line Styles
 
@@ -36,39 +36,40 @@ The `BENTLEY_materials_line_style` extension is applied to a material. When that
 
 ### Width
 
-The `width` property specifies the line’s thickness **in screen pixels**. The value of `width` must be greater than `0`.  
+The `width` property specifies the line’s thickness **in screen pixels**. The value of `width` must be greater than `0`.
 
 For each line segment, implementations should extrude geometry by half this width on each side of the segment’s centerline, perpendicular to its direction. Implementations should also insert triangles at the joints between line segments comprising a continuous line string or line loop, when appropriate to visually round out the joints.
 
-
 ### Pattern
 
-The `pattern` property specifies a **repeating on/off pixel sequence** to be applied along the length of the line.  It is expressed as a string of arbitrary length, where each character corresponds to one pixel:
+The `pattern` property specifies a **repeating on/off bit pattern** applied along the length of the line. Each bit represents one segment unit of equal length:
 
-- `-` (hyphen): lit pixel (on)  
-- ` ` (space): unlit pixel (off)
+- Bit value `1`: lit (on)  
+- Bit value `0`: unlit (off)
 
-The pattern repeats cyclically once the end of the string is reached.  
-The first character determines whether the first pixel drawn is lit or unlit.
+The least significant bit (bit 0) corresponds to the start of the pattern and represents the first drawn segment along the line. The pattern repeats cyclically once all bits have been consumed.  
+The bit pattern is interpreted in **little-endian bit order**, consistent with §3.6.1.1 of the glTF 2.0 specification, in which all buffer data uses little-endian byte order.
 
 Example patterns:
 
-| Pattern | Description |
-|----------|--------------|
-| `---` | solid line |
-| `- -` | dotted line |
-| `--  ` | dashed line |
-| `- - --  -` | custom pattern |
-
-The pattern is applied continuously along each continuous line string or loop.
+| Bit Pattern (hex) | Binary | Description     |
+|--------------------|---------|----------------|
+| `0xFFFF`          | 1111111111111111 | solid line |
+| `0xAAAA`          | 1010101010101010 | dotted line |
+| `0xF0F0`          | 1111000011110000 | dashed line |
+| `0xC3C3`          | 1100001111000011 | custom pattern |
 
 ## Implementation Notes
 
-Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines. Implementations may smooth out the tesselated lines by, e.g., inserting additional triangles at the joints to round them.
+Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines. Implementations may smooth out the tessellated lines by, for example, inserting additional triangles at the joints to round them.
 
-The pattern should be continuous along the length of each continuous line string or line loop.
+The pattern should be applied continuously along the length of each continuous line string or line loop, ensuring visual consistency across connected segments.
 
-Implementations may choose to aggregate the set of unique dash patterns into a texture with one row per pattern to be indexed by the shader program when applying a line style's pattern.
+When rendering, the integer `pattern` value may be supplied to the shader as a uniform or read from a small lookup table shared among materials. Each bit of the integer defines whether a given unit segment along the line is drawn or skipped.
+
+Implementations may support either 16-bit or 32-bit integers for pattern encoding.  
+If a pattern uses fewer bits than the maximum supported width, unused higher bits must be set to zero.
+
 
 ## JSON Schema
 
