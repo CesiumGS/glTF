@@ -48,7 +48,6 @@ The `pattern` property specifies a **repeating on/off bit pattern** applied alon
 - Bit value `0`: unlit (off)
 
 The least significant bit (bit 0) corresponds to the start of the pattern and represents the first drawn segment along the line. The pattern repeats cyclically once all bits have been consumed.  
-The bit pattern is interpreted in **little-endian bit order**, consistent with §3.6.1.1 of the glTF 2.0 specification, in which all buffer data uses little-endian byte order.
 
 Example patterns:
 
@@ -67,7 +66,7 @@ The pattern should be applied continuously along the length of each continuous l
 
 When rendering, the integer `pattern` value may be supplied to the shader as a uniform or read from a small lookup table shared among materials. Each bit of the integer defines whether a given unit segment along the line is drawn or skipped.
 
-Implementations may support either 16-bit or 32-bit integers for pattern encoding.  
+For now, implementations will be limited to 16-bit integers for pattern encoding, as this is sufficient for all current use cases. 
 If a pattern uses fewer bits than the maximum supported width, unused higher bits must be set to zero.
 
 
