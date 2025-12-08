@@ -60,7 +60,7 @@ Example patterns:
 
 ## Implementation Notes
 
-Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines. Implementations may smooth out the tessellated lines by, for example, inserting additional triangles at the joints to round them.
+Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines.
 
 The pattern should be applied continuously along the length of each continuous line string or line loop, ensuring visual consistency across connected segments.
 
