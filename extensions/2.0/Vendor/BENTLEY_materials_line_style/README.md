@@ -49,6 +49,8 @@ The `pattern` property specifies a **repeating on/off bit pattern** applied alon
 
 The least significant bit (bit 0) corresponds to the start of the pattern and represents the first drawn segment along the line. The pattern repeats cyclically once all bits have been consumed.  
 
+The pattern must be applied continuously along each continuous line string or line loop so that connected segments remain visually consistent. Implementations must not restart the pattern at intermediate vertices within the same line string.  
+
 Example patterns:
 
 | Bit Pattern (hex) | Binary | Description     |
@@ -62,10 +64,7 @@ Example patterns:
 
 *This section is non-normative.*
 
-
 Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines.
-
-The pattern should be applied continuously along the length of each continuous line string or line loop, ensuring visual consistency across connected segments.
 
 When rendering, the integer `pattern` value may be supplied to the shader as a uniform or read from a small lookup table shared among materials.
 
