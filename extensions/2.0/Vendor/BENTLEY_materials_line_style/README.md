@@ -42,7 +42,7 @@ For each line segment, implementations should extrude geometry by half this widt
 
 ### Pattern
 
-The `pattern` property specifies a **repeating on/off bit pattern** applied along the length of the line. Each bit represents one segment unit of equal length:
+The `pattern` property specifies a **repeating on/off bit pattern** applied along the length of the line. Each bit corresponds to one screen pixel:
 
 - Bit value `1`: lit (on)  
 - Bit value `0`: unlit (off)
