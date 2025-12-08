@@ -67,7 +67,7 @@ Because many graphics APIs do not support line primitives with a width larger th
 
 The pattern should be applied continuously along the length of each continuous line string or line loop, ensuring visual consistency across connected segments.
 
-When rendering, the integer `pattern` value may be supplied to the shader as a uniform or read from a small lookup table shared among materials. Each bit of the integer defines whether a given unit segment along the line is drawn or skipped.
+When rendering, the integer `pattern` value may be supplied to the shader as a uniform or read from a small lookup table shared among materials.
 
 For now, implementations will be limited to 16-bit integers for pattern encoding, as this is sufficient for all current use cases. 
 If a pattern uses fewer bits than the maximum supported width, unused higher bits must be set to zero.
