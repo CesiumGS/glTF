@@ -42,12 +42,12 @@ For each line segment, implementations should extrude geometry by half this widt
 
 ### Pattern
 
-The `pattern` property specifies a **repeating on/off bit pattern** applied along the length of the line. Each bit corresponds to one screen pixel:
+The `pattern` property specifies a **repeating on/off bit pattern** applied along the length of the line, encoded as a 16-bit unsigned integer. Each bit corresponds to one screen pixel:
 
 - Bit value `1`: lit (on)  
 - Bit value `0`: unlit (off)
 
-The least significant bit (bit 0) corresponds to the start of the pattern and represents the first drawn segment along the line. The pattern repeats cyclically once all bits have been consumed.  
+The least significant bit (bit 0) corresponds to the start of the pattern. The pattern repeats cyclically after all 16 bits have been used. If a pattern requires fewer than 16 bits, its unused higher-order bits must be `0`.  
 
 The pattern must be applied continuously along each continuous line string or line loop so that connected segments remain visually consistent. Implementations must not restart the pattern at intermediate vertices within the same line string.  
 
