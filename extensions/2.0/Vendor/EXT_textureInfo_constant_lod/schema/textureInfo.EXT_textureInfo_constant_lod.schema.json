@@ -10,7 +10,7 @@
     "repetitions": {
       "type": "number",
       "description": "The number of times the texture is repeated.",
-      "minimum": 0.0,
+      "minimum": 1.0,
       "default": 1.0
     },
     "offset": {

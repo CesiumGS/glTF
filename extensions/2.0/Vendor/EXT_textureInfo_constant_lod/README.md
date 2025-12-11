@@ -32,23 +32,19 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 ### Repetitions
 
-The number of times the texture is repeated. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger. TODO is the min 0, and what would that look like?
+The `repetitions` property specifies the number of times the texture is repeated. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
 
 ### Offset
 
-An offset used to shift the texture, specified as a pair of numbers which are UV coordinates in the format [U, V].
-
-TODO are repetitions and offset necessary in this extension, or are they covered by EXT_textureInfo?
+The `offset` property is used to shift the texture, specified as a pair of numbers which are UV coordinates in the format [U, V].
 
 ### Minimum Clamp Distance
 
-The minimum distance in meters from the eye to the surface at which to clamp the texture.
+The `minClampDistance` property specifies the minimum distance in meters from the eye to the surface at which to clamp the texture.
 
 ### Maximum Clamp Distance
 
-The maximum distance in meters from the eye to the surface at which to clamp the texture.
-
-TODO clarify the meaning of clamp distance. For example a min clamp distance of 1 means that when the camera is closer than 1m to the surface, the constant lod effect will no longer apply? And same with max, if camera is more than 2^32m away, it will stop applying?
+The `minClampDistance` property specifies the maximum distance in meters from the eye to the surface at which to clamp the texture.
 
 ## Implementation Notes
 
