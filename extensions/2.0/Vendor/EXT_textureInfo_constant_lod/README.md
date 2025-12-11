@@ -44,10 +44,19 @@ The `minClampDistance` property specifies the minimum distance in meters from th
 
 ### Maximum Clamp Distance
 
-The `minClampDistance` property specifies the maximum distance in meters from the eye to the surface at which to clamp the texture.
+The `maxClampDistance` property specifies the maximum distance in meters from the eye to the surface at which to clamp the texture.
 
 ## Implementation Notes
 
+This is a general formula that can be used to calculate the two different texture coordinates and how to blend them:
+
+```
+logDepth = log2(v_uvCustom.z); // TODO translate to pseudocode - what is uvCustom.z again? Significance of logDepth?
+textureCoordinate1 = vUvCustom / clamp(pow(2.0, floor(logDepth)), minClampDistance, maxClampDistance) * repetitions
+// TODO note about + 1.0 here, what is vUvCustom
+textureCoordinate2 = vUvCustom / clamp(pow(2.0, floor(logDepth) + 1.0), minClampDistance, maxClampDistance) * repetitions
+result = mix(textureCoordinate1, textureCoordinate2, fract(logDepth))
+```
 
 ## JSON Schema
 
