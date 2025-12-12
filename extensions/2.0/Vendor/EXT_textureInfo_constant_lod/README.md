@@ -30,6 +30,8 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 ## Specifying Constant LOD Texture Mapping
 
+The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structures. When that `textureInfo` is used by a material, this extension applies the constant LOD technique to the specified texture.
+
 ### Repetitions
 
 The `repetitions` property specifies the number of times the texture is repeated. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
