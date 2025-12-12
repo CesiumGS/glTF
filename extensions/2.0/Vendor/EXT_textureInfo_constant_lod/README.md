@@ -36,7 +36,7 @@ The `repetitions` property specifies the number of times the texture is repeated
 
 ### Offset
 
-The `offset` property is used to shift the texture, specified as a pair of numbers which are UV coordinates in the format [U, V].
+The `offset` property is used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
 
 ### Minimum Clamp Distance
 
@@ -48,15 +48,38 @@ The `maxClampDistance` property specifies the maximum distance in meters from th
 
 ## Implementation Notes
 
-This is a general formula that can be used to calculate the two different texture coordinates and how to blend them:
+This is a general formula that can be used to calculate the two different texture coordinates and how to blend them.
 
-```
-logDepth = log2(v_uvCustom.z); // TODO translate to pseudocode - what is uvCustom.z again? Significance of logDepth?
-textureCoordinate1 = vUvCustom / clamp(pow(2.0, floor(logDepth)), minClampDistance, maxClampDistance) * repetitions
-// TODO note about + 1.0 here, what is vUvCustom
-textureCoordinate2 = vUvCustom / clamp(pow(2.0, floor(logDepth) + 1.0), minClampDistance, maxClampDistance) * repetitions
-result = mix(textureCoordinate1, textureCoordinate2, fract(logDepth))
-```
+In the vertex shader, where $worldPosition$ is the vertex position in world coordinates and $eyeSpace$ is the vertex position in camera coordinates:
+
+$$customUvCoords = worldPosition + offset$$
+$$\text{if }isPerspectiveProjection \text{:}$$
+$$customUvCoords.z = -eyeSpace.z$$
+$$\text{if }isOrthographicProjection \text{:}$$
+$$customUvCoords.z = frustumWidth$$
+
+The resulting $customUvCoords.xy$ should contain the vertex's X and Y position in world coordinates. $customUvCoords.z$ is the negative eye-space depth (z-coordinate) from the camera to the fragment when using perspective projection. Since all points are equidistant to the camera when using orthographic projection, this value should be set to the frustum width as a proxy for zoom level.
+
+In the fragment shader:
+
+$$logDepth = \log_{2}{customUvCoords.z}$$
+$$textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions$$
+$$textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions$$
+$$result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))$$
+
+>Note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.
+
+Where $clamp(x, minVal, maxVal)$ constrains the value of $x$ to the range of $minVal$ to $maxVal$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/clamp.xhtml) of:
+
+$$\min(\max(x, minVal), maxVal)$$
+
+$fract(x)$ returns the fractional part of $x$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/fract.xhtml) of:
+
+$$x - \lfloor x \rfloor$$
+
+and $mix(x, y, a)$ performs a linear interpolation between $x$ and $y$ using $a$ to weight between them, using the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) of:
+
+$$x \times (1 − a) + y \times a$$
 
 ## JSON Schema
 
