@@ -20,7 +20,7 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-Constant level-of-detail ("LOD") is a technique of texture coordinate generation which dynamically calculates cordinates to keep the texture near a certain size on the screen, thus preserving the level of detail no matter what the zoom level. It blends from one size of the texture to another as the view is zoomed in or out so that the change is smooth.
+Constant level-of-detail ("LOD") is a technique of texture coordinate generation which dynamically calculates coordinates to keep the texture near a certain size on the screen, thus preserving the level of detail no matter what the zoom level. It blends from one size of the texture to another as the view is zoomed in or out so that the change is smooth.
 
 The `EXT_textureInfo_constant_lod` extension defines properties needed to calculate these texture coordinates: the number of times the texture is repeated, an offset to shift the texture, the minimum and maximum distance for which to clamp the texture. The minimum and maximum clamp distance control at which point the texture sizes should be blended. These images illustrate the textures blending to create the constant LOD effect:
 
@@ -54,7 +54,7 @@ This is a general formula that can be used to calculate the two different textur
 
 In the vertex shader, where $worldPosition$ is the vertex position in world coordinates and $eyeSpace$ is the vertex position in camera coordinates:
 
-$$customUvCoords = worldPosition + offset$$
+$$customUvCoords.xy = worldPosition.xy + offset$$
 $$\text{if }isPerspectiveProjection \text{:}$$
 $$customUvCoords.z = -eyeSpace.z$$
 $$\text{if }isOrthographicProjection \text{:}$$
