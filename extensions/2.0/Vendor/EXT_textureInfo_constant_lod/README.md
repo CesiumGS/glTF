@@ -20,9 +20,9 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-Constant level-of-detail ("LOD") is a technique of texture coordinate generation which dynamically calculates coordinates to keep the texture near a certain size on the screen, thus preserving the level of detail no matter what the zoom level. It blends from one size of the texture to another as the view is zoomed in or out so that the change is smooth.
+Constant level-of-detail ("LOD") is a technique of texture coordinate generation which dynamically calculates texture coordinates to keep the texture near a certain size on the screen, thus preserving the level of detail no matter the zoom level. It blends from one size of the texture to another as the view is zoomed in or out so that the change is smooth.
 
-The `EXT_textureInfo_constant_lod` extension defines properties needed to calculate these texture coordinates: the number of times the texture is repeated, an offset to shift the texture, the minimum and maximum distance for which to clamp the texture. The minimum and maximum clamp distance control at which point the texture sizes should be blended. These images illustrate the textures blending to create the constant LOD effect:
+The `EXT_textureInfo_constant_lod` extension defines properties needed to calculate these dynamic texture coordinates: the number of times the texture is repeated per meter, an offset to shift the texture, and the minimum and maximum distance for which to clamp the texture. The minimum and maximum clamp distance control at which point the texture sizes should be blended. These images illustrate the textures blending to create the constant LOD effect:
 
 ![Constant LOD gif](./figures/constantlod.gif "Constant LOD gif")
 
@@ -32,25 +32,43 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structures. When that `textureInfo` is used by a material, this extension applies the constant LOD technique to the specified texture.
 
-### Repetitions
+Constant LOD uses the following properties:
 
-The `repetitions` property specifies the number of times the texture is repeated. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
+* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
+* `offset` - used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
+* `minClampDistance` - specifies the minimum distance in meters from the camera to the surface at which to clamp the texture.
+* `maxClampDistance` - specifies the maximum distance in meters from the camera to the surface at which to clamp the texture.
 
-### Offset
+For example, the following JSON defines a material with a texture at index 0 that is modified by the `EXT_textureInfo_constant_lod` extension. The extension has a `repetitions` value of 2 causing it to be repeated twice per meter, making its pattern appear half the size. It is shifted by 1 meter in the X direction and 0 meters in the Y direction. It also has a minimum clamp distance of 0.5 meters, meaning the constant LOD effect stops being present when the camera is 0.5m away from the surface or closer. This is a closer distance than the default value of 1m, meaning for this material you would have to zoom in closer for the texture to stop adapting its level of detail and for it to appear magnified. The absence of the `maxClampDistance` property means it has a default value of $2^{32}$, so the constant LOD effect will occur until the camera is $2^{32}$ away from the surface.
 
-The `offset` property is used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
+```json
+"materials": [
+  {
+    "pbrMetallicRoughness": {
+      "baseColorTexture": {
+        "index": 0,
+        "texCoord": 0,
+        "extensions": {
+          "EXT_textureInfo_constant_lod": {
+            "repetitions": 2,
+            "offset": [1, 0],
+            "minClampDistance": 0.5
+          }
+        }
+      },
+      "baseColorFactor": [1.0, 1.0, 1.0, 1.0], 
+      "metallicFactor": 0.0,
+      "roughnessFactor": 1.0
+    }
+  }
+],
+```
 
-### Minimum Clamp Distance
-
-The `minClampDistance` property specifies the minimum distance in meters from the eye to the surface at which to clamp the texture.
-
-### Maximum Clamp Distance
-
-The `maxClampDistance` property specifies the maximum distance in meters from the eye to the surface at which to clamp the texture.
+Implementations should follow the formula explained in the Implementation Notes section to produce the desired visual effect.
 
 ## Implementation Notes
 
-This is a general formula that can be used to calculate the two different texture coordinates and how to blend them.
+This section outlines the general formula that should be used to calculate the dynamic texture coordinates for constant LOD.
 
 In the vertex shader, where $worldPosition$ is the vertex position in world coordinates and $eyeSpace$ is the vertex position in camera coordinates:
 

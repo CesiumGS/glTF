@@ -9,7 +9,7 @@
   "properties": {
     "repetitions": {
       "type": "number",
-      "description": "The number of times the texture is repeated.",
+      "description": "The number of times the texture is repeated per meter.",
       "minimum": 1.0,
       "default": 1.0
     },
