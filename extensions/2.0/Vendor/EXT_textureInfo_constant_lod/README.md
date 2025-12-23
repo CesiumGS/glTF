@@ -68,7 +68,7 @@ Implementations should follow the formula explained in the Implementation Notes 
 
 ## Implementation Notes
 
-This section outlines the general formula that should be used to calculate the dynamic texture coordinates for constant LOD.
+This section outlines the formula that should be used by implementations to calculate the dynamic texture coordinates for constant LOD.
 
 In the vertex shader, where $worldPosition$ is the vertex position in world coordinates and $eyeSpace$ is the vertex position in camera coordinates:
 
