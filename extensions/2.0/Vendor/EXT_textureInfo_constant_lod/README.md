@@ -34,12 +34,12 @@ The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structu
 
 Constant LOD uses the following properties:
 
-* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
+* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller; decreasing it will make it appear larger.
 * `offset` - used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
 * `minClampDistance` - specifies the minimum distance in meters from the camera to the surface at which to clamp the texture.
 * `maxClampDistance` - specifies the maximum distance in meters from the camera to the surface at which to clamp the texture.
 
-For example, the following JSON defines a material with a texture at index 0 that is modified by the `EXT_textureInfo_constant_lod` extension. The extension has a `repetitions` value of 2 causing it to be repeated twice per meter, making its pattern appear half the size. It is shifted by 1 meter in the X direction and 0 meters in the Y direction. It also has a minimum clamp distance of 0.5 meters, meaning the constant LOD effect stops being present when the camera is 0.5m away from the surface or closer. This is a closer distance than the default value of 1m, meaning for this material you would have to zoom in closer for the texture to stop adapting its level of detail and for it to appear magnified. The absence of the `maxClampDistance` property means it has a default value of $2^{32}$, so the constant LOD effect will occur until the camera is $2^{32}$ away from the surface.
+For example, the following JSON defines a material with a texture at index 0 that is modified by the `EXT_textureInfo_constant_lod` extension. The extension has a `repetitions` value of 2 causing it to be repeated twice per meter, making its pattern appear half the size. It is shifted by 1 meter in the X direction and 0 meters in the Y direction. It also has a minimum clamp distance of 0.5 meters, meaning the constant LOD effect stops being present when the camera is 0.5m away from the surface or closer. This is a closer distance than the default value of 1m; therefore, this material requires a closer zoom before the texture stops adapting its level of detail (and for it to appear magnified). The absence of the `maxClampDistance` property means it has a default value of $2^{32}$, so the constant LOD effect will occur until the camera is $2^{32}$ away from the surface.
 
 ```json
 "materials": [
