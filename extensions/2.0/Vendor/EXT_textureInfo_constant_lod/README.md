@@ -34,7 +34,7 @@ The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structu
 
 Constant LOD uses the following properties:
 
-* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller, decreasing it will make it larger.
+* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller; decreasing it will make it appear larger.
 * `offset` - used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
 * `minClampDistance` - specifies the minimum distance in meters from the camera to the surface at which to clamp the texture.
 * `maxClampDistance` - specifies the maximum distance in meters from the camera to the surface at which to clamp the texture.
