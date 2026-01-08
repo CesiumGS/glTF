@@ -28,6 +28,10 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 ![Constant LOD image](./figures/constantlod.jpg "Constant LOD image")
 
+The extension specifies an alternative way of computing the texture coordinates, so if it is supported by the client then the `textureInfo`'s `texCoord` may be ommitted. In this case, `EXT_textureInfo_constant_lod` must be present in both `extensionsUsed` and `extensionsRequired`.
+
+For maximum compatibility however, it is recommended that encoders still provide UV coordinates to the `texCoord` field so the texture still renders even if the extension is not supported. If fallback UV coordinates are provided, the extension doesn't need to be listed in `extensionsRequired`.
+
 ## Specifying Constant LOD Texture Mapping
 
 The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structures. When that `textureInfo` is used by a material, this extension applies the constant LOD technique to the specified texture.
