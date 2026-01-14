@@ -10,7 +10,8 @@
     "repetitions": {
       "type": "number",
       "description": "The number of times the texture is repeated per meter.",
-      "minimum": 1.0,
+      "minimum": 0.0,
+      "exclusiveMinimum": true,
       "default": 1.0
     },
     "offset": {
@@ -33,6 +34,7 @@
       "type": "number",
       "description": "The maximum distance in meters from the eye to the surface at which to clamp the texture.",
       "minimum": 0.0,
+      "exclusiveMinimum": true,
       "default": 4294967296.0
     },
     "extensions": { },
