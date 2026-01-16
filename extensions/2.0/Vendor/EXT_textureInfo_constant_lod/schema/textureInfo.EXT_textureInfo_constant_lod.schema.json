@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "EXT_textureInfo_constant_lod TextureInfo Extension",
   "type": "object",
   "description": "Enables dynamically calculated UV coordinates to keep the texture near a constant level of detail",
@@ -10,8 +10,7 @@
     "repetitions": {
       "type": "number",
       "description": "The number of times the texture is repeated per meter.",
-      "minimum": 0.0,
-      "exclusiveMinimum": true,
+      "exclusiveMinimum": 0.0,
       "default": 1.0
     },
     "offset": {
@@ -33,8 +32,7 @@
     "maxClampDistance": {
       "type": "number",
       "description": "The maximum distance in meters from the eye to the surface at which to clamp the texture.",
-      "minimum": 0.0,
-      "exclusiveMinimum": true,
+      "exclusiveMinimum": 0.0,
       "default": 4294967296.0
     },
     "extensions": { },
