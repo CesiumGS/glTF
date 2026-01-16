@@ -74,7 +74,11 @@ Implementations should follow the formula explained in the Implementation Notes 
 
 ## Implementation Notes
 
-This section outlines the formula that should be used by implementations to calculate the dynamic texture coordinates for constant LOD.
+The `EXT_textureInfo_constant_lod` extension may be present on any `textureInfo` object, including those that extend `textureInfo` such as `normalTextureInfo`. Encoders and clients may decide to implement the extension such that the normal texture has identical constant LOD properties to the base color texture to produce a synchronized blending of levels-of-detail, although this is not required.
+
+### Formulas
+
+This section outlines the formulas that should be used by implementations to calculate the dynamic texture coordinates for constant LOD.
 
 In the vertex shader:
 
