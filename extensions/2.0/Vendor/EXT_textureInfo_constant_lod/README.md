@@ -82,11 +82,13 @@ This section outlines the formulas that should be used by implementations to cal
 
 In the vertex shader:
 
-$$customUvCoords.xy = worldPosition.xy + offset$$
-$$\text{if }isPerspectiveProjection \text{:}$$
-$$customUvCoords.z = -eyeSpace.z$$
-$$\text{if }isOrthographicProjection \text{:}$$
-$$customUvCoords.z = frustumWidth$$
+```math
+customUvCoords.xy = worldPosition.xy + offset \\
+\text{if }isPerspectiveProjection \text{:} \\
+customUvCoords.z = -eyeSpace.z \\
+\text{if }isOrthographicProjection \text{:} \\
+customUvCoords.z = frustumWidth
+```
 
 Where $worldPosition$ is the vertex position in world coordinates, $eyeSpace$ is the vertex position in camera coordinates, and $frustumWidth$ is the frustum width in meters.
 
@@ -94,24 +96,32 @@ The resulting $customUvCoords.xy$ should contain the vertex's X and Y position i
 
 In the fragment shader:
 
-$$logDepth = \log_{2}{customUvCoords.z}$$
-$$textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions$$
-$$textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions$$
-$$result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))$$
+```math
+logDepth = \log_{2}{customUvCoords.z} \\
+textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions \\
+textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions \\
+result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
+```
 
 >Note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.
 
 Where $clamp(x, minVal, maxVal)$ constrains the value of $x$ to the range of $minVal$ to $maxVal$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/clamp.xhtml) of:
 
-$$\min(\max(x, minVal), maxVal)$$
+```math
+\min(\max(x, minVal), maxVal)
+```
 
 $fract(x)$ returns the fractional part of $x$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/fract.xhtml) of:
 
-$$x - \lfloor x \rfloor$$
+```math
+x - \lfloor x \rfloor
+```
 
 and $mix(x, y, a)$ performs a linear interpolation between $x$ and $y$ using $a$ to weight between them, using the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) of:
 
-$$x \times (1 − a) + y \times a$$
+```math
+x \times (1 − a) + y \times a
+```
 
 ## JSON Schema
 
