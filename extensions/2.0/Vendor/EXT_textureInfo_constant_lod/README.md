@@ -81,10 +81,10 @@ This section outlines the formulas that should be used by implementations to cal
 In the vertex shader:
 
 ```math
-customUvCoords.xy = worldPosition.xy + offset \\
-\text{if }isPerspectiveProjection \text{:} \\
-customUvCoords.z = -eyeSpace.z \\
-\text{if }isOrthographicProjection \text{:} \\
+customUvCoords.xy = worldPosition.xy + offset \\\\
+\text{if }isPerspectiveProjection \text{:} \\\\
+customUvCoords.z = -eyeSpace.z \\\\
+\text{if }isOrthographicProjection \text{:} \\\\
 customUvCoords.z = frustumWidth
 ```
 
@@ -95,9 +95,9 @@ The resulting $customUvCoords.xy$ should contain the vertex's X and Y position i
 In the fragment shader:
 
 ```math
-logDepth = \log_{2}{customUvCoords.z} \\
-textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions \\
-textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions \\
+logDepth = \log_{2}{customUvCoords.z} \\\\
+textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions \\\\
+textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions \\\\
 result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
 ```
 
