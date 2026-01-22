@@ -82,11 +82,11 @@ In the vertex shader:
 
 ```math
 \begin{aligned}
-customUvCoords.xy &= worldPosition.xy + offset \\
-\text{if }isPerspectiveProjection \text{:} \\
-customUvCoords.z &= -eyeSpace.z \\
-\text{if }isOrthographicProjection \text{:} \\
-customUvCoords.z &= frustumWidth
+&customUvCoords.xy = worldPosition.xy + offset \\
+&\text{if }isPerspectiveProjection \text{:} \\
+&customUvCoords.z = -eyeSpace.z \\
+&\text{if }isOrthographicProjection \text{:} \\
+&customUvCoords.z = frustumWidth
 \end{aligned}
 ```
 
@@ -98,10 +98,10 @@ In the fragment shader:
 
 ```math
 \begin{aligned}
-logDepth &= \log_{2}{customUvCoords.z} \\
-textureCoordinates_1 &= customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions \\
-textureCoordinates_2 &= customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions \\
-result &= mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
+&logDepth = \log_{2}{customUvCoords.z} \\
+&textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions \\
+&textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions \\
+&result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
 \end{aligned}
 ```
 
