@@ -131,3 +131,8 @@ x \cdot (1 − a) + y \cdot a
 ## JSON Schema
 
 * [textureInfo.EXT_textureInfo_constant_lod.schema.json](schema/textureInfo.EXT_textureInfo_constant_lod.schema.json)
+
+## Known Implementations
+
+* [iTwin.js](https://github.com/iTwin/itwinjs-core/pull/8882)
+* [CesiumJS](https://github.com/CesiumGS/cesium/pull/13121)
