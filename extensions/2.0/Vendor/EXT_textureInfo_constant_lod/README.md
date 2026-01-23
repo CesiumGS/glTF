@@ -14,7 +14,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ## Status
 
-Draft
+Complete
 
 ## Dependencies
 
@@ -108,7 +108,7 @@ result &= mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
 \end{aligned}
 ```
 
->Note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.
+*Non-normative note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.*
 
 Where $clamp(x, minVal, maxVal)$ constrains the value of $x$ to the range of $minVal$ to $maxVal$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/clamp.xhtml) of:
 
@@ -125,7 +125,7 @@ x - \lfloor x \rfloor
 and $mix(x, y, a)$ performs a linear interpolation between $x$ and $y$ using $a$ to weight between them, using the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) of:
 
 ```math
-x \times (1 − a) + y \times a
+x \cdot (1 − a) + y \cdot a
 ```
 
 ## JSON Schema
