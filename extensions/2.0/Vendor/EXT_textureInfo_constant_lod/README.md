@@ -81,13 +81,13 @@ This section outlines the formulas that should be used by implementations to cal
 In the vertex shader:
 
 ```math
-\begin{gather*}
-customUvCoords.xy = worldPosition.xy + offset\\
-\text{if }isPerspectiveProjection \text{:}\\
-customUvCoords.z = -eyeSpace.z\\
-\text{if }isOrthographicProjection \text{:}\\
-customUvCoords.z = frustumWidth
-\end{gather*}
+\begin{aligned}
+customUvCoords.xy &= worldPosition.xy + offset\\
+customUvCoords.z &= \begin{cases}
+-eyeSpace & \text{if } isPerspectiveProjection \\
+frustrumWidth & \text{if } isOrthographicProjection \\
+\end{cases}
+\end{aligned}
 ```
 
 Where $worldPosition$ is the vertex position in world coordinates, $eyeSpace$ is the vertex position in camera coordinates, and $frustumWidth$ is the frustum width in meters.
@@ -97,12 +97,15 @@ The resulting $customUvCoords.xy$ should contain the vertex's X and Y position i
 In the fragment shader:
 
 ```math
-\begin{gather*}
-logDepth = \log_{2}{customUvCoords.z}\\
-textureCoordinates_1 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor}, minClampDistance, maxClampDistance) \times repetitions\\
-textureCoordinates_2 = customUvCoords.xy \div clamp(2^{\lfloor logDepth \rfloor + 1}, minClampDistance, maxClampDistance) \times repetitions\\
-result = mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
-\end{gather*}
+\begin{aligned}
+(x, y, z) &= customUvCoords\\
+minDistance &= min(clampDistance) \\
+maxDistance &= max(clampDistance) \\
+logDepth &= \log_{2}{z}\\
+textureCoordinates_1 &= \frac{xy}{clamp(2^{\lfloor logDepth \rfloor}, minDistance, maxDistance)} \cdot repetitions\\
+textureCoordinates_2 &= \frac{xy}{clamp(2^{\lfloor logDepth \rfloor + 1}, minDistance, maxDistance)} \cdot repetitions\\
+result &= mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
+\end{aligned}
 ```
 
 >Note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.
