@@ -76,7 +76,7 @@ The `EXT_textureInfo_constant_lod` extension may be present on any `textureInfo`
 
 ### Formulas
 
-This section outlines the formulas that should be used by implementations to calculate the dynamic texture coordinates for constant LOD.
+This section outlines the formulas that shall be used by implementations to calculate the dynamic texture coordinates for constant LOD.
 
 In the vertex shader:
 
