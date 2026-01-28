@@ -68,8 +68,6 @@ For example, the following JSON defines a material with a texture at index 0 tha
 ],
 ```
 
-Implementations should follow the formula explained in the Implementation Notes section to produce the desired visual effect.
-
 ## Implementation Notes
 
 The `EXT_textureInfo_constant_lod` extension may be present on any `textureInfo` object, including those that extend `textureInfo` such as `normalTextureInfo`. Encoders and clients may decide to implement the extension such that the normal texture has identical constant LOD properties to the base color texture to produce a synchronized blending of levels-of-detail, although this is not required.
