@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BENTLEY_materials_line_style glTF MeshPrimitive Extension",
+  "type": "object",
+  "description": "Indicates that a mesh primitive supplies the BENTLEY_materials_line_style cumulative distance attribute semantic.",
+  "allOf": [
+    {
+      "$ref": "glTFProperty.schema.json"
+    }
+  ],
+  "properties": {
+    "extensions": {},
+    "extras": {}
+  },
+  "required": []
+}
