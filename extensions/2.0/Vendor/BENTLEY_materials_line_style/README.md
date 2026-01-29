@@ -81,8 +81,6 @@ Values are expected to be non-decreasing along each line string.
 
 ## Implementation Notes
 
-*This section is non-normative.*
-
 Because many graphics APIs do not support line primitives with a width larger than 1, tessellation is generally required to draw wide lines.
 
 ## JSON Schema
