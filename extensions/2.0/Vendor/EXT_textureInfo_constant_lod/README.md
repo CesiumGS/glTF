@@ -106,7 +106,7 @@ result &= mix(textureCoordinates_1, textureCoordinates_2, fract(logDepth))
 \end{aligned}
 ```
 
-*Non-normative note: the addition of $\lfloor logDepth \rfloor + 1$ when calculating $textureCoordinates_2$ allows the result of the $mix$ function to blend between two adjacent mipmap levels.*
+*Non-normative note: the addition of $`\lfloor logDepth \rfloor + 1`$ when calculating $`textureCoordinates_2`$ allows the result of the $`mix`$ function to blend between two adjacent mipmap levels.*
 
 Where $clamp(x, minVal, maxVal)$ constrains the value of $x$ to the range of $minVal$ to $maxVal$, defined by the [GLSL definition](https://registry.khronos.org/OpenGL-Refpages/gl4/html/clamp.xhtml) of:
 
