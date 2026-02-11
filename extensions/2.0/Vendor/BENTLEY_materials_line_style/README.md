@@ -87,3 +87,8 @@ Because many graphics APIs do not support line primitives with a width larger th
 
 * [material.BENTLEY_materials_line_style.schema.json](schema/material.BENTLEY_materials_line_style.schema.json)
 * [mesh.primitive.BENTLEY_materials_line_style.schema.json](schema/mesh.primitive.BENTLEY_materials_line_style.schema.json)
+
+## Known implementations
+
+* [iTwin.js](https://github.com/iTwin/itwinjs-core/pull/8856)
+* [Cesium.js](https://github.com/CesiumGS/cesium/pull/13110)
