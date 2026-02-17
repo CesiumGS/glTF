@@ -45,13 +45,33 @@
                     "type": "integer"
                 },
                 {
+                    "const": 5124,
+                    "description": "INT",
+                    "type": "integer"
+                },
+                {
                     "const": 5125,
                     "description": "UNSIGNED_INT",
                     "type": "integer"
                 },
                 {
+                    "const": 5134,
+                    "description": "INT64",
+                    "type": "integer"
+                },
+                {
+                    "const": 5135,
+                    "description": "UNSIGNED_INT64",
+                    "type": "integer"
+                },
+                {
                     "const": 5126,
                     "description": "FLOAT",
+                    "type": "integer"
+                },
+                {
+                    "const": 5130,
+                    "description": "DOUBLE",
                     "type": "integer"
                 },
                 {
