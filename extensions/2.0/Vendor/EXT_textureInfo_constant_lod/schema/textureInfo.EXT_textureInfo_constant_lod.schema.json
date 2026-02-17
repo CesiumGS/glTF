@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EXT_textureInfo_constant_lod TextureInfo Extension",
+  "type": "object",
+  "description": "Enables dynamically calculated UV coordinates to keep the texture near a constant level of detail",
+  "allOf": [
+    { "$ref": "glTFProperty.schema.json" }
+  ],
+  "properties": {
+    "repetitions": {
+      "type": "number",
+      "description": "The number of times the texture is repeated per meter.",
+      "exclusiveMinimum": 0.0,
+      "default": 1.0
+    },
+    "offset": {
+      "type": "array",
+      "description": "The offset in meters used to shift the texture.",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "default": [ 0.0, 0.0 ]
+    },
+    "minClampDistance": {
+      "type": "number",
+      "description": "The minimum distance in meters from the eye to the surface at which to clamp the texture.",
+      "minimum": 0.0,
+      "default": 1.0
+    },
+    "maxClampDistance": {
+      "type": "number",
+      "description": "The maximum distance in meters from the eye to the surface at which to clamp the texture.",
+      "exclusiveMinimum": 0.0,
+      "default": 4294967296.0
+    },
+    "extensions": { },
+    "extras": { }
+  }
+}
