@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "EXT_mesh_polygon",
+    "title": "EXT_mesh_polygon glTF Mesh Primitive Extension",
+    "type": "object",
+    "description": "glTF extension adding an encoding of polygon primitive topology",
+    "allOf": [
+        {
+              "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "count": {
+            "type": "number",
+            "description": "Integer number of polygons encoded in the mesh primitive."
+        },
+        "loopIndices": {
+            "type": "number",
+            "description": "Index of an accessor containing indices of the polygons' exterior and interior loops. The accessor MUST have SCALAR type and an unsigned integer component type."
+        },
+        "loopIndicesOffsets": {
+            "type": "number",
+            "description": "Index of an accessor containing one integer offset per polygon in the primitive, indicating the first index of the first linear ring associated with that polygon."
+        },
+        "indicesOffsets": {
+            "type": "number",
+            "description": "Index of an accessor containing one integer offset per polygon in the primitive, indicating the first index of the first triangle associated with that polygon."
+        },
+    },
+    "required": [
+        "count", "loopIndices", "loopIndicesOffsets", "indicesOffsets"
+    ]
+}
