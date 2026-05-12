@@ -11,19 +11,19 @@
     ],
     "properties": {
         "count": {
-            "type": "number",
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "Integer number of polygons encoded in the mesh primitive."
         },
         "loopIndices": {
-            "type": "number",
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "Index of an accessor containing indices of the polygons' exterior and interior loops. The accessor MUST have SCALAR type and an unsigned integer component type."
         },
         "loopIndicesOffsets": {
-            "type": "number",
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "Index of an accessor containing one integer offset per polygon in the primitive, indicating the first index of the first linear ring associated with that polygon."
         },
         "indicesOffsets": {
-            "type": "number",
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "Index of an accessor containing one integer offset per polygon in the primitive, indicating the first index of the first triangle associated with that polygon."
         }
     },
