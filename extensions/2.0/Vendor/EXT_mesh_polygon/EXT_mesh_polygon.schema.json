@@ -25,7 +25,7 @@
         "indicesOffsets": {
             "type": "number",
             "description": "Index of an accessor containing one integer offset per polygon in the primitive, indicating the first index of the first triangle associated with that polygon."
-        },
+        }
     },
     "required": [
         "count", "loopIndices", "loopIndicesOffsets", "indicesOffsets"
