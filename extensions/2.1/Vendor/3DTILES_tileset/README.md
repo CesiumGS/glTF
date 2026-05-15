@@ -16,17 +16,20 @@ Written against the glTF 2.1 spec.
 
 Depends on:
 
-- `EXT_structural_metadata` for assigning properties to entities
 - `EXT_geometric_error` for geometric error based node refinement
+- `EXT_structural_metadata` for assigning properties to entities
 - `EXT_bounding_volume_region` for region bounding volumes
 - `EXT_geospatial_crs` for geospatial coordinate reference system definitions
 - `3DTILES_subtree` for concise representation of quadtrees and octrees.
+- `GODOT_single_root` for ensuring single root node
 
 ## Overview
 
 This extension specifies a well defined subset of glTF 2.1 for representing a tileset in [3D Tiles](https://github.com/CesiumGS/3d-tiles/tree/main/specification).
 
-## 3D Tiles
+## Concepts
+
+### Overview
 
 In 3D Tiles, a _tileset_ is a set of _tiles_ organized in a spatial data structure, the _tree_. Each tile may reference renderable _content_.
 
@@ -40,36 +43,86 @@ Application-specific _metadata_ may be provided at multiple granularities within
 
 Optionally a [3D Tiles Style](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Styling/README.adoc#styling-styling), or _style_, may be applied to a tileset. A style defines expressions to be evaluated which modify how each feature is displayed.
 
-
-## glTF constraints
-
-This extension imposes certain constraints on glTF assets as described below.
-
-### Scenes
-
-- The document `"scenes"` array MUST have exactly one scene.
-- The document `"scene"` index MUST be set to 0, the index of the only scene in the `"scenes"` array.
-- The scene MUST have exactly one node, the single root node.
-
-### Nodes
-
-- A node MUST NOT have a `mesh`
-- A node MUST have a `boundingVolume`
-- A node MUST use the `EXT_geometric_error` extension
-
-
-
-
-
-## Concepts
-
-### Overview
-
-This section describes the concepts of 3D Tiles and how they are represented in glTF.
-
 ### Tileset
 
-A tileset is a set of tiles organized in a spatial data structure, the tree.
+A tileset is a set of tiles organized in a spatial data structure, the tree. The tree has a single root tile. Each tile has any number of children tiles. Tiles are represented as nodes in the glTF node hierarchy, or defined implicitly with [Implicit Tiling](#implicit-tiling).
+
+The presence of `3DTILES_tileset` in `extensionsUsed` indicates that the glTF is a tileset.
+
+3D Tiles uses one main tileset file as the entry point to define a tileset. To create a tree of trees, a tileset may also reference [external tilesets](#external-tilesets).
+
+### Tile
+
+Tiles consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
+
+```json
+{
+  "reference": 0,
+  "boundingVolume": {
+    "shape": 0
+  },
+  "extensions": {
+    "EXT_geometric_error": {
+      "geometricError": 70.0,
+    }
+  },
+  "children": [1, 2, 3, 4],
+}
+```
+
+This example shows
+
+A tile is represented as a glTF node. The following constraints apply:
+
+- The node MUST NOT have a `mesh`
+- The node MUST have a `boundingVolume`
+- The node MUST use the `EXT_geometric_error` extension
+
+
+
+
+### External Tilesets
+
+3D Tiles uses one main tileset file as the entry point to define a tileset. To create a tree of trees, a tileset may also reference external tilesets.
+
+```
+{
+  "reference": 0,
+  "boundingVolume": {
+    "shape": 0
+  },
+  "extensions": {
+    "EXT_geometric_error": {
+      "geometricError": 70.0,
+    }
+  },
+  "children": [1, 2, 3, 4],
+}
+```
+
+
+
+A glTF is consdieredthat uses the `3DTILES_tileset` extension is consider a tileset.
+
+### Implicit Tiling
+
+The node must be a leaf.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Implicit Tiling
+
 
 
 
@@ -97,26 +150,6 @@ Here is a subset of the tileset used for Canary Wharf:
 
 
 
-### Tile
-
-Tiles consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
-
-A tile is represented by a glTF node.
-
-```json
-{
-  "reference": 0,
-  "boundingVolume": {
-    "shape": 0
-  },
-  "extensions": {
-    "EXT_geometric_error": {
-      "geometricError": 70.0,
-    }
-  },
-  "children": [1, 2, 3, 4],
-}
-```
 
 #### Tile Content
 
@@ -153,6 +186,52 @@ Each content can be associated with a bounding volume. While tile.boundingVolume
 ## Bounding volumes
 
 The <<core-region,region>> bounding volume specifies bounds using a geographic coordinate system (latitude, longitude, height). Specifically, https://epsg.org/crs_4979/WGS-84.html[EPSG 4979], but with the latitude and longitude given in _radians_ instead of _degrees_. The reference ellipsoid is assumed to be the same as the reference ellipsoid of the tileset.
+
+
+
+
+
+
+
+
+## glTF constraints
+
+This extension imposes certain constraints on glTF assets as described below.
+
+### Scene requirements
+
+
+
+- The glTF MUST use the `GODOT_single_root` extension
+- The `"mesh"` and `"reference"` properties MUST NOT be defined
+- The root node MUST use the `EXT_geometric_error` extension
+- The root node MUST have a single child
+
+### Nodes
+
+
+- Nodes MUST NOT have a `mesh`
+- A node MUST have a `boundingVolume`
+- A node MUST use the `EXT_geometric_error` extension
+
+
+#- The root node must be empty i.e. 
+
+### Scenes
+
+- The document `"scenes"` array MUST have exactly one scene.
+- The document `"scene"` index MUST be set to 0, the index of the only scene in the `"scenes"` array.
+- The scene MUST have exactly one node, the single root node.
+
+### Nodes
+
+
+## Concepts
+
+### Overview
+
+This section describes the concepts of 3D Tiles and how they are represented in glTF.
+
 
 ## Coordinate reference system (CRS)
 
@@ -293,7 +372,10 @@ By convention, glTF*.tileset.gltf
 
 ## TODO
 
+- Inner vs. outer bounding volume
+- Unconditional refinement
 - "Metadata" vs. "properties"
 - Where to put recommended file extension `*.tileset.gltf`, in this extension or in the 3D Tiles 2.0 spec
 - Forward axis, how does this affect bv's and 
 - Implicit tiling derived transforms
+- How to indicate that `reference` is an external tileset?
