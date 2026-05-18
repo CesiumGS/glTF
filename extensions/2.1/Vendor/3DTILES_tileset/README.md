@@ -16,7 +16,6 @@ Written against the glTF 2.1 spec.
 
 Depends on:
 
-- `EXT_geometric_error` for geometric error based node refinement
 - `EXT_structural_metadata` for assigning properties to entities
 - `EXT_bounding_volume_region` for region bounding volumes
 - `EXT_geospatial_crs` for geospatial coordinate reference system definitions
@@ -29,7 +28,7 @@ This extension specifies a well defined subset of glTF 2.1 for representing a ti
 
 ## Concepts
 
-### Overview
+### 3D Tiles
 
 In 3D Tiles, a _tileset_ is a set of _tiles_ organized in a spatial data structure, the _tree_. Each tile may reference renderable _content_.
 
@@ -49,11 +48,86 @@ A tileset is a set of tiles organized in a spatial data structure, the tree. The
 
 3D Tiles uses one main tileset file as the entry point to define a tileset. To create a tree of trees, a tileset may also reference [external tilesets](#external-tilesets).
 
+
+The following example shows a tree with a root tile and a child tile.
+
+```json
+{
+  "extensionsUsed": ["3DTILES_tileset"],
+  "asset": {
+    "version": "2.1"
+  },
+  "scenes": [
+    {
+      "nodes": [0]
+    }
+  ],
+  "scene": 0,
+  "shapes": [
+    {
+      "type": "box",
+      "box": {
+        "size": [1.0, 1.0, 1.0]
+      }
+    },
+    {
+      "type": "box",
+      "box": {
+        "size": [0.9, 0.3, 1.0]
+      }
+    }
+  ],
+  "references": [
+    {
+      "uri": "root.glb"
+    },
+    {
+      "uri": "child.glb"
+    }
+  ],
+  "extensions": {
+    "3DTILES_tileset": {
+      "geometricError": 240
+    }
+  },
+  "nodes": [
+    {
+      "boundingVolume": {
+        "shape": 0
+      },
+      "extensions": {
+        "3DTILES_tileset": {
+          "geometricError": 70.0,
+          "refine": "ADD"
+        }
+      },
+      "reference": 0,
+      "children": [1],
+    },
+    {
+      "boundingVolume": {
+        "shape": 1
+      },
+      "extensions": {
+        "3DTILES_tileset": {
+          "geometricError": 0.0,
+        }
+      },
+      "reference": 1
+    },
+  ]
+}
+```
+
+The top-level `3DTILES_tileset` extension has the following properties:
+
+`geometricError` is a nonnegative number that defines the error, in meters, that determines if the tileset is rendered. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. If the SSE does not exceed a required minimum, the tileset should not be rendered, and none of its tiles should be considered for rendering, see [Geometric error](#geometric-error).
+
 ### Tile
 
 Tiles consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
 
-The following example shows one non-leaf tile.
+The following example shows the root tile above.
 
 ```json
 {
@@ -61,28 +135,85 @@ The following example shows one non-leaf tile.
     "shape": 0
   },
   "extensions": {
-    "EXT_geometric_error": {
+    "3DTILES_tileset": {
       "geometricError": 70.0,
       "refine": "ADD"
     }
   },
   "reference": 0,
-  "children": [1, 2, 3, 4],
+  "children": [1],
 }
 ```
 
-The `boundingVolume` defines a volume enclosing the tile, and is used to determine which tiles to render at runtime.
+The `boundingVolume` defines a volume enclosing the tile, and is used to determine which tiles to render at runtime. The bounding volume may define a local space transform of the shape by supplying any of `translation`, `rotation`, and `scale` properties (not shown above).
 
-The `geometricError` property is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. The SSE determines if a tile is sufficiently detailed for the current view or if its children should be considered, see [Geometric error](#geoemtric-error).
+The `geometricError` property is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. The SSE determines if a tile is sufficiently detailed for the current view or if its children should be considered, see [Geometric error]().
 
 The `refine` property is a string that is either `"REPLACE"` for replacement refinement or `"ADD"` for additive refinement. It is required for the root tile of a tileset; it is optional for all other tiles. A tileset can use any combination of additive and replacement refinement. When the `refine` property is omitted, it is inherited from the parent tile.
 
-The optional `reference` property defines the tile's content. 
+The optional `reference` property provides a reference to the tile's content. When `reference` is not defined the tile is considered to be an _empty tile_.
 
+The reference object may have an optional [bounding volume]() similar to the tile `boundingVolume`. But unlike the tile bounding volume, the reference bounding volume is a tightly fitting bounding volume enclosing just the tile's content.
 
- to the tile's content
+The tile may defined a local space transform by supplying a `matrix` property, or any of `translation`, `rotation`, and `scale` properties. These properties MUST either be not defined or have default values for the root tile.
 
-This example shows
+The `children` property is an array of node indices to child tiles. Each child tile's content is fully enclosed by its parent tile's `boundingVolume`. For _leaf tiles_, there are no children, and `children` MAY not be defined.
+
+### Geometric Error
+
+Tiles are structured into a tree incorporating _Hierarchical Level of Detail_ (HLOD) so that at runtime a client implementation will need to determine if a tile is sufficiently detailed for rendering and if the content of tiles should be successively refined by children tiles of higher resolution. An implementation will consider a maximum allowed _Screen-Space Error_ (SSE), the error measured in pixels.
+
+A tile’s geometric error defines the selection metric for that tile. Its value is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not.
+
+Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If the child tile's geometric error is greater than or equal to its parent's geometric error, the tile is considered _unconditionally refinable_.
+
+In a client implementation, geometric error is used with other screen space metrics—​e.g., distance from the tile to the camera, screen size, and resolution-- to calculate the SSE introduced if this tile is rendered and its children are not. If the introduced SSE exceeds the maximum allowed, then the tile is refined and its children are considered for rendering.
+
+The geometric error is formulated based on a metric like point density, mesh or texture decimation, or another factor specific to that tileset. In general, a higher geometric error means a tile will be refined more aggressively, and children tiles will be loaded and rendered sooner.
+
+### Refinement
+
+Refinement determines the process by which a lower resolution parent tile renders when its higher resolution children are selected to be rendered. Permitted refinement types are replacement (`"REPLACE"`) and additive (`"ADD"`). If the tile has replacement refinement, the children tiles are rendered in place of the parent, that is, the parent tile is no longer rendered. If the tile has additive refinement, the children are rendered in addition to the parent tile.
+
+A tileset can use replacement refinement exclusively, additive refinement exclusively, or any combination of additive and replacement refinement.
+
+A refinement type is required for the root tile of a tileset; it is optional for all other tiles. When omitted, a tile inherits the refinement type of its parent.
+
+##### Replacement
+
+If a tile uses replacement refinement, when refined it renders its children in place of itself.
+
+| Parent Tile | Refined |
+|:---:|:--:|
+| ![](figures/replacement_1.jpg) | ![](figures/replacement_2.jpg) |
+
+##### Additive
+
+If a tile uses additive refinement, when refined it renders itself and its children simultaneously.
+
+| Parent Tile | Refined |
+|:---:|:--:|
+| ![](figures/additive_1.jpg) | ![](figures/additive_2.jpg) |
+
+### Bounding Volumes
+
+A bounding volume defines the spatial extent enclosing a tile or a tile’s content. To support tight fitting volumes for a variety of datasets such as regularly divided terrain, cities not aligned with a line of latitude or longitude, or arbitrary point clouds, the bounding volume types include an oriented bounding box and a bounding sphere. Additionally bounding volumes types are supported through extensions.
+
+- [3DTILES_shape_ellipsoid_region]()
+- [3DTILES_shape_cylinder_region]()
+- [3DTILES_shape_S2]()
+
+### Spatial Coherence
+
+### Coordinate reference systems
+
+### Implicit Tiling
+
+### External Tilesets
+
+### Metadata
+
+### Styling
 
 A tile is represented as a glTF node. The following constraints apply:
 
@@ -91,7 +222,9 @@ A tile is represented as a glTF node. The following constraints apply:
 - The node MUST use the `EXT_geometric_error` extension
 
 
+### Coordinate reference systems
 
+- Geopose instead of lat/long
 
 ### External Tilesets
 
@@ -152,17 +285,6 @@ Here is a subset of the tileset used for Canary Wharf:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #### Tile Content
 
 A tile can be associated with renderable content. 
@@ -181,7 +303,6 @@ Each content can be associated with a bounding volume. While tile.boundingVolume
 
 #### Geometric error
 
-#### Refinement
 
 ##### Replacement
 
@@ -394,3 +515,7 @@ By convention, glTF*.tileset.gltf
 - How to indicate that `reference` is an external tileset?
 - Should external tilesets and implicit tilesets be separate extensions?
 - Should region extension be not dependant?
+- How common is it to use HLOD without external references? Basically, should EXT_geometric_error be a separate extension or folded into this one. EXT_geometric_error should have top-level geometric error.
+- Where to store tileset geometricError
+- viewerRequestVolume - related to behaviors and interactivity?
+- TODO: better picture for replacement refinement
