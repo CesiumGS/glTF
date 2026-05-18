@@ -45,9 +45,7 @@ Optionally a [3D Tiles Style](https://github.com/CesiumGS/3d-tiles/blob/main/spe
 
 ### Tileset
 
-A tileset is a set of tiles organized in a spatial data structure, the tree. The tree has a single root tile. Each tile has any number of children tiles. Tiles are represented as nodes in the glTF node hierarchy, or defined implicitly with [Implicit Tiling](#implicit-tiling).
-
-The presence of `3DTILES_tileset` in `extensionsUsed` indicates that the glTF is a tileset.
+A tileset is a set of tiles organized in a spatial data structure, the tree. The tree has a single root tile. Tiles are represented as nodes in the glTF node hierarchy, or defined implicitly with [Implicit Tiling](#implicit-tiling).
 
 3D Tiles uses one main tileset file as the entry point to define a tileset. To create a tree of trees, a tileset may also reference [external tilesets](#external-tilesets).
 
@@ -55,20 +53,34 @@ The presence of `3DTILES_tileset` in `extensionsUsed` indicates that the glTF is
 
 Tiles consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
 
+The following example shows one non-leaf tile.
+
 ```json
 {
-  "reference": 0,
   "boundingVolume": {
     "shape": 0
   },
   "extensions": {
     "EXT_geometric_error": {
       "geometricError": 70.0,
+      "refine": "ADD"
     }
   },
+  "reference": 0,
   "children": [1, 2, 3, 4],
 }
 ```
+
+The `boundingVolume` defines a volume enclosing the tile, and is used to determine which tiles to render at runtime.
+
+The `geometricError` property is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. The SSE determines if a tile is sufficiently detailed for the current view or if its children should be considered, see [Geometric error](#geoemtric-error).
+
+The `refine` property is a string that is either `"REPLACE"` for replacement refinement or `"ADD"` for additive refinement. It is required for the root tile of a tileset; it is optional for all other tiles. A tileset can use any combination of additive and replacement refinement. When the `refine` property is omitted, it is inherited from the parent tile.
+
+The optional `reference` property defines the tile's content. 
+
+
+ to the tile's content
 
 This example shows
 
@@ -375,7 +387,10 @@ By convention, glTF*.tileset.gltf
 - Inner vs. outer bounding volume
 - Unconditional refinement
 - "Metadata" vs. "properties"
+- Should 3D Metadata Specification be folded into EXT_structural_metadata?
 - Where to put recommended file extension `*.tileset.gltf`, in this extension or in the 3D Tiles 2.0 spec
 - Forward axis, how does this affect bv's and 
 - Implicit tiling derived transforms
 - How to indicate that `reference` is an external tileset?
+- Should external tilesets and implicit tilesets be separate extensions?
+- Should region extension be not dependant?
