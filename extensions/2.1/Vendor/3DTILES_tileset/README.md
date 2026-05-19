@@ -30,10 +30,11 @@ When using [External Tilesets](#external-tilesets), the root tileset SHOULD be n
 
 When this extension is used the following constraints apply to the glTF:
 
-- The glTF must use the [GODOT_single_root]() extension.
+- The glTF must have a single root tile as specified by [GODOT_single_root]().
 
-The following constraints apply to nodes:
+The following constraints apply to all nodes:
 
+- The `3DTILES_tileset` extension MUST be defined
 - The `"mesh"` property MUST NOT be defined.
 - The `"boundingVolume"` property MUST be defined.
 - The bounding volume shape type MUST be `"box"` or `"sphere"`
