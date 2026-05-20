@@ -16,15 +16,13 @@ Written against the glTF 2.1 spec.
 
 ## Overview
 
-This extension specifies a well defined subset of glTF 2.1 for representing a tileset in [3D Tiles](https://github.com/CesiumGS/3d-tiles/tree/main/specification).
-
-It uses the glTF node hierarchy and glTF 2.1 features like external assets and bounding volumes to define a Hierarchical Level of Detail (HLOD) structure for streaming massive 3D scenes.
+This extension specifies a well defined subset of glTF 2.1 for representing a tileset in [3D Tiles](https://github.com/CesiumGS/3d-tiles/tree/main/specification). It extends the node hierarchy to support Hierarchical Level of Detail (HLOD) for streaming massive 3D scenes. Additionally, it depends on core glTF 2.1 features like external assets and bounding volumes.
 
 ## File Extensions
 
-Assets using this extension SHOULD use the `.tileset.gltf` or `.tileset.glb` file extensions. This helps differentiate tileset files from content files.
+Assets with this extension should use the `.tileset.gltf` or `.tileset.glb` file extensions. While not required, this helps differentiate tileset files from content files.
 
-When using [External Tilesets](#external-tilesets), the root tileset SHOULD be named `root.tileset.gltf`.
+When using [External Tilesets](#external-tilesets), the root tileset SHOULD be named `root.tileset.gltf` so that there is a well-known entry point.
 
 ## Constraints
 
@@ -35,14 +33,12 @@ When this extension is used the following constraints apply to the glTF:
 The following constraints apply to all nodes:
 
 - The `3DTILES_tileset` extension MUST be defined
-- The `"mesh"` property MUST NOT be defined.
-- The `"boundingVolume"` property MUST be defined.
-- The bounding volume shape type MUST be `"box"` or `"sphere"`
-  - Additional shapes types may be supported through extensions
+- The `"boundingVolume"` property MUST be defined. The bounding volume shape type MUST be `"box"` or `"sphere"` unless additional shape types are enabled through extension.
+- The `"mesh"` property MUST NOT be defined. `3DTILES_tileset` only allows references to external assets.
 
 ## Concepts
 
-### Overview
+### 3D Tiles
 
 In 3D Tiles, a _tileset_ is a set of _tiles_ organized in a spatial data structure, the _tree_. Each tile may reference renderable _content_.
 
@@ -165,11 +161,11 @@ The `geometricError` property is a nonnegative number that defines the error, in
 
 The `refine` property is a string that is either `"REPLACE"` for replacement refinement or `"ADD"` for additive refinement. It is required for the root tile of a tileset; it is optional for all other tiles. A tileset can use any combination of additive and replacement refinement. When the `refine` property is omitted, it is inherited from the parent tile.
 
-The optional `asset` property provides a reference to the tile's content. When `asset` is not defined the tile is considered to be an _empty tile_.
+The optional `asset` property provides a reference to the tile's content. If the referenced asset uses the `3DTILES_tileset` extension then it is considered an [External tileset](#external-tilesets). When `asset` is not defined the tile is considered an _empty tile_. 
 
-The asset object may have an optional [bounding volume]() similar to the tile `boundingVolume`. But unlike the tile bounding volume, the asset bounding volume is a tightly fitting bounding volume enclosing just the tile's content.
+The `asset` object may have an optional `boundingVolume` similar to the tile `boundingVolume`. But unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content.
 
-The tile may defined a local space transform by supplying a `matrix` property, or any of `translation`, `rotation`, and `scale` properties. These properties MUST either be not defined or have default values for the root tile.
+A tile may define a local space transform by supplying a `matrix` property, or any of `translation`, `rotation`, and `scale` properties. The root tile MUST NOT define a local transform.
 
 The `children` property is an array of node indices to child tiles. Each child tile's content is fully enclosed by its parent tile's `boundingVolume`. For _leaf tiles_, there are no children, and `children` MAY not be defined.
 
@@ -213,7 +209,7 @@ If a tile uses additive refinement, when refined it renders itself and its child
 
 A bounding volume defines the spatial extent enclosing a tile or a tile’s content. The bounding volume shape MUST be `"box"` or `"sphere"`.
 
-Additional shapes may be supported through extensions such as
+Additional shapes may be supported through extensions:
 
 - [3DTILES_shape_ellipsoid_region]()
 - [3DTILES_shape_cylinder_region]()
@@ -222,7 +218,7 @@ Additional shapes may be supported through extensions such as
 
 #### Bounding Box
 
-The following example shows an oriented bounding box.
+The following example shows an oriented bounding box created by transforming an axis-aligned box.
 
 ```json
 {
@@ -275,24 +271,60 @@ The following example shows a bounding sphere encompassing the Earth.
 
 ### Spatial Coherence
 
-### Coordinate reference systems
+As described above, the tree has spatial coherence; each tile has a bounding volume completely enclosing its content, and the content for child tiles are completely inside the parent's bounding volume. This does not imply that a child's bounding volume is completely inside its parent's bounding volume. For example:
 
-- `EXT_geospatial_crs` for geospatial coordinate reference system definitions
-- Forward axis, how does this affect bv's 
-- Geopose on root node instead of supply arbitrary 4x4 transform
+_Bounding sphere for a terrain tile_
+
+![image](figures/parentBoundingSphere.jpg)
+
+_Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit._
+
+![image](figures/childBoundingSphere.jpg)
+
+### Spatial data structures
+
+3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by `root` and, recursively, its `children` tiles, which can be organized by different types of spatial data structures.
+
+A runtime engine is generic and will render any tree defined by a tileset. Any combination of tile formats and refinement approaches can be used, enabling flexibility in supporting heterogeneous datasets, see [Refinement](#refinement).
+
+A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
+
+[Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
 
 ### Implicit Tiling
 
-- `3DTILES_implicit_tiling`
-- `3DTILES_subtree` for concise representation of quadtrees and octrees.
-- Implicit tiling derived transforms
+The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
+
+See [3DTILES_implicit_tiling]().
+
+![](./figures/implicit-tiling-small.png)
+
+### Coordinate reference systems
+
+3D Tiles uses the same coordinate system and units as glTF; that is a right-handed coordinate system with +Y as up, +Z as forward, and -X as right. The units for all linear distances are meters.
+
+The default coordinate system may be overriden with the [3DTILES_geocentric_crs]() extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
+
+![](./figures/Earth_Centered_Inertial_Coordinate_System.png)
+
+Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference]() extension, which may be added to the root node.
 
 ### External Tilesets
 
-- `3DTILES_external_tileset`
-- How to indicate that `asset` is an external tileset?
+To create a tree of trees, a tile’s content can point to an external tileset (the uri of another glTF with the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets.
+
+![](./figures/tilesets.png)
+
+For more details see [3DTILES_external_tileset]().
 
 ### Metadata
+
+Application-specific _metadata_ may be provided at multiple granularities within a tileset. Properties may be associated with high-level entities like tilesets, tiles, contents, or features, or with individual vertices and texels. See 
+
+Metadata conforms to a well-defined type system described by the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Metadata/README.adoc#metadata-3d-metadata-specification), which may be extended with application- or domain-specific semantics.
+
+The [EXT_structural_metadata]() extension may be added
+
 
 - `EXT_structural_metadata` for assigning properties to tileset, tile, content, etc
 - "Metadata" vs. "properties"
@@ -300,10 +332,82 @@ The following example shows a bounding sphere encompassing the Earth.
 
 ### Styling
 
+## Appendix A: Spatial data structures
+
+### Quadtrees
+
+A quadtree is created when each tile has four uniformly subdivided children, similar to typical 2D geospatial tiling schemes. Empty child tiles can be omitted.
+
+<p align="center">
+  <img src="figures/quadtree.png" /><br />
+  Classic quadtree subdivision.
+</p>
+
+3D Tiles enable quadtree variations such as non-uniform subdivision and tight bounding volumes (as opposed to bounding, for example, the full 25% of the parent tile, which is wasteful for sparse datasets).
+
+<p align="center">
+  <img src="figures/quadtree-tight.png" /><br />
+  Quadtree with tight bounding volumes around each child.
+</p>
+
+For example, here is the root tile and its children for Canary Wharf. Note the bottom left, where the bounding volume does not include the water on the left where no buildings will appear:
+
+<p align="center">
+  <img src="figures/nonUniformQuadtree.png" /><br />
+  Building data from <a href="http://www.cybercity3d.com/">CyberCity3D</a>. Imagery data from <a href="https://www.microsoft.com/maps/">Bing Maps</a>.
+</p>
+
+3D Tiles also enable other quadtree variations such as [loose quadtrees](http://www.tulrich.com/geekstuff/partitioning.html), where child tiles overlap but spatial coherence is still preserved, i.e., a parent tile completely encloses all of its children. This approach can be useful to avoid splitting features, such as 3D models, across tiles.
+
+<p align="center">
+  <img src="figures/quadtree-overlap.png" /><br />
+  Quadtree with non-uniform and overlapping tiles.
+</p>
+
+Below, the green buildings are in the left child and the purple buildings are in the right child. Note that the tiles overlap so the two green and one purple building in the center are not split.
+
+![](figures/looseQuadtree.png)
+
+##### K-d trees
+
+A k-d tree is created when each tile has two children separated by a _splitting plane_ parallel to the _x_, _y_, or _z_ axis (or latitude, longitude, height). The split axis is often round-robin rotated as levels increase down the tree, and the splitting plane may be selected using the median split, surface area heuristics, or other approaches.
+
+<p align="center">
+  <img src="figures/kdtree.png" /><br />
+  Example k-d tree. Note the non-uniform subdivision.
+</p>
+
+Note that a k-d tree does not have uniform subdivision like typical 2D geospatial tiling schemes and, therefore, can create a more balanced tree for sparse and non-uniformly distributed datasets.
+
+3D Tiles enables variations on k-d trees such as [multi-way k-d trees](http://www.crs4.it/vic/cgi-bin/bib-page.cgi?id=%27Goswami:2013:EMF%27) where, at each leaf of the tree, there are multiple splits along an axis. Instead of having two children per tile, there are `n` children.
+
+##### Octrees
+
+An octree extends a quadtree by using three orthogonal splitting planes to subdivide a tile into eight children. Like quadtrees, 3D Tiles allows variations to octrees such as non-uniform subdivision, tight bounding volumes, and overlapping children.
+
+<p align="center">
+  <img src="figures/octree.png" /><br />
+  Traditional octree subdivision.
+</p>
+
+<p align="center">
+  <img src="figures/pointcloud-octree.png" /><br />
+  Non-uniform octree subdivision for a point cloud using additive refinement. Point Cloud of <a href="http://robotics.cs.columbia.edu/~atroccol/ijcv/chappes.html">the Church of St Marie at Chappes, France</a> by Prof. Peter Allen, Columbia University Robotics Lab. Scanning by Alejandro Troccoli and Matei Ciocarlie.
+</p>
+
+##### Grids
+
+3D Tiles enables uniform, non-uniform, and overlapping grids by supporting an arbitrary number of child tiles. For example, here is a top-down view of a non-uniform overlapping grid of Cambridge:
+
+![](figures/grid.png)
+
+3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
+
 ## TODO
 
 - Inner vs. outer bounding volume
 - Unconditional refinement
 - viewerRequestVolume - related to behaviors and interactivity?
 - Better picture for replacement refinement
-- Geometric error image from reference card
+- Expand on geometric error Geometric error image from reference card
+- How to indicate that `asset` is an external tileset? Don't want to rely on JSON sniffing.
