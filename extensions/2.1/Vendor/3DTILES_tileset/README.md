@@ -295,9 +295,17 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
 
-See [3DTILES_implicit_tiling]().
+Implicit tiling is enabled by using the [3DTILES_implicit_tiling]() extension.
 
 ![](./figures/implicit-tiling-small.png)
+
+### External Tilesets
+
+To create a tree of trees, a tile’s content can point to an external tileset (a glTF with the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets.
+
+![](./figures/tilesets.png)
+
+External tilesets are enabled by using the [3DTILES_external_tileset]() extension.
 
 ### Coordinate reference systems
 
@@ -307,30 +315,83 @@ The default coordinate system may be overriden with the [3DTILES_geocentric_crs]
 
 ![](./figures/Earth_Centered_Inertial_Coordinate_System.png)
 
-Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference]() extension, which may be added to the root node.
-
-### External Tilesets
-
-To create a tree of trees, a tile’s content can point to an external tileset (the uri of another glTF with the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets.
-
-![](./figures/tilesets.png)
-
-For more details see [3DTILES_external_tileset]().
+Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference]() extension.
 
 ### Metadata
 
-Application-specific _metadata_ may be provided at multiple granularities within a tileset. Properties may be associated with high-level entities like tilesets, tiles, contents, or features, or with individual vertices and texels. See 
+Application-specific _metadata_ may be provided at multiple granularities within a tileset. Properties may be associated with tilesets, tiles, and contents within a tileset file using the `EXT_structural_metadata` extension. Properties may also be associated with features or with individual vertices and texels within content files.
 
-Metadata conforms to a well-defined type system described by the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Metadata/README.adoc#metadata-3d-metadata-specification), which may be extended with application- or domain-specific semantics.
+The following example shows a tileset with tileset metadata, tile metadata, and content metadata. The referenced asset `root.glb` may also use `EXT_structural_metadata`, for example, for storing per-building metadata.
 
-The [EXT_structural_metadata]() extension may be added
+```json
+{
+  "extensionsUsed": ["3DTILES_tileset", "EXT_structural_metadata"],
+  "assets": [
+    {
+      "uri": "root.glb",
+      "EXT_structural_metadata": {
+        "class": "geometryData",
+        "properties": {
+          "vertices": 49534,
+          "primitives": 2
+        }
+      }
+    }
+  ],
+  "extensions": {
+    "3DTILES_tileset": {
+      "geometricError": 240
+    },
+    "EXT_structural_metadata": {
+      "class": "city",
+      "properties": {
+        "name": "New York City",
+        "country": "United States",
+        "population": 8804190
+      }
+    }
+  },
+  "nodes": [
+    {
+      "boundingVolume": {
+        "shape": 0
+      },
+      "extensions": {
+        "3DTILES_tileset": {
+          "geometricError": 0.0,
+          "refine": "ADD"
+        },
+        "EXT_structural_metadata": {
+          "class": "block",
+          "properties": {
+            "borough": "Manhattan",
+            "zipCode": 10024,
+            "population": 52428
+          }
+        }
+      },
+      "asset": 0
+    }
+  ]
+}
+```
 
+### Declarative styling specification
 
-- `EXT_structural_metadata` for assigning properties to tileset, tile, content, etc
-- "Metadata" vs. "properties"
-- Fold 3D Metadata Specification into EXT_structural_metadata (or KHR_structural_metadata)?
+3D Tiles includes concise declarative styling defined with JSON and expressions written in a small subset of JavaScript augmented for styling.
 
-### Styling
+Styles define how a featured is displayed, for example `show` and `color` (RGB and translucency), using an expression based on a feature’s properties.
+
+The following example colors features with a height above 90 as red and the others as white.
+
+```json
+{
+  "color" : "(${Height} > 90) ? color('red') : color('white')"
+}
+```
+
+For complete details, see the [Declarative Styling]() specification.
+
 
 ## Appendix A: Spatial data structures
 
