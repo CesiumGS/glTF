@@ -71,6 +71,7 @@ The following example shows a tree with a root tile and a child tile.
 ```json
 {
   "extensionsUsed": ["3DTILES_tileset"],
+  "extensionsRequired": ["3DTILES_tileset"],
   "asset": {
     "version": "2.1"
   },
@@ -333,6 +334,7 @@ The following example shows a tileset with tileset metadata, tile metadata, and 
 ```json
 {
   "extensionsUsed": ["3DTILES_tileset", "EXT_structural_metadata"],
+  "extensionsRequired": ["3DTILES_tileset"],
   "externalAssets": [
     {
       "uri": "root.glb",
