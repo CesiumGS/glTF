@@ -94,12 +94,22 @@ The following example shows a tree with a root tile and a child tile.
       }
     }
   ],
-  "externalAssets": [
+  "files": [
     {
+      "mimeType": "model/gltf-binary",
       "uri": "root.glb"
     },
     {
+      "mimeType": "model/gltf-binary",
       "uri": "child.glb"
+    }
+  ],
+  "externalAssets": [
+    {
+      "file": 0
+    },
+    {
+      "file": 1
     }
   ],
   "extensions": {
