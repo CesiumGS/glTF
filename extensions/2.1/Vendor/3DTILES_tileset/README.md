@@ -33,7 +33,7 @@ The entry tileset **SHOULD** be named `root.tileset.gltf` to differentiate the e
 
 The following constraints apply when using the `3DTILES_tileset` extension:
 
-- The glTF must have a single root tile as specified by [GODOT_single_root](https://github.com/CesiumGS/glTF/blob/main/extensions/2.0/Vendor/GODOT_single_root/).
+- The glTF **MUST** have a single root tile as specified by [GODOT_single_root](https://github.com/CesiumGS/glTF/blob/main/extensions/2.0/Vendor/GODOT_single_root/).
 
 The following constraints apply to all nodes:
 
