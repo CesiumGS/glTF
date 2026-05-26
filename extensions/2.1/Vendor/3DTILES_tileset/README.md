@@ -18,7 +18,6 @@ Written against the glTF 2.1 spec.
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
-
 ## Overview
 
 This extension specifies a well defined subset of glTF 2.1 for representing a tileset in [3D Tiles](https://github.com/CesiumGS/3d-tiles/tree/main/specification/). It extends the node hierarchy to support Hierarchical Level of Detail (HLOD) for streaming massive 3D scenes. Additionally, it depends on core glTF 2.1 features like external assets and bounding volumes.
