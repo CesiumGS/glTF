@@ -480,3 +480,10 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Add geometric error image from reference card
 - How to indicate that `externalAsset` is an external tileset before loading it?
 - Section on unconditional refinement
+- Add `3DTILES_implicit_tiling`
+- Add `3DTILES_external_tileset`
+- Add `3DTILES_shape_ellipsoid_region`
+- Add `3DTILES_shape_cylinder_region`
+- Add `3DTILES_shape_S2`
+- Add `3DTILES_geocentric_crs`
+- Add `3DTILES_georeference`
