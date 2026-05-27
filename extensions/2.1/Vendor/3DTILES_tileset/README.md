@@ -497,3 +497,4 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Add `3DTILES_shape_S2`
 - Add `3DTILES_geocentric_crs`
 - Add `3DTILES_georeference`
+- Update external tilesets image
