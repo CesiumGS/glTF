@@ -44,26 +44,25 @@ The following constraints apply to all nodes:
 
 ### 3D Tiles
 
-In 3D Tiles, a _tileset_ is a set of _tiles_ organized in a spatial data structure, the _tree_. Each tile may reference renderable _content_.
+In 3D Tiles, a *tileset* is a set of *tiles* organized in a spatial data structure, the *tree*. Each tile may reference renderable *content*.
 
-The content references a set of _features_, such as 3D models representing buildings or trees, or points in a point cloud. Each feature has position and appearance properties and additional application-specific properties. A client may choose to select features at runtime and retrieve their properties for visualization or analysis.
+The content references a set of *features*, such as 3D models representing buildings or trees, or points in a point cloud. Each feature has position and appearance properties and additional application-specific properties. A client may choose to select features at runtime and retrieve their properties for visualization or analysis.
 
-Tiles are organized in a tree which incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. Each tile has a _bounding volume_, an object defining a spatial extent completely enclosing its content. The tree has [spatial coherence](#spatial-coherence); the content for child tiles are completely inside the parent’s bounding volume.
+Tiles are organized in a tree which incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. Each tile has a *bounding volume*, an object defining a spatial extent completely enclosing its content. The tree has [spatial coherence](#spatial-coherence); the content for child tiles are completely inside the parent’s bounding volume.
 
 ![](./figures/tree.png)
 
 A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, the tree can be any spatial data structure with spatial coherence, including k-d trees, quadtrees, octrees, and grids. [Implicit tiling](#implicit-tiling) defines a concise representation of quadtrees and octrees.
 
-Application-specific _metadata_ may be provided at multiple granularities within a tileset. Properties may be associated with high-level entities like tilesets, tiles, contents, or features, or with individual vertices and texels. Metadata conforms to a well-defined type system described by the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Metadata/), which may be extended with application- or domain-specific semantics.
+Application-specific *metadata* may be provided at multiple granularities within a tileset. Properties may be associated with high-level entities like tilesets, tiles, contents, or features, or with individual vertices and texels. Metadata conforms to a well-defined type system described by the [3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Metadata/), which may be extended with application- or domain-specific semantics.
 
-Optionally a [3D Tiles Style](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Styling/), or _style_, may be applied to a tileset. A style defines expressions to be evaluated which modify how each feature is displayed.
+Optionally a [3D Tiles Style](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Styling/), or *style*, may be applied to a tileset. A style defines expressions to be evaluated which modify how each feature is displayed.
 
 ### Tileset
 
 A tileset is a set of tiles organized in a spatial data structure, the tree. The tree has a single root tile. Each tile has zero or more children tiles. Tiles are represented as nodes in the glTF node hierarchy, or defined implicitly with [Implicit Tiling](#implicit-tiling).
 
 3D Tiles uses one main tileset file as the entry point to define a tileset. To create a tree of trees, a tileset may also reference [external tilesets](#external-tilesets).
-
 
 The following example shows a tree with a root tile and a child tile.
 
@@ -148,7 +147,7 @@ The following example shows a tree with a root tile and a child tile.
 
 The top-level `3DTILES_tileset` extension has the following properties:
 
-`geometricError` is a nonnegative number that defines the error, in meters, that determines if the tileset is rendered. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. If the SSE does not exceed a required minimum, the tileset should not be rendered, and none of its tiles should be considered for rendering, see [Geometric error](#geometric-error).
+`geometricError` is a nonnegative number that defines the error, in meters, that determines if the tileset is rendered. At runtime, the geometric error is used to compute *Screen-Space Error* (SSE), the error measured in pixels. If the SSE does not exceed a required minimum, the tileset should not be rendered, and none of its tiles should be considered for rendering, see [Geometric error](#geometric-error).
 
 ### Tile
 
@@ -174,25 +173,25 @@ The following example shows the root tile above.
 
 The `boundingVolume` property (core in glTF 2.1) defines a volume enclosing the tile, and is used to determine which tiles to render at runtime. The bounding volume may define a local space transform of the shape by supplying any of `translation`, `rotation`, and `scale` properties (not shown above).
 
-The `geometricError` property is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not. At runtime, the geometric error is used to compute _Screen-Space Error_ (SSE), the error measured in pixels. The SSE determines if a tile is sufficiently detailed for the current view or if its children should be considered, see [Geometric error]().
+The `geometricError` property is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not. At runtime, the geometric error is used to compute *Screen-Space Error* (SSE), the error measured in pixels. The SSE determines if a tile is sufficiently detailed for the current view or if its children should be considered, see [Geometric error](#geometric-error).
 
 The `refine` property is a string that is either `"REPLACE"` for replacement refinement or `"ADD"` for additive refinement. It is required for the root tile of a tileset; it is optional for all other tiles. A tileset can use any combination of additive and replacement refinement. When the `refine` property is omitted, it is inherited from the parent tile.
 
-The optional `externalAsset` property (core in glTF 2.1) provides a reference to the tile's content. If the content uses the `3DTILES_tileset` extension then it is considered an [External tileset](#external-tilesets). When `externalAsset` is not defined the tile is considered an _empty tile_.
+The optional `externalAsset` property (core in glTF 2.1) provides a reference to the tile's content. If the content uses the `3DTILES_tileset` extension then it is considered an [External tileset](#external-tilesets). When `externalAsset` is not defined the tile is considered an *empty tile*.
 
 The `externalAsset` object may have an optional `boundingVolume`, the content bounding volume. Unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content. This enables tight view frustum culling, excluding from rendering any content not in the volume of what is potentially in view. When it is not defined, the tile’s bounding volume is still used for culling.
 
 A tile may define a local space transform using the standard `matrix` or `translation`, `rotation`, `scale` node properties. The root tile **MUST NOT** define a local transform.
 
-The `children` property is an array of node indices to child tiles. Each child tile's content is fully enclosed by its parent tile's `boundingVolume`. For _leaf tiles_, there are no children, and `children` **MUST** not be defined.
+The `children` property is an array of node indices to child tiles. Each child tile's content is fully enclosed by its parent tile's `boundingVolume`. For *leaf tiles*, there are no children, and `children` **MUST** not be defined.
 
 ### Geometric Error
 
-Tiles are structured into a tree incorporating _Hierarchical Level of Detail_ (HLOD) so that at runtime a client implementation will need to determine if a tile is sufficiently detailed for rendering and if the content of tiles should be successively refined by children tiles of higher resolution. An implementation will consider a maximum allowed _Screen-Space Error_ (SSE), the error measured in pixels.
+Tiles are structured into a tree incorporating *Hierarchical Level of Detail* (HLOD) so that at runtime a client implementation will need to determine if a tile is sufficiently detailed for rendering and if the content of tiles should be successively refined by children tiles of higher resolution. An implementation will consider a maximum allowed *Screen-Space Error* (SSE), the error measured in pixels.
 
 A tile’s geometric error defines the selection metric for that tile. Its value is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not.
 
-Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If the child tile's geometric error is greater than or equal to its parent's geometric error, the tile is considered _unconditionally refinable_.
+Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If the child tile's geometric error is greater than or equal to its parent's geometric error, the tile is considered *unconditionally refinable*.
 
 In a client implementation, geometric error is used with other screen space metrics—​e.g., distance from the tile to the camera, screen size, and resolution—to calculate the SSE introduced if this tile is rendered and its children are not. If the introduced SSE exceeds the maximum allowed, then the tile is refined and its children are considered for rendering.
 
@@ -206,21 +205,21 @@ A tileset can use replacement refinement exclusively, additive refinement exclus
 
 A refinement type is required for the root tile of a tileset; it is optional for all other tiles. When omitted, a tile inherits the refinement type of its parent.
 
-##### Replacement
+#### Replacement
 
 If a tile uses replacement refinement, when refined it renders its children in place of itself.
 
-| Parent Tile | Refined |
-|:---:|:--:|
-| ![](figures/replacement_1.jpg) | ![](figures/replacement_2.jpg) |
+Parent Tile|Refined
+--|--
+![](./figures/replacement_1.jpg)|![](./figures/replacement_2.jpg)
 
-##### Additive
+#### Additive
 
 If a tile uses additive refinement, when refined it renders itself and its children simultaneously.
 
-| Parent Tile | Refined |
-|:---:|:--:|
-| ![](figures/additive_1.jpg) | ![](figures/additive_2.jpg) |
+Parent Tile|Refined
+--|--
+![](./figures/additive_1.jpg)|![](./figures/additive_2.jpg)
 
 ### Bounding Volumes
 
@@ -228,10 +227,9 @@ A bounding volume defines the spatial extent enclosing a tile or a tile’s cont
 
 A list of extensions that enable additional shape types:
 
-- [3DTILES_shape_ellipsoid_region]()
-- [3DTILES_shape_cylinder_region]()
-- [3DTILES_shape_S2]()
-
+- [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md)
+- [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
+- [3DTILES_shape_S2](../3DTILES_shape_S2/README.md)
 
 #### Bounding Box
 
@@ -290,13 +288,11 @@ The following example shows a bounding sphere.
 
 As described above, the tree has spatial coherence; each tile has a bounding volume completely enclosing its content, and the content for child tiles are completely inside the parent's bounding volume. This does not imply that a child's bounding volume is completely inside its parent's bounding volume. For example:
 
-![image](figures/parentBoundingSphere.jpg)
+![](./figures/parentBoundingSphere.jpg)
+*Bounding sphere for a terrain tile*
 
-_Bounding sphere for a terrain tile_
-
-![image](figures/childBoundingSphere.jpg)
-
-_Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit._
+![](./figures/childBoundingSphere.jpg)
+*Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.*
 
 ### Spatial data structures
 
@@ -312,7 +308,7 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
 
-Implicit tiling is enabled by using the [3DTILES_implicit_tiling]() extension.
+Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension.
 
 ![](./figures/implicit-tiling-small.png)
 
@@ -320,7 +316,7 @@ Implicit tiling is enabled by using the [3DTILES_implicit_tiling]() extension.
 
 To create a tree of trees, a tile’s content can point to an external tileset (a glTF with the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets.
 
-External tilesets are enabled by using the [3DTILES_external_tileset]() extension.
+External tilesets are enabled by using the [3DTILES_external_tileset](../extensions/3DTILES_external_tileset/README.md) extension.
 
 ![](./figures/tilesets.png)
 
@@ -328,15 +324,15 @@ External tilesets are enabled by using the [3DTILES_external_tileset]() extensio
 
 3D Tiles uses the same coordinate system and units as glTF; that is a right-handed coordinate system with +Y as up, +Z as forward, and -X as right. The units for all linear distances are meters.
 
-The default coordinate system may be overriden with the [3DTILES_geocentric_crs]() extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
+The default coordinate system may be overriden with the [3DTILES_geocentric_crs](../3DTILES_geocentric_crs/README.md) extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
 ![](./figures/Earth_Centered_Inertial_Coordinate_System.png)
 
-Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference]() extension.
+Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference](../3DTILES_georeference/README.md) extension.
 
 ### Metadata
 
-Application-specific _metadata_ may be provided at multiple granularities within a tileset. Properties may be associated with tilesets, tiles, and contents within a tileset file using the `EXT_structural_metadata` extension. Properties may also be associated with features or with individual vertices and texels within content files.
+Application-specific *metadata* may be provided at multiple granularities within a tileset. Properties may be associated with tilesets, tiles, and contents within a tileset file using the `EXT_structural_metadata` extension. Properties may also be associated with features or with individual vertices and texels within content files.
 
 The following example shows a tileset with tileset metadata, tile metadata, and content metadata. The referenced asset `root.glb` may also use `EXT_structural_metadata`, for example, for storing per-building metadata.
 
@@ -408,7 +404,7 @@ The following example colors features with a height above 90 as red and the othe
 }
 ```
 
-For complete details, see the [Declarative Styling]() specification.
+For complete details, see the [Declarative Styling](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Styling/) specification.
 
 ## Appendix A: Spatial data structures
 
@@ -444,11 +440,11 @@ For example, here is the root tile and its children for Canary Wharf. Note the b
 
 Below, the green buildings are in the left child and the purple buildings are in the right child. Note that the tiles overlap so the two green and one purple building in the center are not split.
 
-![](figures/looseQuadtree.png)
+![](./figures/looseQuadtree.png)
 
-##### K-d trees
+#### K-d trees
 
-A k-d tree is created when each tile has two children separated by a _splitting plane_ parallel to the _x_, _y_, or _z_ axis (or latitude, longitude, height). The split axis is often round-robin rotated as levels increase down the tree, and the splitting plane may be selected using the median split, surface area heuristics, or other approaches.
+A k-d tree is created when each tile has two children separated by a *splitting plane* parallel to the *x*, *y*, or *z* axis (or latitude, longitude, height). The split axis is often round-robin rotated as levels increase down the tree, and the splitting plane may be selected using the median split, surface area heuristics, or other approaches.
 
 <p align="center">
   <img src="figures/kdtree.png" /><br />
@@ -459,7 +455,7 @@ Note that a k-d tree does not have uniform subdivision like typical 2D geospatia
 
 3D Tiles enables variations on k-d trees such as [multi-way k-d trees](http://www.crs4.it/vic/cgi-bin/bib-page.cgi?id=%27Goswami:2013:EMF%27) where, at each leaf of the tree, there are multiple splits along an axis. Instead of having two children per tile, there are `n` children.
 
-##### Octrees
+#### Octrees
 
 An octree extends a quadtree by using three orthogonal splitting planes to subdivide a tile into eight children. Like quadtrees, 3D Tiles allows variations to octrees such as non-uniform subdivision, tight bounding volumes, and overlapping children.
 
@@ -473,11 +469,11 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
   Non-uniform octree subdivision for a point cloud using additive refinement. Point Cloud of <a href="http://robotics.cs.columbia.edu/~atroccol/ijcv/chappes.html">the Church of St Marie at Chappes, France</a> by Prof. Peter Allen, Columbia University Robotics Lab. Scanning by Alejandro Troccoli and Matei Ciocarlie.
 </p>
 
-##### Grids
+#### Grids
 
 3D Tiles enables uniform, non-uniform, and overlapping grids by supporting an arbitrary number of child tiles. For example, here is a top-down view of a non-uniform overlapping grid of Cambridge:
 
-![](figures/grid.png)
+![](./figures/grid.png)
 
 3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
 
