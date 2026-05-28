@@ -32,7 +32,7 @@ The entry tileset **SHOULD** be named `root.tileset.gltf` to differentiate the e
 
 The following constraints apply when using the `3DTILES_tileset` extension:
 
-- The glTF **MUST** have a single root tile as specified by [GODOT_single_root](https://github.com/CesiumGS/glTF/blob/main/extensions/2.0/Vendor/GODOT_single_root/).
+- The document **MUST** have exactly one scene with exactly one node, the single root node
 
 The following constraints apply to all nodes:
 
@@ -181,7 +181,7 @@ The optional `externalAsset` property (core in glTF 2.1) provides a reference to
 
 The `externalAsset` object may have an optional `boundingVolume`, the content bounding volume. Unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content. This enables tight view frustum culling, excluding from rendering any content not in the volume of what is potentially in view. When it is not defined, the tile’s bounding volume is still used for culling.
 
-A tile may define a local space transform using the standard `matrix` or `translation`, `rotation`, `scale` node properties. The root tile **MUST NOT** define a local transform.
+A tile may define a local space transform using the standard `matrix` or `translation`, `rotation`, `scale` node properties.
 
 The `children` property is an array of node indices to child tiles. Each child tile's content is fully enclosed by its parent tile's `boundingVolume`. For *leaf tiles*, there are no children, and `children` **MUST** not be defined.
 
