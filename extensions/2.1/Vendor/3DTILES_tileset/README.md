@@ -18,6 +18,28 @@ Written against the glTF 2.1 spec.
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [File Extensions](#file-extensions)
+- [Constraints](#constraints)
+- [Concepts](#concepts)
+  - [3D Tiles](#3d-tiles)
+  - [Tileset](#tileset)
+  - [Tile](#tile)
+  - [Geometric Error](#geometric-error)
+  - [Refinement](#refinement)
+  - [Bounding Volumes](#bounding-volumes)
+  - [Spatial Coherence](#spatial-coherence)
+  - [Spatial Data Structures](#spatial-data-structures)
+- [Optional Features](#optional-features)
+  - [Implicit Tiling](#implicit-tiling)
+  - [External Tilesets](#external-tilesets)
+  - [Coordinate Reference Systems](#coordinate-reference-systems)
+  - [Metadata](#metadata)
+  - [Declarative Styling](#declarative-styling)
+- [Appendix A: Spatial Data Structures](#appendix-a-spatial-data-structures)
+
 ## Overview
 
 This extension specifies a well defined subset of glTF 2.1 for representing a tileset in [3D Tiles](https://github.com/CesiumGS/3d-tiles/tree/main/specification/). It extends the node hierarchy to support Hierarchical Level of Detail (HLOD) for streaming massive 3D scenes. Additionally, it depends on core glTF 2.1 features like external assets and bounding volumes.
@@ -294,7 +316,7 @@ As described above, the tree has spatial coherence; each tile has a bounding vol
 ![](./figures/childBoundingSphere.jpg)
 *Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.*
 
-### Spatial data structures
+### Spatial Data Structures
 
 3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by `root` and, recursively, its `children` tiles, which can be organized by different types of spatial data structures.
 
@@ -303,6 +325,8 @@ A runtime engine is generic and will render any tree defined by a tileset. Any c
 A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
 
 [Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
+
+## Optional Features
 
 ### Implicit Tiling
 
@@ -320,7 +344,7 @@ External tilesets are enabled by using the [3DTILES_external_tileset](../extensi
 
 ![](./figures/tilesets.png)
 
-### Coordinate reference systems
+### Coordinate Reference Systems
 
 3D Tiles uses the same coordinate system and units as glTF; that is a right-handed coordinate system with +Y as up, +Z as forward, and -X as right. The units for all linear distances are meters.
 
@@ -390,7 +414,7 @@ The following example shows a tileset with tileset metadata, tile metadata, and 
 }
 ```
 
-### Declarative styling specification
+### Declarative Styling
 
 3D Tiles includes concise declarative styling defined with JSON and expressions written in a small subset of JavaScript augmented for styling.
 
@@ -406,7 +430,7 @@ The following example colors features with a height above 90 as red and the othe
 
 For complete details, see the [Declarative Styling](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Styling/) specification.
 
-## Appendix A: Spatial data structures
+## Appendix A: Spatial Data Structures
 
 ### Quadtrees
 
