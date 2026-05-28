@@ -32,7 +32,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Bounding Volumes](#bounding-volumes)
   - [Spatial Coherence](#spatial-coherence)
   - [Spatial Data Structures](#spatial-data-structures)
-- [Optional Features](#optional-features)
+- [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
   - [External Tilesets](#external-tilesets)
   - [Coordinate Reference Systems](#coordinate-reference-systems)
@@ -332,7 +332,7 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 [Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
 
-## Optional Features
+## Supporting Extensions
 
 ### Implicit Tiling
 
@@ -429,16 +429,6 @@ The following example shows a tileset with tileset metadata, tile metadata, and 
 ### Declarative Styling
 
 3D Tiles includes concise declarative styling defined with JSON and expressions written in a small subset of JavaScript augmented for styling.
-
-Styles define how a featured is displayed, for example `show` and `color` (RGB and translucency), using an expression based on a feature’s properties.
-
-The following example colors features with a height above 90 as red and the others as white.
-
-```json
-{
-  "color" : "(${Height} > 90) ? color('red') : color('white')"
-}
-```
 
 For complete details, see the [Declarative Styling](https://github.com/CesiumGS/3d-tiles/tree/main/specification/Styling/) specification.
 
