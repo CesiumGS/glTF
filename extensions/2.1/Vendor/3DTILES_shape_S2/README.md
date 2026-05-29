@@ -1,8 +1,7 @@
-# 3DTILES\_shape\_ellipsoid\_region
+# 3DTILES\_shape\_S2
 
 ## Contributors
 
-- Janine Liu, Cesium
 - Sean Lilley, Cesium
 
 ## Status
