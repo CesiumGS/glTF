@@ -63,7 +63,9 @@ The closest representable values in 32-bit floating point would be
 
 The results in an error of about 0.25 meters.
 
-To mitigate floating point precision issues, geocentric coordinates should be transformed into a local reference frame so that values are closer to zero. The inverse transform (local to global) can be set on the node transform in full precision in JSON.
+To mitigate floating point precision issues, geocentric coordinates may be transformed into a local reference frame (e.g. [East-North-Up](https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates)) and then georeferenced with [3DTILES_crs_georeference](../3DTILES_crs_georeference/README.md).
+
+This ensures that the values in the `POSITION` accessor are closer to zero and can be represented more precisely in floating point. The affine transformation from ENU coordinates to geocentric coordinates (as defined by [3DTILES_crs_georeference](../3DTILES_crs_georeference/README.md)) can be computed in double precision on the CPU.
 
 For more details about this approach see [Precisions, Precisions](https://help.agi.com/STKComponents/html/BlogPrecisionsPrecisions.htm).
 
