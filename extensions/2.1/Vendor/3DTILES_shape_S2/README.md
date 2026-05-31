@@ -12,7 +12,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-Depends on [3DTILES_crs_geocentric](../3DTILES_crs_geocentric/README.md).
+Depends on [3DTILES_crs](../3DTILES_crs/README.md).
 
 ## Optional vs. Required
 

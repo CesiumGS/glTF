@@ -358,13 +358,9 @@ External tilesets are enabled by using the [3DTILES_external_tileset](../extensi
 
 3D Tiles uses the same coordinate system and units as glTF; that is a right-handed coordinate system with +Y as up, +Z as forward, and -X as right. The units for all linear distances are meters.
 
-The default coordinate system may be overriden with the [3DTILES_crs_geocentric](../3DTILES_crs_geocentric/README.md) extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
+The default coordinate system may be overriden with the [3DTILES_crs](../3DTILES_crs/README.md) extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
-<p align="center">
-  <img src="./figures/Earth_Centered_Inertial_Coordinate_System.png"/>
-</p>
-
-Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference](../3DTILES_georeference/README.md) extension.
+Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_geopose](../3DTILES_geopose/README.md) extension. When both `3DTILES_tileset` and `3DTILES_geopose` are used the `3DTILES_geopose` extension **SHOULD** only be added to the root tile.
 
 ### Metadata
 
@@ -521,6 +517,6 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Add `3DTILES_shape_ellipsoid_region`
 - Add `3DTILES_shape_cylinder_region`
 - Add `3DTILES_shape_S2`
-- Add `3DTILES_crs_geocentric`
+- Add `3DTILES_crs`
 - Add `3DTILES_georeference`
 - Update external tilesets image
