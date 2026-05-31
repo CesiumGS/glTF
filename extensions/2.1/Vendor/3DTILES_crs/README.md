@@ -25,7 +25,7 @@ glTF assets used in certain contexts, and notably as 3D Tiles content, are geore
 
 Rather than requiring client implementations to transform generic glTF assets into a geospecific orientation at runtime, this extension allows content pipelines producing 3D Tiles with glTF content to prepare data as needed (e.g. orienting and perhaps splitting an asset) to be delivered in a 3D Tiles tileset. In order to identify that such processing has been applied and the default coordinate system no longer applies, assets are annotated with a CRS.
 
-The following example shows an asset annotated to indicate a `EPSG:4978` CRS.
+The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
 ```json
 {
@@ -40,7 +40,7 @@ The following example shows an asset annotated to indicate a `EPSG:4978` CRS.
 }
 ```
 
-The `crs` property **SHOULD** be an EPSG code, WKT2 string, or other common CRS identifier.
+The extension defines a single property `crs`, which **SHOULD** be an EPSG code, WKT2 string, or other common CRS identifier.
 
 
 Implementations of this extensions are only required to support [geocentric coordinate reference systems](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they require dedicated coordinate transformation libraries that are not always runtime efficient.
