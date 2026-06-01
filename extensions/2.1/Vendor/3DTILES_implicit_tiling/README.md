@@ -19,3 +19,4 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 ## Overview
 
 Implicit tiling defines a concise representation of quadtrees and octrees in 3D Tiles. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
+
