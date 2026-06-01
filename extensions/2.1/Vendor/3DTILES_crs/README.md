@@ -20,7 +20,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension declares the Coordinate Reference System (CRS) in which a glTF 2.0 asset was authored, which may differ from the default — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
 
-The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
+The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
 ```json
 {
@@ -35,10 +35,9 @@ The following example shows an asset annotated to indicate a [WGS 84](https://ep
 }
 ```
 
-The extension defines a single property, `crs`, which **SHOULD** be an EPSG code, WKT2 string, or other common CRS identifier.
+The extension defines a single property, `crs`, which **SHOULD** be an [EPSG](https://epsg.org/home.html) string, [WKT2](https://www.ogc.org/standards/wkt-crs/) string, or other common CRS identifier.
 
-> [!NOTE] 
-> Implementations are only required to support [geocentric CRSs](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries or ancillary data, such as grid shift files.
+> **Implementation Note:** Implementations are only required to support [geocentric coordinate reference systems](#geocentric-crs), which are natively supported with 3D globe engines. Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, to be supported in 3D globe engines.
 
 ## Geocentric CRS
 
@@ -68,27 +67,28 @@ Common geocentric `crs` values include:
 `"EPSG:7662"` | WGS 84 (G1674)
 `"EPSG:7664"` | WGS 84 (G1762)
 `"EPSG:9753"` | WGS 84 (G2139)
+`"EPSG:10604"` | WGS 84 (G2296)
 `"EPSG:7842"` | GDA2020
 
-### Precision Considerations
+### Precision
 
-Geocentric coordinates are often quite large and can't be adequately represented in 32-bit floating point, which is the highest precision allowed by `POSITION` attribute accessors.
+Geocentric coordinates are often quite large and can't be adequately represented in 32-bit floating-point, which is the highest precision allowed by `POSITION` attribute accessors.
 
 For example, given the geocentric coordinates:
 
-* `x: 1254151.3944734565`
-* `y: -4732843.845023793`
-* `z: 4073794.407620059`
+- `x: 1254151.3944734565`
+- `y: -4732843.845023793`
+- `z: 4073794.407620059`
 
-The closest representable values in 32-bit floating point would be
+The closest representable values in 32-bit floating-point would be
 
-* `x: 1254151.375`
-* `y: -4732844`
-* `z: 4073794.5`
+- `x: 1254151.375`
+- `y: -4732844`
+- `z: 4073794.5`
 
 The results in an error of about 0.25 meters.
 
-To mitigate floating point error, geocentric coordinates may be transformed to a local coordinate system and the inverse transformation (the local to global matrix) may be set on the root node's `matrix` property, or the node may be georeferenced to a specific longitude and latitude  with [3DTILES_geopose](../3DTILES_geopose/README.md).
+To mitigate floating-point error, geocentric coordinates may be transformed to a local coordinate system such that 32-bit floating-point precision is adequate to describe the positions. Then the inverse transformation (local to geocentric) may be set on the node's `matrix` in full precision in JSON.
 
 For more details about this approach see [Precisions, Precisions](https://help.agi.com/STKComponents/html/BlogPrecisionsPrecisions.htm).
 
@@ -97,3 +97,7 @@ For more details about this approach see [Precisions, Precisions](https://help.a
 _This section is non-normative._
 
 This extension is a successor to the 3D Tiles 1.1 semantic [`TILESET_CRS_GEOCENTRIC`](https://github.com/CesiumGS/3d-tiles/blob/main/specification/Metadata/Semantics/README.adoc#tileset-semantics) and the 3D Tiles 1.1 extension [3DTILES_ellipsoid](https://github.com/CesiumGS/3d-tiles/tree/main/extensions/3DTILES_ellipsoid).
+
+## TODO
+
+- Is the same `crs` assumed also for external assets? What if an external asset defines its own `3DTILES_crs` extension?
