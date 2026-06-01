@@ -3,6 +3,7 @@
 ## Contributors
 
 - Sean Lilley, Cesium
+- Don McCurdy, Cesium
 
 ## Status
 
@@ -18,7 +19,8 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-This extension declares the Coordinate Reference System (CRS) in which a glTF 2.0 asset was authored, which may differ from the default — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
+This extension declares the Coordinate Reference System (CRS) in which a glTF 2.0 asset was authored, which may differ from the default — meters, right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
+
 
 The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
@@ -35,9 +37,11 @@ The following example shows an asset annotated to indicate a [WGS 84](https://ep
 }
 ```
 
-The extension defines a single property, `crs`, which **SHOULD** be an [EPSG](https://epsg.org/home.html) string, [WKT2](https://www.ogc.org/standards/wkt-crs/) string, or other common CRS identifier.
+Assets annotated with the `crs` property are declared to have been authored for geospecific usage, with a particular CRS. Without this property, glTF assets are understood to have been authored using the coordinate system of the base glTF specification.
 
-> **Implementation Note:** Implementations are only required to support [geocentric coordinate reference systems](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, to be supported in 3D globe engines.
+The `crs` property **SHOULD** be an [EPSG](https://epsg.org/home.html) code, [WKT2](https://www.ogc.org/standards/wkt-crs/) string, or other common CRS identifier.
+
+Implementations are only required to support [geocentric CRSs](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be used for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
 
 ## Geocentric CRS
 
@@ -56,7 +60,7 @@ The image below shows a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Ea
   <img src="./figures/ecef.png"/><br/>
 </p>
 
-Common geocentric `crs` values include:
+Common geocentric `crs` values include, but are not limited to:
 
 `crs` | Description
 --|--
@@ -72,7 +76,7 @@ Common geocentric `crs` values include:
 
 ### Precision
 
-Geocentric coordinates are often quite large and can't be adequately represented in 32-bit floating-point, which is the highest precision allowed by `POSITION` attribute accessors.
+Geocentric coordinates often can't be adequately represented in 32-bit floating-point, which is the highest precision allowed by `POSITION` attribute accessors.
 
 For example, given the geocentric coordinates:
 
@@ -88,9 +92,13 @@ The closest representable values in 32-bit floating-point would be
 
 The results in an error of about 0.25 meters.
 
-To mitigate floating-point error, geocentric coordinates may be transformed to a local coordinate system such that 32-bit floating-point precision is adequate to describe the positions. Then the inverse transformation (local to geocentric) may be set on the node's `matrix` in full precision in JSON.
+To mitigate floating-point error, geocentric coordinates may be transformed to a local tangent plane such that 32-bit floating-point precision is adequate to describe the distance between each position and the origin of the tangent plane. These relative positions are stored in the glTF vertex data. The transformation from the local tangent plane to the ellipsoid's fixed reference frame is stored in the node's `matrix` property in full precision in JSON, or may be expressed with [`3DTILES_georeference`](../3DTILES_georeference/README.md).
 
-For more details about this approach see [Precisions, Precisions](https://help.agi.com/STKComponents/html/BlogPrecisionsPrecisions.htm).
+<p align="center">
+  <img src="./figures/enu-xyz.png"/><br/>
+</p>
+
+For more details on this approach see [Precisions, Precisions](https://help.agi.com/STKComponents/html/BlogPrecisionsPrecisions.htm).
 
 ## Notes
 
