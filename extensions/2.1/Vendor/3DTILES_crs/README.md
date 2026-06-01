@@ -37,7 +37,7 @@ The following example shows an asset annotated to indicate a [WGS 84](https://ep
 
 The extension defines a single property, `crs`, which **SHOULD** be an [EPSG](https://epsg.org/home.html) string, [WKT2](https://www.ogc.org/standards/wkt-crs/) string, or other common CRS identifier.
 
-> **Implementation Note:** Implementations are only required to support [geocentric coordinate reference systems](#geocentric-crs), which are natively supported with 3D globe engines. Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, to be supported in 3D globe engines.
+> **Implementation Note:** Implementations are only required to support [geocentric coordinate reference systems](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be provided for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, to be supported in 3D globe engines.
 
 ## Geocentric CRS
 

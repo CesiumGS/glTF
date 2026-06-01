@@ -360,7 +360,7 @@ External tilesets are enabled by using the [3DTILES_external_tileset](../extensi
 
 The default coordinate system may be overriden with the [3DTILES_crs](../3DTILES_crs/README.md) extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
-Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_geopose](../3DTILES_geopose/README.md) extension. When both `3DTILES_tileset` and `3DTILES_geopose` are used the `3DTILES_geopose` extension **SHOULD** only be added to the root tile.
+Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference](../3DTILES_georeference/README.md) extension. When both `3DTILES_tileset` and `3DTILES_georeference` are used the `3DTILES_georeference` extension **SHOULD** only be added to the root tile.
 
 ### Metadata
 
