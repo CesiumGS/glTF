@@ -108,4 +108,9 @@ This extension is a successor to the 3D Tiles 1.1 semantic [`TILESET_CRS_GEOCENT
 
 ## TODO
 
-- Is the same `crs` assumed also for external assets? What if an external asset defines its own `3DTILES_crs` extension?
+- Decide on scope of `crs` property. Should it be flexible or limited to a single CRS identification mechanism?
+- Does an external asset inherit the CRS of this asset or does it need to be explicitly provided?
+- What happens if an external asset defines `3DTILES_crs` with a different `crs`?
+- May need an `epoch` property like `TILESET_CRS_COORDINATE_EPOCH`
+- How to specify coordinate systems for other planetary bodies like Moon and Mars?
+- Is it possible to specify a local z-up coordinate system?
