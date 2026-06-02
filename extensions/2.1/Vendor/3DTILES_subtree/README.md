@@ -21,3 +21,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 ## Overview
 
 This extension specifies a well defined subset of glTF 2.1 for representing a subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md). A subtree stores tile, content, and child subtree availability, as well as metadata for available tiles and contents.
+
+## File Extensions
+
+Assets that use the `3DTILES_subtree` extension **SHOULD** use the `.subtree.gltf` or `.subtree.glb` file extensions. Though not required, this convention helps differentiate subtree files from tileset and content files.
