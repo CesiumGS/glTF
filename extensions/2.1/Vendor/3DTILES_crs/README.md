@@ -113,4 +113,3 @@ This extension is a successor to the 3D Tiles 1.1 semantic [`TILESET_CRS_GEOCENT
 - What happens if an external asset defines `3DTILES_crs` with a different `crs`?
 - May need an `epoch` property like `TILESET_CRS_COORDINATE_EPOCH`
 - How to specify coordinate systems for other planetary bodies like Moon and Mars?
-- Is it possible to specify a local z-up coordinate system?

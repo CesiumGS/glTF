@@ -253,7 +253,7 @@ A list of extensions that enable additional shape types:
 
 - [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md)
 - [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
-- [3DTILES_shape_S2](../3DTILES_shape_S2/README.md)
+- [3DTILES_shape_s2](../3DTILES_shape_s2/README.md)
 
 #### Bounding Box
 
@@ -510,13 +510,5 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Better picture for replacement refinement
 - More examples of geometric error in appendix
 - Add geometric error image from reference card
-- How to indicate that `externalAsset` is an external tileset before loading it?
 - Section on unconditional refinement
-- Add `3DTILES_implicit_tiling`
-- Add `3DTILES_external_tileset`
-- Add `3DTILES_shape_ellipsoid_region`
-- Add `3DTILES_shape_cylinder_region`
-- Add `3DTILES_shape_S2`
-- Add `3DTILES_crs`
-- Add `3DTILES_georeference`
 - Update external tilesets image

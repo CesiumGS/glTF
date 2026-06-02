@@ -21,3 +21,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 ## Overview
 
 This extension allows a tileset to reference external tilesets (other assets with the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets. It is also helpful for partitioning large tilesets into multiple smaller tilesets to improve initial load time.
+
+## TODO
+
+- How to indicate that `externalAsset` is an external tileset before loading it?
