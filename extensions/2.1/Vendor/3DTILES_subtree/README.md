@@ -18,7 +18,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-A subtree file is a glTF file that contains availability and metadata information for a single subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
+A subtree contains availability and metadata information for a single subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
 
 ## File Extensions
 
@@ -28,7 +28,13 @@ Assets that use the `3DTILES_subtree` extension **SHOULD** use the `.subtree.glt
 
 The following constraints apply when using the `3DTILES_subtree` extension:
 
-- Top level properties other than `asset`, `accessors`, `bufferViews`, `buffers`, and `files` **MUST NOT** be defined.
+- Top level properties other than `asset`, `accessors`, `bufferViews`, `buffers`, and `files` **SHOULD NOT** be defined.
+
+## Subtree
+
+In order to support sparse datasets, additional information is needed to indicate which tiles or contents exist. This is called availability.
+
+
 
 ## Schema
 
