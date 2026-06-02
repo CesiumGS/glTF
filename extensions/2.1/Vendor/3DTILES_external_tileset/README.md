@@ -1,4 +1,4 @@
-# 3DTILES\_external_tileset
+# 3DTILES\_external\_tileset
 
 ## Contributors
 
