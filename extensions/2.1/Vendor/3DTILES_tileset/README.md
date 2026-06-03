@@ -18,7 +18,7 @@ Written against the glTF 2.1 spec.
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
-## Table of Contents
+## Contents
 
 - [Overview](#overview)
 - [File Extensions](#file-extensions)
@@ -30,6 +30,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Geometric Error](#geometric-error)
   - [Refinement](#refinement)
   - [Bounding Volumes](#bounding-volumes)
+  - [Transforms](#transforms)
   - [Spatial Coherence](#spatial-coherence)
   - [Spatial Data Structures](#spatial-data-structures)
 - [Supporting Extensions](#supporting-extensions)
