@@ -21,7 +21,6 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension declares the Coordinate Reference System (CRS) in which a glTF 2.0 asset was authored, which may differ from the default — meters, right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
 
-
 The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
 ```json
@@ -41,26 +40,26 @@ Assets annotated with the `crs` property are declared to have been authored for 
 
 The `crs` property **SHOULD** be an [EPSG](https://epsg.org/home.html) code, [WKT2](https://www.ogc.org/standards/wkt-crs/) string, or other common CRS identifier.
 
-Implementations are only required to support [geocentric CRSs](#geocentric-crs). Other coordinate reference systems, such as projected or geographic coordinate reference systems, may be used for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
+Implementations are only required to support [Planetocentric (Geocentric) CRSs](#planetocentric-geocentric-crs). Other coordinate reference systems, such as projected or planetographic (geographic) coordinate reference systems, may be used for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
 
-## Geocentric CRS
+## Planetocentric (Geocentric) CRS
 
 _This section is non-normative._
 
-A geocentric CRS is typically a right-handed Cartesian coordinate system (x, y, z) where:
+A planetocentric CRS is typically a right-handed Cartesian coordinate system (x, y, z) where:
 
 - The origin (0, 0, 0) is located at the center of mass of the central body.
 - The X-axis points through the intersection of the equator and the prime meridian.
 - The Y-axis points through the intersection of the equator and 90° longitude.
 - The Z-axis points to the north pole.
 
-The image below shows a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
+The image below shows a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
 <p align="center">
   <img src="./figures/ecef.png"/><br/>
 </p>
 
-Common geocentric `crs` values include, but are not limited to:
+Common planetocentric `crs` values include, but are not limited to:
 
 `crs` | Description
 --|--
@@ -73,10 +72,12 @@ Common geocentric `crs` values include, but are not limited to:
 `"EPSG:9753"` | WGS 84 (G2139)
 `"EPSG:10604"` | WGS 84 (G2296)
 `"EPSG:7842"` | GDA2020
+`"IAU_2015:30100"` | Moon
+`"IAU_2015:49902"` | Mars
 
 ### Precision
 
-Geocentric coordinates often can't be adequately represented in 32-bit floating-point, which is the highest precision allowed by `POSITION` attribute accessors.
+Planetocentric coordinates often can't be adequately represented in 32-bit floating-point, which is the highest precision allowed by `POSITION` attribute accessors.
 
 For example, given the geocentric coordinates:
 
@@ -92,7 +93,7 @@ The closest representable values in 32-bit floating-point would be
 
 The results in an error of about 0.25 meters.
 
-To mitigate floating-point error, geocentric coordinates may be transformed to a local tangent plane such that 32-bit floating-point precision is adequate to describe the distance between each position and the origin of the tangent plane. These relative positions are stored in the glTF vertex data. The transformation from the local tangent plane to the ellipsoid's fixed reference frame is stored in the node's `matrix` property in full precision in JSON, or may be expressed with [`3DTILES_georeference`](../3DTILES_georeference/README.md).
+To mitigate floating-point error, coordinates may be transformed to a local tangent plane such that 32-bit floating-point precision is adequate to describe the distance between each position and the origin of the tangent plane. These relative positions are stored in the glTF vertex data. The transformation from the local tangent plane to the ellipsoid's fixed reference frame is stored in the node's `matrix` property in full precision in JSON, or may be expressed with [`3DTILES_georeference`](../3DTILES_georeference/README.md).
 
 <p align="center">
   <img src="./figures/enu-xyz.png"/><br/>
@@ -112,4 +113,4 @@ This extension is a successor to the 3D Tiles 1.1 semantic [`TILESET_CRS_GEOCENT
 - Does an external asset inherit the CRS of this asset or does it need to be explicitly provided?
 - What happens if an external asset defines `3DTILES_crs` with a different `crs`?
 - May need an `epoch` property like `TILESET_CRS_COORDINATE_EPOCH`
-- How to specify coordinate systems for other planetary bodies like Moon and Mars?
+- How to indicate that a tileset is in a local z-up coordinate system?
