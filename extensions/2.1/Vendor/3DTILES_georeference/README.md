@@ -57,7 +57,7 @@ When [`3DTILES_crs`](../3DTILES_crs/README.md) is used:
 
 The georeference transform is applied **after** the node transform.
 
-In this example the node has a local 45° heading that is applied before the georeference transform.
+In this example the node has a local 20° heading that is applied before the georeference transform.
 
 <table>
   <tr>
@@ -69,7 +69,7 @@ In this example the node has a local 45° heading that is applied before the geo
       "height": -21.668226434267066
     }
   },
-  "rotation": [0, -0.38268, 0, 0.923879],
+  "rotation": [0, -0.173648, 0, 0.984807],
   "mesh": 0,
 }</code></pre></td>
     <td><img src="./figures/plane.jpg"/></td>
