@@ -61,9 +61,9 @@ When [`3DTILES_crs`](../3DTILES_crs/README.md) is used the applied rotation resu
 
 ## Transformation Order
 
-The georeference transform is applied **after** the node transform. 
+The georeference transform is applied **after** the node transform.
 
-In this example the node has a local 110° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion around the local y axis in the example.
+In this example the node has a local 110° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion about the local y axis in the example.
 
 <table>
   <tr>
@@ -84,4 +84,4 @@ In this example the node has a local 110° heading that is applied before the ge
 
 ## Appendix
 
-For computing the transformation matrix from local ENU coordinates to geocentric coordinates see [`Cesium.Transforms.eastNorthUpToFixedFrame`](Cesium.Transforms.eastNorthUpToFixedFrame).
+For computing the transformation matrix from local ENU coordinates to planetocentric coordinates see [`Cesium.Transforms.eastNorthUpToFixedFrame`](Cesium.Transforms.eastNorthUpToFixedFrame).
