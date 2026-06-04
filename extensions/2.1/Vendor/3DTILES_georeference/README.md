@@ -35,19 +35,25 @@ This extension georeferences a node to the provided geographic coordinates.
 
 `longitude` and `latitude` are specified in degrees. `height` above (or below) the ellipsoid is specified in meters.
 
-This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`3DTILES_crs`](../3DTILES_crs/README.md) in which case the longitude, latitude, and height values are now geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
+The extension is most useful when implementations use it to apply an additional transform on the node. In this case local coordinates will be transformed to planetocentric coordinates (also see [`3DTILES_crs`](../3DTILES_crs/README.md)).
 
-The glTF axis mapping is as follows:
+This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`3DTILES_crs`](../3DTILES_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
 
-- The `+z` axis (forward) faces east 
-- The `+x` axis (left) faces north 
-- The `+y` axis (up) faces up 
+The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension will also adjust the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane to the specified ellipsoid at the specified location (see figure). These alignments differ depending on the use of [`3DTILES_crs`](../3DTILES_crs/README.md).
 
-When [`3DTILES_crs`](../3DTILES_crs/README.md) is used:
+The glTF standard axis alignment without use of [`3DTILES_crs`](../3DTILES_crs/README.md) results in a rotation as follows:
+
+- The `+x` axis (local left) faces north
+- The `+y` axis (local up) faces up (normal to the tangent plane)
+- The `+z` axis (local forward) faces east
+
+When [`3DTILES_crs`](../3DTILES_crs/README.md) is used the applied rotation results in:
 
 - The `+x` axis faces east
 - The `+y` axis faces north
 - The `+z` axis faces up
+
+[Suggestion to clarify: Note that in this case, e.g. both extensions are in use, the node is expected to use local, and not planetocentric coordinates.]
 
 <p align="center">
   <img src="./figures/enu-xyz.png"/><br/>
@@ -55,9 +61,9 @@ When [`3DTILES_crs`](../3DTILES_crs/README.md) is used:
 
 ## Transformation Order
 
-The georeference transform is applied **after** the node transform.
+The georeference transform is applied **after** the node transform. 
 
-In this example the node has a local 20° heading that is applied before the georeference transform.
+In this example the node has a local 110° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion around the local y axis in the example.
 
 <table>
   <tr>
