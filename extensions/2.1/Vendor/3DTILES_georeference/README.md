@@ -57,6 +57,7 @@ Note that in both cases, the node is expected to use local, and not planetocentr
 
 <p align="center">
   <img src="./figures/enu-xyz.png"/><br/>
+  Alignment of local coordinates (right) to tangent plane of ellipsoid (left) with axes mapped in case of 3DTILES_crs use.
 </p>
 
 ## Transformation Order
