@@ -153,12 +153,12 @@ The following example shows a tree with a root tile and a child tile.
         "shape": 0
       },
       "externalAsset": 0,
-      "children": [1],
+      "children": [1]
     },
     {
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 0.0,
+          "geometricError": 0.0
         }
       },
       "boundingVolume": {

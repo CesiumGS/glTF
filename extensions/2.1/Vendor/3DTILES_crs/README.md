@@ -34,7 +34,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-This extension declares the Coordinate Reference System (CRS) in which a glTF 2.0 asset was authored, which may differ from the default — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
+This extension declares the Coordinate Reference System (CRS) in which a glTF 2.1 asset was authored, which may differ from the default — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section of the glTF specification.
 
 The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
 
@@ -53,7 +53,6 @@ The following example shows an asset annotated to indicate a [WGS 84](https://ep
   }
 }
 ```
-
 
 Assets with the `3DTILES_crs` extension are declared to have been authored for geospecific usage, with a particular CRS. Without this extension, glTF assets are understood to have been authored using the coordinate system of the base glTF specification.
 
@@ -164,7 +163,7 @@ This example shows an asset with a `"local"` CRS referencing a glTF asset withou
   },
   "nodes": {
     "matrix": [1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1],
-    "externalAsset": 0,
+    "externalAsset": 0
   }
 }
 ```
