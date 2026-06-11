@@ -369,8 +369,6 @@ The example below shows a tileset defined in a [WGS 84](https://epsg.org/ellipso
 
 > **Note:** 3D Tiles implementations are only required to support **local** and **geocentric (planetocentric)** coordinate reference systems. Other types, such as geographic and projected, may be used for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
 
-#### CRS Transitions
-
 Tilesets may reference external tilesets, each with their own CRS. For example, a tileset could start in a geocentric CRS and then transition to a local engineering reference frame for higher precision.
 
 The following rules apply for CRS transitions:
