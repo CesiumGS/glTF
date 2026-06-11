@@ -3,6 +3,7 @@
 ## Contributors
 
 - Sean Lilley, Cesium
+- Tamrat Belayneh, ESRI
 
 ## Status
 
