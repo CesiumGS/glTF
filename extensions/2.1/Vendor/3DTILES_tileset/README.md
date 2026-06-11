@@ -32,8 +32,8 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Bounding Volumes](#bounding-volumes)
   - [Transforms](#transforms)
   - [Spatial Coherence](#spatial-coherence)
-  - [Coordinate Reference System](#coordinate-reference-system-crs)
   - [Spatial Data Structures](#spatial-data-structures)
+  - [Coordinate Reference System](#coordinate-reference-system-crs)
 - [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
   - [External Tilesets](#external-tilesets)
@@ -331,6 +331,16 @@ As described above, the tree has spatial coherence; each tile has a bounding vol
   Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.
 </p>
 
+### Spatial Data Structures
+
+3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by `root` and, recursively, its `children` tiles, which can be organized by different types of spatial data structures.
+
+A runtime engine is generic and will render any tree defined by a tileset. Any combination of tile formats and refinement approaches can be used, enabling flexibility in supporting heterogeneous datasets, see [Refinement](#refinement).
+
+A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
+
+[Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
+
 ### Coordinate Reference System (CRS)
 
 3D Tiles uses a right-handed Cartesian coordinate system. A tileset’s global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn’t have to be, e.g., a power plant may be defined fully in its local coordinate system.
@@ -369,16 +379,6 @@ The following rules apply for CRS transitions:
 - Geocentric assets **SHOULD** only reference local assets or geocentric assets with the same CRS.
 
 When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a [node transform](#transforms) or with [EXT_georeference](../3DTILES_georeference/README.md).
-
-### Spatial Data Structures
-
-3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by `root` and, recursively, its `children` tiles, which can be organized by different types of spatial data structures.
-
-A runtime engine is generic and will render any tree defined by a tileset. Any combination of tile formats and refinement approaches can be used, enabling flexibility in supporting heterogeneous datasets, see [Refinement](#refinement).
-
-A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
-
-[Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
 
 ## Supporting Extensions
 
