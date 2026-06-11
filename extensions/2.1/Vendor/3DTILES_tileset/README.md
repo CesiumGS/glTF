@@ -368,7 +368,7 @@ The following rules apply for CRS transitions:
 - Local assets **SHOULD** only reference other local assets.
 - Geocentric assets **SHOULD** only reference local assets or geocentric assets with the same CRS.
 
-When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a node transform or with [EXT_georeference](../3DTILES_georeference/README.md).
+When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a [node transform](#transforms) or with [EXT_georeference](../3DTILES_georeference/README.md).
 
 ### Spatial Data Structures
 
