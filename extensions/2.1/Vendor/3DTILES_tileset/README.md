@@ -32,11 +32,11 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Bounding Volumes](#bounding-volumes)
   - [Transforms](#transforms)
   - [Spatial Coherence](#spatial-coherence)
+  - [Coordinate Reference System](#coordinate-reference-system-crs)
   - [Spatial Data Structures](#spatial-data-structures)
 - [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
   - [External Tilesets](#external-tilesets)
-  - [Coordinate Reference Systems](#coordinate-reference-systems)
   - [Metadata](#metadata)
   - [Declarative Styling](#declarative-styling)
 - [Appendix A: Spatial Data Structures](#appendix-a-spatial-data-structures)
@@ -139,6 +139,10 @@ The following example shows a tree with a root tile and a child tile.
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 240
+    },
+    "EXT_crs_wkid": {
+      "authority": "EPSG",
+      "wkid": "4978"
     }
   },
   "nodes": [
@@ -327,6 +331,45 @@ As described above, the tree has spatial coherence; each tile has a bounding vol
   Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.
 </p>
 
+### Coordinate Reference System (CRS)
+
+3D Tiles uses a right-handed Cartesian coordinate system. A tileset’s global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn’t have to be, e.g., a power plant may be defined fully in its local coordinate system.
+
+A tileset **SHOULD** specify a coordinate reference system with one of the following extensions:
+
+- [EXT_crs_enu](../EXT_crs_enu/README.md)
+- [EXT_crs_wkid](../EXT_crs_wkid/README.md)
+- [EXT_crs_wkt2](../EXT_crs_wkt2/README.md)
+
+The example below shows a tileset defined in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) geocentric coordinate reference system.
+
+```json
+{
+  "asset": {
+    "version": "2.1"
+  },
+  "extensions": {
+    "EXT_crs_wkid": {
+      "authority": "EPSG",
+      "wkid": 4978
+    }
+  }
+}
+```
+
+> **Note:** 3D Tiles implementations are only required to support **local** and **geocentric (planetocentric)** coordinate reference systems. Other types, such as geographic and projected, may be used for application-specific purposes, but are discouraged as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
+
+#### CRS Transitions
+
+Tilesets may reference external tilesets, each with their own CRS. For example, a tileset could start in a geocentric CRS and then transition to a local engineering reference frame for higher precision.
+
+The following rules apply for CRS transitions:
+
+- Local assets **SHOULD** only reference other local assets.
+- Geocentric assets **SHOULD** only reference local assets or geocentric assets with the same CRS.
+
+When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a node transform or with [EXT_georeference](../3DTILES_georeference/README.md).
+
 ### Spatial Data Structures
 
 3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by `root` and, recursively, its `children` tiles, which can be organized by different types of spatial data structures.
@@ -358,14 +401,6 @@ External tilesets are enabled by using the [3DTILES_external_tileset](../extensi
 <p align="center">
   <img src="./figures/tilesets.png"/>
 </p>
-
-### Coordinate Reference Systems
-
-3D Tiles uses the same coordinate system and units as glTF; that is a right-handed coordinate system with +Y as up, +Z as forward, and -X as right. The units for all linear distances are meters.
-
-The default coordinate system may be overriden with the [3DTILES_crs](../3DTILES_crs/README.md) extension. For example, a tileset’s global coordinate system will often be in a WGS 84 Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)).
-
-Additionally, a tileset may be defined in a local coordinate system and georeferenced to a specific longitude/latitude with the [3DTILES_georeference](../3DTILES_georeference/README.md) extension. When both `3DTILES_tileset` and `3DTILES_georeference` are used the `3DTILES_georeference` extension **SHOULD** only be added to the root tile.
 
 ### Metadata
 
