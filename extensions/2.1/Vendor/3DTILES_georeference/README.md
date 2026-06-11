@@ -3,6 +3,7 @@
 ## Contributors
 
 - Sean Lilley, Cesium
+- Andreas Plesch, Earthstruct
 
 ## Status
 
@@ -35,36 +36,37 @@ This extension georeferences a node to the provided geographic coordinates.
 
 `longitude` and `latitude` are specified in degrees. `height` above (or below) the ellipsoid is specified in meters.
 
-The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)). In this case local coordinates will be transformed to planetocentric coordinates (also see [`3DTILES_crs`](../3DTILES_crs/README.md)).
+The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)). In this case local coordinates will be transformed to geocentric (planetocentric) coordinates.
 
-This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`3DTILES_crs`](../3DTILES_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
+This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with an extension such as [`EXT_crs_wkid`](../EXT_crs_wkid/README.md) or [`EXT_crs_wkt2`](../EXT_crs_wkt2/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
 
-The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension will also adjust the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane to the selected ellipsoid at the specified location (see figure). These alignments differ depending on the use of [`3DTILES_crs`](../3DTILES_crs/README.md).
+The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal
 
-The alignment of the glTF standard axes without use of [`3DTILES_crs`](../3DTILES_crs/README.md) applies a rotation which has the following results:
-
-- The `+x` axis (local left) faces north
-- The `+y` axis (local up) faces up (normal to the tangent plane)
-- The `+z` axis (local forward) faces east
-
-When [`3DTILES_crs`](../3DTILES_crs/README.md) is used the applied rotation results in:
+If the node references an external asset with the [`EXT_crs_enu`](../EXT_crs_enu/README.md) extension, it applies a rotation which has the following results;
 
 - The `+x` axis faces east
 - The `+y` axis faces north
 - The `+z` axis faces up
 
-Note that in both cases, the node is expected to use local, and not planetocentric coordinates. This differs from using [`3DTILES_crs`](../3DTILES_crs/README.md) by itself.
+Otherwise it applies a rotation which has the following results:
+
+- The `+x` axis (local left) faces north
+- The `+y` axis (local up) faces up (normal to the tangent plane)
+- The `+z` axis (local forward) faces east
+
+
+Note that in both cases, the node is expected to use local, and not geocentric coordinates.
 
 <p align="center">
   <img src="./figures/enu-xyz.png"/><br/>
-  Alignment of local coordinates (right) to tangent plane of ellipsoid (left) with axes mapped in case of 3DTILES_crs use.
+  Alignment of local coordinates (right) to tangent plane of ellipsoid (left) when using <code><a href="../EXT_crs_enu/README.md">EXT_crs_enu</a></code>.
 </p>
 
 ## Transformation Order
 
 The georeference transform is applied **after** the node transform.
 
-In this example the node has a local 110° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion about the local y (up) axis in the example.
+In this example the node has a local 20° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion about the local y (up) axis in the example.
 
 <table>
   <tr>
