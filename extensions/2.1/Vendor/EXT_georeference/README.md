@@ -1,4 +1,4 @@
-# 3DTILES\_georeference
+# EXT\_georeference
 
 ## Contributors
 
@@ -24,7 +24,7 @@ This extension georeferences a node to the provided geographic coordinates.
 ```json
 {
   "extensions": {
-    "3DTILES_georeference": {
+    "EXT_georeference": {
       "longitude": -75.15836368768382,
       "latitude": 39.95090650840344,
       "height": -21.668226434267066
@@ -42,7 +42,7 @@ This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) a
 
 The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal
 
-If the node references an external asset with the [`EXT_crs_enu`](../EXT_crs_enu/README.md) extension, it applies a rotation which has the following results;
+If the node references an external asset with the [`EXT_crs_enu`](../EXT_crs_enu/README.md) extension, it applies a rotation which has the following results:
 
 - The `+x` axis faces east
 - The `+y` axis faces north
@@ -72,7 +72,7 @@ In this example the node has a local 20° heading that is applied before the geo
   <tr>
     <td><pre><code>{
   "extensions": {
-    "3DTILES_georeference": {
+    "EXT_georeference": {
       "longitude": -75.15836368768382,
       "latitude": 39.95090650840344,
       "height": -21.668226434267066
@@ -87,4 +87,4 @@ In this example the node has a local 20° heading that is applied before the geo
 
 ## Appendix
 
-For computing the transformation matrix from local east-north-up (ENU) coordinates to planetocentric coordinates see [`Cesium.Transforms.eastNorthUpToFixedFrame`](Cesium.Transforms.eastNorthUpToFixedFrame).
+For computing the transformation matrix from local east-north-up (ENU) coordinates to geocentric coordinates see [`Cesium.Transforms.eastNorthUpToFixedFrame`](Cesium.Transforms.eastNorthUpToFixedFrame).

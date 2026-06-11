@@ -315,7 +315,7 @@ The following example shows a bounding sphere.
 
 A tile may define a local space transform using the standard glTF `matrix` or `translation`, `rotation`, `scale` node properties. The transform applies to the tile's bounding volume and content (if present).
 
-Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. The tile's transform **MUST** be identity and the `3DTILES_georeference` extension **MUST NOT** be defined.
+Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. The tile's transform **MUST** be identity and the `EXT_georeference` extension **MUST NOT** be defined.
 
 ### Spatial Coherence
 
@@ -376,7 +376,7 @@ The following rules apply for CRS transitions:
 - Local assets **SHOULD** only reference other local assets.
 - Geocentric assets **SHOULD** only reference local assets or geocentric assets with the same CRS.
 
-When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a [node transform](#transforms) or with [EXT_georeference](../3DTILES_georeference/README.md).
+When an asset references an external asset with a different, but compatible CRS, the parent asset **SHOULD** transform the child asset into the parent's coordinate reference system, for example with a [node transform](#transforms) or with [EXT_georeference](../EXT_georeference/README.md).
 
 ## Supporting Extensions
 
