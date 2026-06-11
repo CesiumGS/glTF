@@ -1,4 +1,4 @@
-# 3DTILES\_crs\_wkt2
+# EXT\_crs\_wkt2
 
 ## Contributors
 
