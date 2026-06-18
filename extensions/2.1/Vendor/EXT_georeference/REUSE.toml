@@ -1,0 +1,6 @@
+version = 1
+
+[[annotations]]
+path = "figures/*"
+SPDX-FileCopyrightText = "2026 The Khronos Group Inc."
+SPDX-License-Identifier = "CC-BY-4.0"
