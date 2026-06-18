@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: 2026 2026 The Khronos Group Inc.
+SPDX-FileCopyrightText: 2026 The Khronos Group Inc.
+SPDX-FileCopyrightText: 2026, 2026 The Khronos Group Inc.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
