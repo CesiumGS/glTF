@@ -1,0 +1,48 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "file.schema.json",
+    "title": "File Reference to External File",
+    "type": "object",
+    "description": "A file reference to an external file.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "uri": {
+            "type": "string",
+            "description": "The URI (or IRI) of the external file.",
+            "format": "iri-reference",
+            "gltf_detailedDescription": "The URI (or IRI) of the external file.  Relative paths are relative to the current glTF asset.  Instead of referencing an external file, this field **MAY** contain a `data:`-URI. This field **MUST NOT** be defined when `bufferView` is defined.",
+            "gltf_uriType": "external-file"
+        },
+        "mimeType": {
+            "type": "string",
+            "description": "The MIME type of the external file.",
+            "gltf_detailedDescription": "The MIME type of the external file. This field **MUST** be defined when `bufferView` is defined.",
+            "anyOf": [
+                {
+                    "const": "model/gltf+json"
+                },
+                {
+                    "const": "model/gltf-binary"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "bufferView": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the bufferView that contains the external file.",
+            "gltf_detailedDescription": "The index of the bufferView that contains the external file. This field **MUST NOT** be defined when `uri` is defined."
+        },
+        "name": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "dependencies": {
+        "bufferView": [ "mimeType" ]
+    },
+    "oneOf": [
+        { "required": [ "uri" ] },
+        { "required": [ "bufferView" ] }
+    ]
+}
