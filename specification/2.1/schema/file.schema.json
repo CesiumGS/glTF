@@ -16,7 +16,7 @@
         "mimeType": {
             "type": "string",
             "description": "The MIME type of the external file.",
-            "gltf_detailedDescription": "The MIME type of the external file. This field **MUST** be defined when `bufferView` is defined.",
+            "gltf_detailedDescription": "The MIME type of the external file.",
             "anyOf": [
                 {
                     "const": "model/gltf+json"
@@ -38,9 +38,9 @@
         "extensions": { },
         "extras": { }
     },
-    "dependencies": {
-        "bufferView": [ "mimeType" ]
-    },
+    "required": [
+        "mimeType"
+    ],
     "oneOf": [
         { "required": [ "uri" ] },
         { "required": [ "bufferView" ] }
