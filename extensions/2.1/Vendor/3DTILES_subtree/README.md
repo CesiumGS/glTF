@@ -1,6 +1,5 @@
 <!--
 SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
-SPDX-FileCopyrightText: 2026, 2026 Bentley Systems, Incorporated
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
