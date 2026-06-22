@@ -1083,7 +1083,7 @@ On top of that, a sparse accessor includes a `sparse` JSON object describing the
 
 - `count`: number of displaced elements. This number **MUST NOT** be greater than the number of the base accessor elements.
 
-- `indices`: object describing the location and the component type of indices of values to be replaced. The indices **MUST** form a strictly increasing sequence. The indices **MUST NOT** be greater than or equal to the number of the base accessor elements. 
+- `indices`: object describing the location and the component type of indices of values to be replaced. The indices **MUST** form a strictly increasing sequence. The indices **MUST NOT** be greater than or equal to the number of the base accessor elements.
 
 - `values`: object describing the location of displaced elements corresponding to the indices referred from the `indices`.
 
@@ -2588,6 +2588,103 @@ See <<appendix-c-interpolation,Appendix C>> for additional information about int
 
 Skinned animation is achieved by animating the joints in the skin's joint hierarchy.
 
+[[file-references]]
+== Unified file references
+
+Files may be added to a top-level `files` array. The file's data may either be stored externally and referenced by a `uri`, stored internally in a base64-encoded data URI or IRI, or stored as binary in a buffer and referenced by `bufferView` index.
+
+Each file object **MUST** define a `mimeType` property, which may be any media type that matches the file's contents. If the file contains URIs, and the file is embedded data (base64 data URI or bufferView), those URIs are matched against other objects in the `files` array by `name`. Cyclical references between files are strictly prohibited.
+
+[source,json]
+----
+{
+    "files": [
+        {
+            "uri": "path-to-a.gltf",
+            "mimeType": "model/gltf+json"
+        }
+        {
+            "uri": "path-to-a.glb",
+            "mimeType": "model/gltf-binary"
+        },
+        {
+            "bufferView": 0
+            "mimeType": "model/gltf-binary"
+        }
+    ],
+}
+----
+
+[[external-references]]
+== Referencing external assets
+
+glTF 2.1 defines the ability to compose multiple glTF files together, by referencing external glTF files from another glTF file. Any glTF file which references another glTF file as an external asset is called a complex scene. Complex scenes are defined using multiple components: file references to define where the binary data is stored and external asset definitions that define the properties of the asset node.
+
+TODO: Diagram showing complex scene node hierarchy.
+
+External glTF assets may be added to a top-level `externalAssets` array. The external asset's data is provided by a file, with each object containing a `file` property that refers to an object in the `files` array by index. This means that an external asset's data may be stored internally as well as externally. Multiple objects in the `externalAssets` array may refer to the same `file`. All external assets **MUST** refer to files with the `"model/gltf-binary"` and `"model/gltf+json"` media types.
+
+TODO: Where to put note regarding gltf asset stored in bufferview needing to be a glb?
+
+[source,json]
+----
+{
+    "files": [
+        {
+            "uri": "path-to-a.gltf",
+            "mimeType": "model/gltf+json"
+        }
+        {
+            "uri": "path-to-a.glb",
+            "mimeType": "model/gltf-binary"
+        },
+        {
+            "bufferView": 0
+            "mimeType": "model/gltf-binary"
+        }
+    ],
+    "externalAssets": [
+        {
+            "file": 0
+        },
+        {
+            "file": 1
+        },
+        {
+            "file": 2
+        }
+    ],
+}
+----
+
+Nodes may contain an `externalAsset` property that refers to an external glTF asset in the `externalAssets` array by index.
+
+[source,json]
+----
+{
+    "nodes": [
+        {
+            "name": "RootNode",
+            "translation": [0, 0, 0],
+            "children": [1, 2]
+        },
+        {
+            "translation": [2, 0, 20],
+            "externalAsset": 0
+        },
+        {
+            "translation": [0, 0, 0],
+            "externalAsset": 1
+        },
+        {
+            "translation": [0, 1, 1],
+            "externalAsset": 2
+        }
+    ]
+}
+----
+
+This instantiates the external asset as this node in the scene hierarchy, such that the root of the file becomes this node. For vanilla glTF, this means that the scene object in the `scenes` array becomes this node, and the root nodes in the scene object of the nested glTF become children of this node. Extensions or future spec versions **MAY** alter this behavior. For glTF, only files with one scene and `"scene": 0` are valid targets.
 
 [[specifying-extensions]]
 == Specifying Extensions
