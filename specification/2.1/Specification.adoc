@@ -2591,7 +2591,7 @@ Skinned animation is achieved by animating the joints in the skin's joint hierar
 [[file-references]]
 == Unified file references
 
-Files may be added to a top-level `files` array. The file's data may either be stored externally and referenced by a `uri`, stored internally in a base64-encoded data URI or IRI, or stored as binary in a buffer and referenced by `bufferView` index.
+Files **MAY** be added to a top-level `files` array. The file's data **MAY** be stored externally and referenced by a `uri`, stored internally in a base64-encoded data URI or IRI, or stored as binary in a buffer and referenced by `bufferView` index.
 
 Each file object **MUST** define a `mimeType` property, which may be any media type that matches the file's contents. If the file contains URIs, and the file is embedded data (base64 data URI or bufferView), those URIs are matched against other objects in the `files` array by `name`. Cyclical references between files are strictly prohibited.
 
@@ -2622,7 +2622,7 @@ glTF 2.1 defines the ability to compose multiple glTF files together, by referen
 
 TODO: Diagram showing complex scene node hierarchy.
 
-External glTF assets may be added to a top-level `externalAssets` array. The external asset's data is provided by a file, with each object containing a `file` property that refers to an object in the `files` array by index. This means that an external asset's data may be stored internally as well as externally. Multiple objects in the `externalAssets` array may refer to the same `file`. All external assets **MUST** refer to files with the `"model/gltf-binary"` and `"model/gltf+json"` media types.
+External glTF assets **MAY** be added to a top-level `externalAssets` array. The external asset **MUST** contain a `file` property that refers to an object in the `files` array by index. Multiple objects in the `externalAssets` array may refer to the same `file`. All external assets **MUST** refer to files with the `"model/gltf-binary"` and `"model/gltf+json"` media types.
 
 TODO: Where to put note regarding gltf asset stored in bufferview needing to be a glb?
 
@@ -2657,7 +2657,7 @@ TODO: Where to put note regarding gltf asset stored in bufferview needing to be 
 }
 ----
 
-Nodes may contain an `externalAsset` property that refers to an external glTF asset in the `externalAssets` array by index.
+Nodes *MAY* contain an `externalAsset` property that refers to an external glTF asset in the `externalAssets` array by index. When a node has an `externalAsset` property, it **MUST NOT** have a `mesh` property.
 
 [source,json]
 ----
