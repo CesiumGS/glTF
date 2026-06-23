@@ -30,6 +30,10 @@
                     "description": "A cylinder shape, centered at the origin in local space, equivalent to the convex hull of two circles in the X/Z plane positioned along the Y axis at a specified distance."
                 },
                 {
+                    "const": "plane",
+                    "description": "A plane with an optional finite size, centered at the origin in local space, with normal along Y."
+                },
+                {
                     "type": "string"
                 }
             ]
@@ -53,6 +57,11 @@
             "type": "object",
             "description": "A set of parameter values that are used to define a cylinder shape.",
             "$ref": "shape.cylinder.schema.json"
+        },
+        "plane": {
+            "type": "object",
+            "description": "A set of parameter values that are used to define a plane shape.",
+            "$ref": "shape.plane.schema.json"
         },
         "name": { },
         "extensions": { },
