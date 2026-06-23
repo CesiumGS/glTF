@@ -2591,9 +2591,13 @@ Skinned animation is achieved by animating the joints in the skin's joint hierar
 [[file-references]]
 == Unified file references
 
-Files **MAY** be added to a top-level `files` array. The file's data **MAY** be stored externally and referenced by a `uri`, stored internally in a base64-encoded data URI or IRI, or stored as binary in a buffer and referenced by `bufferView` index.
+Files **MAY** be added to a top-level `files` array. The file's data **MAY** be stored externally and referenced by a `uri` or stored as binary in a buffer and referenced by `bufferView` index.
 
-Each file object **MUST** define a `mimeType` property, which may be any media type that matches the file's contents. If the file contains URIs, and the file is embedded data (base64 data URI or bufferView), those URIs are matched against other objects in the `files` array by `name`. Cyclical references between files are strictly prohibited.
+Each file object **MUST** define a `mimeType` property, which may be any media type that matches the file's contents. If the file contains URIs, and the file is embedded data (base64 data URI or bufferView), those URIs are matched against other objects in the `files` array by `id`. Cyclical references between files are strictly prohibited.
+
+TODO: Mention logic for matching uris by name for embedded files. URI must match name exactly in child files, or implementation must call URI for asset.
+
+TODO: Deeper investigation on cyclical references and id's.
 
 [source,json]
 ----
@@ -2615,7 +2619,7 @@ Each file object **MUST** define a `mimeType` property, which may be any media t
 }
 ----
 
-[[external-references]]
+[[external-assets]]
 == Referencing external assets
 
 glTF 2.1 defines the ability to compose multiple glTF files together, by referencing external glTF files from another glTF file. Any glTF file which references another glTF file as an external asset is called a complex scene. Complex scenes are defined using multiple components: file references to define where the binary data is stored and external asset definitions that define the properties of the asset node.
@@ -2624,8 +2628,6 @@ TODO: Diagram showing complex scene node hierarchy.
 
 External glTF assets **MAY** be added to a top-level `externalAssets` array. The external asset **MUST** contain a `file` property that refers to an object in the `files` array by index. Multiple objects in the `externalAssets` array may refer to the same `file`. All external assets **MUST** refer to files with the `"model/gltf-binary"` and `"model/gltf+json"` media types.
 
-TODO: Where to put note regarding gltf asset stored in bufferview needing to be a glb?
-
 [source,json]
 ----
 {
@@ -2633,7 +2635,11 @@ TODO: Where to put note regarding gltf asset stored in bufferview needing to be 
         {
             "uri": "path-to-a.gltf",
             "mimeType": "model/gltf+json"
-        }
+        },
+        {
+            "uri": "path-to-a.bin",
+            "mimeType": "application/gltf-buffer"
+        },
         {
             "uri": "path-to-a.glb",
             "mimeType": "model/gltf-binary"
@@ -2648,16 +2654,20 @@ TODO: Where to put note regarding gltf asset stored in bufferview needing to be 
             "file": 0
         },
         {
-            "file": 1
+            "file": 2
         },
         {
-            "file": 2
+            "file": 3
         }
     ],
 }
 ----
 
 Nodes *MAY* contain an `externalAsset` property that refers to an external glTF asset in the `externalAssets` array by index. When a node has an `externalAsset` property, it **MUST NOT** have a `mesh` property.
+
+TODO: Add language to disallow other objects when an `externalAsset` is on a `node`. If a node has `externalAsset` and another object, then `externalAsset` has precedence; for handling 2.0 backwards compatibility.
+
+TODO: Add language to Node section as well.
 
 [source,json]
 ----
