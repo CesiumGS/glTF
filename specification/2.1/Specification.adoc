@@ -869,6 +869,10 @@ The tightness or looseness of the bounding volume may be customized by the asset
 
 Boxes and spheres are the recommended shapes for bounding volumes due to their simplicity and efficiency. Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
 
+// TODO: only allow box and sphere but allow extensions to use other types? look at support across engines.
+// TODO: add "exclusiveMinimum": 0.0 to scale or not?
+// TODO: implementation behavior when computed node transform has skew / non-uniform scale / negative scale / zero scale
+
 [NOTE]
 .Implementation Note
 ====
@@ -2642,20 +2646,24 @@ Each shape is specified with a mandatory `type` property, and an additional stru
 
 The core glTF 2.1 specification includes the following shape types:
 
+// TODO: normal pointing outwards for other shape types
+
 [options="header"]
 |====
 | `"box"`      | A box defined with a size vector, axis-aligned in local space.
 | `"capsule"`  | A capsule defined by two "capping" spheres with potentially different radii, and height on the Y axis in local space.
 | `"cylinder"` | A cylinder with potentially different radii at each end, and height on the Y axis in local space.
-| `"plane"`    | A plane with normal facing in the +Y direction in local space.
+| `"plane"`    | A plane centered at the origin in local space, with normal along the +Y axis in local space, optionally with finite extents. 
 | `"sphere"`   | A sphere shape defined with a radius equal in all directions.
 |====
 
-For the `"box"`, `"capsule"`, `"cylinder"`, and `"sphere"` shape types, a sub-object with a key of matching the shape type **MAY** be used to specify the size parameters of the shape. When the `type` of a shape refers to a built-in shape type, the shape must not supply a sub-object for a different shape type: for example, a shape whose `type` is "box" must not have a `sphere` property defined. For each of those four, the shape is centered at the origin in local space.
 
-Degenerate shapes are prohibited. A sphere must have a positive, non-zero radius. A box shape must have positive non-zero values for each component of `size`. The cylinder and capsule shapes must have a positive, non-zero `height`, both `radiusTop` and `radiusBottom` must be non-negative, and at least one of `radiusTop` and `radiusBottom` must be non-zero.
+For the `"box"`, `"capsule"`, `"cylinder"`, `"plane"`, and `"sphere"` shape types, a sub-object with a key of matching the shape type **MAY** be used to specify the size parameters of the shape. When the `type` of a shape refers to a built-in shape type, the shape must not supply a sub-object for a different shape type: for example, a shape whose `type` is "box" must not have a `sphere` property defined. For each of those five, the shape is centered at the origin in local space.
 
-Plane shapes are infinite in size, and the center of the plane's surface is at the origin in local space. The entirety of the space behind the plane, in its local -Y direction, is considered inside of the plane. The plane's tangent and bitangent vectors are specified as the local +X and +Z directions, respectively.
+By default, planes have infinite extents along their tangent and bitangent vectors, specified as X and Z in local space, respectively. A plane may optionally provide `sizeX` and `sizeZ` properties to specify a finite total size along these axes. The center of the plane's surface is at the origin in local space. The entirety of the space behind the plane, in its local -Y direction, is considered inside of the plane.
+
+Degenerate shapes are prohibited. A sphere must have a positive, non-zero radius. A box shape must have positive non-zero values for each component of `size`. The cylinder and capsule shapes must have a positive, non-zero `height`, both `radiusTop` and `radiusBottom` must be non-negative, and at least one of `radiusTop` and `radiusBottom` must be non-zero. A plane must have positive non-zero `sizeX` and `sizeZ` extents.
+
 
 Extensions **MAY** define additional shape types, in which case the `type` **MAY** be set to a custom value, or set to one of the built-in shape types to provide a fallback.
 
