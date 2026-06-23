@@ -845,6 +845,36 @@ The next example defines the transform for a node with attached camera using the
 ----
 
 
+[[bounding-volumes]]
+=== Bounding Volumes
+
+Any node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's content.
+
+Bounding volumes contain the following properties:
+
+[options="header"]
+|====
+| Property      | Description
+| `shape`       | The index of the shape in the top-level `shapes` array. Required.
+| `rotation`    | The bounding volume's unit quaternion rotation relative to the bounding volume's local coordinate system.
+| `scale`       | The bounding volume's scale along the bounding volume's local X, Y, and Z axes.
+| `translation` | The bounding volume's translation along the bounding volume's local X, Y, and Z axes.
+|====
+
+Multiple bounding volumes defined in a node hierarchy form a bounding volume hierarchy (BVH), which can be used to accelerate frustum culling, occlusion culling, ray tracing, and so on. Bounding volume hierarchies **SHOULD** have spatial coherence, meaning that a node's bounding volume completely encloses the bounding volumes of its descendants, and a node's bounding volume completely fits within the bounding volumes of its ancestors.
+
+Bounding volumes may be used to defer loading of content based on application-specific criteria, such as the angular size on a player's camera, or any other metric. Bounding volumes may be used to restrict rendering, interactions, or anything else to a specific volume of space. Implementations may choose to use bounding volumes for any purpose.
+
+The tightness or looseness of the bounding volume may be customized by the asset author depending on the use case. For example, a bounding volume used for a skinned mesh is **RECOMMENDED** to be large enough to contain the mesh in all reasonable deformation states, such as the possible poses of a character. Similarly, a bounding volume placed on a parent with multiple animated children is **RECOMMENDED** to be large enough to contain all of the children in all reasonable animation states. Alternatively, such a parent could simply not define a bounding volume, and dynamically rely on the bounding volumes of its children, if any.
+
+Boxes and spheres are the recommended shapes for bounding volumes due to their simplicity and efficiency. Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
+
+[NOTE]
+.Implementation Note
+====
+Many engines use axis-aligned bounding boxes (AABBs) for mesh culling. When converting from bounding volumes to AABBs programmatically, the resulting AABB should include all extents of the original bounding volume, including any transformations.
+====
+
 [[binary-data-storage]]
 == Binary Data Storage
 
