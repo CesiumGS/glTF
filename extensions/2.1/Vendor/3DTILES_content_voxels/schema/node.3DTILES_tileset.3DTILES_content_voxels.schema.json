@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "node.3DTILES_tileset.3DTILES_content_voxels.schema.json",
+    "title": "3DTILES_content_voxels",
+    "type": "object",
+    "description": "3D Tiles voxel content extension. Indicates the presence of voxel content and associates it with metadata definitions in the tileset's schema.",
+    "gltf_detailedDescription": "Voxels are stored as glTFs with the EXT_primitive_voxels extension and are typically paired with EXT_structural_metadata to unify the schema between a tileset and its tiles. This extension is often paired with Implicit Tiling for efficient representation of massive sparse voxel datasets. This extension lets runtimes detect voxel content in advance to allocate necessary resources before tiles load.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "extensions": { },
+        "extras": { }
+    }
+}

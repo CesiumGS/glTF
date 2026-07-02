@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "glTF.EXT_crs_enu.schema.json",
+    "title": "glTF.EXT_crs_enu",
+    "type": "object",
+    "description": "This extension declares that the glTF is in a local right-handed Cartesian coordinate system in meters where +X faces east, +Y faces north, and +Z faces up.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "extensions": { },
+        "extras": { }
+    }
+}
