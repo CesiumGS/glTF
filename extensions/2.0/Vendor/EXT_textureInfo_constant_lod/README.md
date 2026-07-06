@@ -30,7 +30,7 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 ![Constant LOD image](./figures/constantlod.jpg "Constant LOD image")
 
-Because this technique derives texture coordinates from the world-space X and Z position, it is designed for surfaces that are approximately parallel to the ground plane. On surfaces with other orientations, the projected texture coordinates may produce visual artifacts such as stretching.
+Because this technique derives texture coordinates from the world-space X and Z position, it is designed for surfaces that are approximately perpendicular to the Y-axis. On surfaces with other orientations, the projected texture coordinates may produce visual artifacts such as stretching.
 
 The extension specifies an alternative way of computing the texture coordinates, so if it is supported by the client then the `textureInfo`'s `texCoord` is not used. For maximum compatibility however, encoders still must provide `texCoord` UV coordinates so the texture renders even if the extension is not supported.
 
