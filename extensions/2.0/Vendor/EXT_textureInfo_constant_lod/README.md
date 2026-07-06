@@ -92,7 +92,7 @@ frustrumWidth & \text{if } isOrthographicProjection \\
 
 Where $worldPosition$ is the vertex position in world coordinates, $eyeSpace$ is the vertex position in camera coordinates, and $frustumWidth$ is the frustum width in meters.
 
-The resulting $customUvCoords.xy$ contain the vertex's X and Z position in world coordinates. Because only the X and Z components of the world position are used, this technique assumes the textured surface is approximately horizontal (parallel to the ground plane). $customUvCoords.z$ is the negative eye-space depth (z-coordinate) from the camera to the fragment when using perspective projection. Since all points are equidistant to the camera when using orthographic projection, this value shall be set to the frustum width as a proxy for zoom level. $customUvCoords$ should then be passed into the fragment shader as a `varying`.
+The resulting $customUvCoords.xy$ contain the vertex's X and Z position in world coordinates. Because only the X and Z components of the world position are used, this technique assumes the textured surface is approximately perpendicular to the Y-axis. $customUvCoords.z$ is the negative eye-space depth (z-coordinate) from the camera to the fragment when using perspective projection. Since all points are equidistant to the camera when using orthographic projection, this value shall be set to the frustum width as a proxy for zoom level. $customUvCoords$ should then be passed into the fragment shader as a `varying`.
 
 In the fragment shader:
 
