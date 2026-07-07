@@ -861,13 +861,21 @@ Bounding volumes contain the following properties:
 | `translation` | The bounding volume's translation along the bounding volume's local X, Y, and Z axes.
 |====
 
-Multiple bounding volumes defined in a node hierarchy form a bounding volume hierarchy (BVH), which can be used to accelerate frustum culling, occlusion culling, ray tracing, and so on. Bounding volume hierarchies **SHOULD** have spatial coherence, meaning that a node's bounding volume completely encloses the bounding volumes of its descendants, and a node's bounding volume completely fits within the bounding volumes of its ancestors.
+Multiple bounding volumes defined in a node hierarchy form a bounding volume hierarchy (BVH), which can be used to accelerate frustum culling, occlusion culling, ray tracing, and so on. Bounding volume hierarchies **SHOULD** have spatial coherence, meaning that a node's bounding volume completely encloses the geometry of its descendants.
 
 Bounding volumes may be used to defer loading of content based on application-specific criteria, such as the angular size on a player's camera, or any other metric. Bounding volumes may be used to restrict rendering, interactions, or anything else to a specific volume of space. Implementations may choose to use bounding volumes for any purpose.
 
 The tightness or looseness of the bounding volume may be customized by the asset author depending on the use case. For example, a bounding volume used for a skinned mesh is **RECOMMENDED** to be large enough to contain the mesh in all reasonable deformation states, such as the possible poses of a character. Similarly, a bounding volume placed on a parent with multiple animated children is **RECOMMENDED** to be large enough to contain all of the children in all reasonable animation states. Alternatively, such a parent could simply not define a bounding volume, and dynamically rely on the bounding volumes of its children, if any.
 
-Boxes and spheres are the recommended shapes for bounding volumes due to their simplicity and efficiency. Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
+Boxes and spheres are the supported shapes for bounding volumes due to their simplicity and efficiency. Additional shapes **MAY** be allowed via extensions.
+
+Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
+
+[NOTE]
+.Implementation Note
+====
+If the bounding volume is transformed with a non-conformal transform (e.g. a transform with skew or non-uniform scale) an implementation may convert the bounding volume to an axis-aligned bounding box or other bounding volume that contains the transformed shape.
+====
 
 // TODO: only allow box and sphere but allow extensions to use other types? look at support across engines.
 // TODO: add "exclusiveMinimum": 0.0 to scale or not?
@@ -2650,11 +2658,11 @@ The core glTF 2.1 specification includes the following shape types:
 
 [options="header"]
 |====
-| `"box"`      | A box defined with a size vector, axis-aligned in local space.
-| `"capsule"`  | A capsule defined by two "capping" spheres with potentially different radii, and height on the Y axis in local space.
-| `"cylinder"` | A cylinder with potentially different radii at each end, and height on the Y axis in local space.
-| `"plane"`    | A plane centered at the origin in local space, with normal along the +Y axis in local space, optionally with finite extents. 
-| `"sphere"`   | A sphere shape defined with a radius equal in all directions.
+| `"box"`      | A box defined with a size vector, axis-aligned in local space with normals facing outwards.
+| `"capsule"`  | A capsule defined by two "capping" spheres with potentially different radii, and height on the Y axis in local space with normals facing outwards.
+| `"cylinder"` | A cylinder with potentially different radii at each end, and height on the Y axis in local space with normals facing outwards.
+| `"plane"`    | A plane centered at the origin in local space, optionally with finite extents, with normal along the +Y axis in local space.
+| `"sphere"`   | A sphere shape defined with a radius equal in all directions with normals facing outwards.
 |====
 
 
