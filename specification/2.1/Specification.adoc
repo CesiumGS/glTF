@@ -877,10 +877,6 @@ Additionally, changing the size of shapes **SHOULD** be preferred over changing 
 If the bounding volume is transformed with a non-conformal transform (e.g. a transform with skew or non-uniform scale) an implementation may convert the bounding volume to an axis-aligned bounding box or other bounding volume that contains the transformed shape.
 ====
 
-// TODO: only allow box and sphere but allow extensions to use other types? look at support across engines.
-// TODO: add "exclusiveMinimum": 0.0 to scale or not?
-// TODO: implementation behavior when computed node transform has skew / non-uniform scale / negative scale / zero scale
-
 [NOTE]
 .Implementation Note
 ====
@@ -2653,8 +2649,6 @@ Each shape is specified with a mandatory `type` property, and an additional stru
 ----
 
 The core glTF 2.1 specification includes the following shape types:
-
-// TODO: normal pointing outwards for other shape types
 
 [options="header"]
 |====
