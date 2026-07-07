@@ -30,6 +30,8 @@ The `EXT_textureInfo_constant_lod` extension defines properties needed to calcul
 
 ![Constant LOD image](./figures/constantlod.jpg "Constant LOD image")
 
+Because this technique derives texture coordinates from the world-space X and Z position, it is designed for surfaces that are approximately perpendicular to the Y-axis. On surfaces with other orientations, the projected texture coordinates may produce visual artifacts such as stretching.
+
 The extension specifies an alternative way of computing the texture coordinates, so if it is supported by the client then the `textureInfo`'s `texCoord` is not used. For maximum compatibility however, encoders still must provide `texCoord` UV coordinates so the texture renders even if the extension is not supported.
 
 ## Specifying Constant LOD Texture Mapping
@@ -38,12 +40,12 @@ The `EXT_textureInfo_constant_lod` extension is defined on `textureInfo` structu
 
 Constant LOD uses the following properties:
 
-* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Y dimensions. Increasing this will make the texture pattern appear smaller; decreasing it will make it appear larger.
-* `offset` - used to shift the texture, specified as a pair of numbers in meters in the format [X, Y].
+* `repetitions` - specifies the number of times the texture is repeated per meter in both the X and Z dimensions. Increasing this will make the texture pattern appear smaller; decreasing it will make it appear larger.
+* `offset` - used to shift the texture, specified as a pair of numbers in meters in the format [X, Z].
 * `minClampDistance` - specifies the minimum distance in meters from the camera to the surface at which to clamp the texture. This value must not be greater than `maxClampDistance`.
 * `maxClampDistance` - specifies the maximum distance in meters from the camera to the surface at which to clamp the texture. This value must not be less than `minClampDistance`.
 
-For example, the following JSON defines a material with a texture at index 0 that is modified by the `EXT_textureInfo_constant_lod` extension. The extension has a `repetitions` value of 2 causing it to be repeated twice per meter, making its pattern appear half the size. It is shifted by 1 meter in the X direction and 0 meters in the Y direction. It also has a minimum clamp distance of 0.5 meters, meaning the constant LOD effect stops being present when the camera is 0.5m away from the surface or closer. This is a closer distance than the default value of 1m; therefore, this material requires a closer zoom before the texture stops adapting its level of detail (and for it to appear magnified). The absence of the `maxClampDistance` property means it has a default value of $2^{32}$, so the constant LOD effect will occur until the camera is $2^{32}$ away from the surface.
+For example, the following JSON defines a material with a texture at index 0 that is modified by the `EXT_textureInfo_constant_lod` extension. The extension has a `repetitions` value of 2 causing it to be repeated twice per meter, making its pattern appear half the size. It is shifted by 1 meter in the X direction and 0 meters in the Z direction. It also has a minimum clamp distance of 0.5 meters, meaning the constant LOD effect stops being present when the camera is 0.5m away from the surface or closer. This is a closer distance than the default value of 1m; therefore, this material requires a closer zoom before the texture stops adapting its level of detail (and for it to appear magnified). The absence of the `maxClampDistance` property means it has a default value of $2^{32}$, so the constant LOD effect will occur until the camera is $2^{32}$ away from the surface.
 
 ```json
 "materials": [
@@ -80,7 +82,7 @@ In the vertex shader:
 
 ```math
 \begin{aligned}
-customUvCoords.xy &= worldPosition.xy + offset\\
+customUvCoords.xy &= worldPosition.xz + offset\\
 customUvCoords.z &= \begin{cases}
 -eyeSpace & \text{if } isPerspectiveProjection \\
 frustrumWidth & \text{if } isOrthographicProjection \\
@@ -90,7 +92,7 @@ frustrumWidth & \text{if } isOrthographicProjection \\
 
 Where $worldPosition$ is the vertex position in world coordinates, $eyeSpace$ is the vertex position in camera coordinates, and $frustumWidth$ is the frustum width in meters.
 
-The resulting $customUvCoords.xy$ contain the vertex's X and Y position in world coordinates. $customUvCoords.z$ is the negative eye-space depth (z-coordinate) from the camera to the fragment when using perspective projection. Since all points are equidistant to the camera when using orthographic projection, this value shall be set to the frustum width as a proxy for zoom level. $customUvCoords$ should then be passed into the fragment shader as a `varying`.
+The resulting $customUvCoords.xy$ contain the vertex's X and Z position in world coordinates. Because only the X and Z components of the world position are used, this technique assumes the textured surface is approximately perpendicular to the Y-axis. $customUvCoords.z$ is the negative eye-space depth (z-coordinate) from the camera to the fragment when using perspective projection. Since all points are equidistant to the camera when using orthographic projection, this value shall be set to the frustum width as a proxy for zoom level. $customUvCoords$ should then be passed into the fragment shader as a `varying`.
 
 In the fragment shader:
 
