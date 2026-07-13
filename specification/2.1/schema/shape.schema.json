@@ -11,15 +11,15 @@
             "anyOf": [
                 {
                     "const": "plane",
-                    "description": "A plane with infinite size, centered at the origin in local space, with normal along +Y."
+                    "description": "A plane centered at the origin in local space, optionally with finite extents, with normal along the +Y axis in local space."
                 },
                 {
                     "const": "sphere",
-                    "description": "A sphere with a specified radius, centered at the origin in local space."
+                    "description": "A sphere shape defined with a radius equal in all directions with smooth normals facing outwards."
                 },
                 {
                     "const": "box",
-                    "description": "An axis-aligned box with a size per-axis, centered at the origin in local space."
+                    "description": "An axis-aligned box with a size per-axis, centered at the origin in local space, with hard normals facing outwards."
                 },
                 {
                     "const": "capsule",
@@ -28,10 +28,6 @@
                 {
                     "const": "cylinder",
                     "description": "A cylinder shape, centered at the origin in local space, equivalent to the convex hull of two circles in the X/Z plane positioned along the Y axis at a specified distance."
-                },
-                {
-                    "const": "plane",
-                    "description": "A plane with an optional finite size, centered at the origin in local space, with normal along Y."
                 },
                 {
                     "type": "string"

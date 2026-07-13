@@ -848,7 +848,7 @@ The next example defines the transform for a node with attached camera using the
 [[bounding-volumes]]
 === Bounding Volumes
 
-Any node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's content.
+Any node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's geometry.
 
 Bounding volumes contain the following properties:
 
@@ -867,14 +867,16 @@ Bounding volumes may be used to defer loading of content based on application-sp
 
 The tightness or looseness of the bounding volume may be customized by the asset author depending on the use case. For example, a bounding volume used for a skinned mesh is **RECOMMENDED** to be large enough to contain the mesh in all reasonable deformation states, such as the possible poses of a character. Similarly, a bounding volume placed on a parent with multiple animated children is **RECOMMENDED** to be large enough to contain all of the children in all reasonable animation states. Alternatively, such a parent could simply not define a bounding volume, and dynamically rely on the bounding volumes of its children, if any.
 
-Boxes and spheres are the supported shapes for bounding volumes due to their simplicity and efficiency. Additional shapes **MAY** be allowed via extensions.
+`"box"`` and `"sphere"` are the supported shape types for bounding volumes due to their simplicity and efficiency. Additional shape types **MAY** be allowed via extensions.
 
 Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
 
 [NOTE]
 .Implementation Note
 ====
-If the bounding volume is transformed with a non-conformal transform (e.g. a transform with skew or non-uniform scale) an implementation may convert the bounding volume to an axis-aligned bounding box or other bounding volume that contains the transformed shape.
+* TODO: Switch this to be the inverse - define what transforms are allowed.
+* TODO: be careful about ISO wording with *may*
+If the bounding volume is transformed with a non-conformal transform (e.g. a transform with skew or non-uniform scale) an implementation may convert the bounding volume to an axis-aligned bounding volume that contains the transformed shape.
 ====
 
 [NOTE]
@@ -2648,15 +2650,21 @@ Each shape is specified with a mandatory `type` property, and an additional stru
 }
 ----
 
+// TODO: only allow box and sphere but allow extensions to use other types? look at support across engines.
+// TODO: add "exclusiveMinimum": 0.0 to scale or not?
+// TODO: implementation behavior when computed node transform has skew / non-uniform scale / negative scale / zero scale
+
+
+
 The core glTF 2.1 specification includes the following shape types:
 
 [options="header"]
 |====
-| `"box"`      | A box defined with a size vector, axis-aligned in local space with normals facing outwards.
-| `"capsule"`  | A capsule defined by two "capping" spheres with potentially different radii, and height on the Y axis in local space with normals facing outwards.
-| `"cylinder"` | A cylinder with potentially different radii at each end, and height on the Y axis in local space with normals facing outwards.
-| `"plane"`    | A plane centered at the origin in local space, optionally with finite extents, with normal along the +Y axis in local space.
-| `"sphere"`   | A sphere shape defined with a radius equal in all directions with normals facing outwards.
+| `"box"`      | A box defined with a size vector, axis-aligned in local space with hard normals facing outwards.
+| `"capsule"`  | A capsule defined by two "capping" spheres with potentially different radii, and height on the Y axis in local space with smooth normals facing outwards.
+| `"cylinder"` | A cylinder with potentially different radii at each end, and height on the Y axis in local space with hard normals facing outwards on the caps and smooth normals facing outwards on the sides.
+| `"plane"`    | A plane centered at the origin in local space, optionally with finite extents, with normal along the +Y axis in local space. The plane is one sided
+| `"sphere"`   | A sphere shape defined with a radius equal in all directions with smooth normals facing outwards.
 |====
 
 
