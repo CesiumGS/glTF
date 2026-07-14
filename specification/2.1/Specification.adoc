@@ -848,7 +848,7 @@ The next example defines the transform for a node with attached camera using the
 [[bounding-volumes]]
 === Bounding Volumes
 
-Any node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's geometry.
+Any glTF node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's geometry.
 
 Bounding volumes contain the following properties:
 
@@ -856,9 +856,9 @@ Bounding volumes contain the following properties:
 |====
 | Property      | Description
 | `shape`       | The index of the shape in the top-level `shapes` array. Required.
-| `rotation`    | The bounding volume's unit quaternion rotation relative to the bounding volume's local coordinate system.
-| `scale`       | The bounding volume's scale along the bounding volume's local X, Y, and Z axes.
-| `translation` | The bounding volume's translation along the bounding volume's local X, Y, and Z axes.
+| `rotation`    | The bounding volume's unit quaternion rotation relative to the node's local coordinate system.
+| `scale`       | The bounding volume's scale along the rotated local X, Y, and Z axes.
+| `translation` | The bounding volume's translation along the node's local X, Y, and Z axes.
 |====
 
 Multiple bounding volumes defined in a node hierarchy form a bounding volume hierarchy (BVH), which can be used to accelerate frustum culling, occlusion culling, ray tracing, and so on. Bounding volume hierarchies **SHOULD** have spatial coherence, meaning that a node's bounding volume completely encloses the geometry of its descendants.
@@ -2656,7 +2656,7 @@ The core glTF 2.1 specification includes the following shape types:
 |====
 
 
-For the `"box"`, `"capsule"`, `"cylinder"`, `"plane"`, and `"sphere"` shape types, a sub-object with a key of matching the shape type **MAY** be used to specify the size parameters of the shape. When the `type` of a shape refers to a built-in shape type, the shape must not supply a sub-object for a different shape type: for example, a shape whose `type` is "box" must not have a `sphere` property defined.
+A sub-object with a key of matching the shape type **MAY** be used to specify the size parameters of the shape. When the `type` of a shape refers to a built-in shape type, the shape must not supply a sub-object for a different shape type: for example, a shape whose `type` is "box" must not have a `sphere` property defined.
 
 By default, planes have infinite extents along their tangent and bitangent vectors, specified as X and Z in local space, respectively. A plane may optionally provide `sizeX` and `sizeZ` properties to specify a finite total size along these axes. The center of the plane's surface is at the origin in local space. The entirety of the space behind the plane, in its local -Y direction, is considered inside of the plane.
 
