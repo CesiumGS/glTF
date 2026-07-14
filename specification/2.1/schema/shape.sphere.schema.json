@@ -11,8 +11,6 @@
             "description": "The radius of the sphere.",
             "exclusiveMinimum": 0.0,
             "default": 0.5
-        },
-        "extensions": { },
-        "extras": { }
+        }
     }
 }

@@ -58,10 +58,7 @@
             "type": "object",
             "description": "A set of parameter values that are used to define a sphere shape.",
             "$ref": "shape.sphere.schema.json"
-        },
-        "name": { },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "type"

@@ -869,7 +869,7 @@ The tightness or looseness of the bounding volume may be customized by the asset
 
 `"box"`` and `"sphere"` are the supported shape types for bounding volumes due to their simplicity and efficiency. Additional shape types **MAY** be allowed via extensions.
 
-Additionally, changing the size of shapes **SHOULD** be preferred over changing the bounding volume's `scale`.
+Additionally, changing the shape parameters **SHOULD** be preferred over changing the bounding volume's `scale`.
 
 [NOTE]
 .Implementation Note

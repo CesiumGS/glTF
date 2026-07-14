@@ -23,8 +23,6 @@
             "description": "The radius of the sphere located at the top of the capsule (i.e. the sphere at the half-height along +Y)",
             "minimum": 0.0,
             "default": 0.5
-        },
-        "extensions": { },
-        "extras": { }
+        }
     }
 }

@@ -15,8 +15,6 @@
             "type": "number",
             "description": "The extents along the Z axis in local space. If not provided, this dimension should be considered infinite.",
             "exclusiveMinimum": 0.0
-        },
-        "extensions": { },
-        "extras": { }
+        }
     }
 }

@@ -41,9 +41,7 @@
             "minItems": 3,
             "maxItems": 3,
             "default": [ 0.0, 0.0, 0.0 ]
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [ "shape" ]
 }
