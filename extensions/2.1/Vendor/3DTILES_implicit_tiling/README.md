@@ -140,26 +140,15 @@ Coordinate|Positive Direction
 
 ![](./figures/box-coordinates.png)
 
-For `region` bounding volumes:
-
-Coordinate|Positive Direction
---|--
-`x`|From west to east (increasing longitude)
-`y`|From south to north (increasing latitude)
-`z`|From bottom to top (increasing height)
-
-![](./figures/region-coordinates.jpg)
-
 ## Template URIs
 
 A *Template URI* is a URI pattern used to refer to tiles by their tile coordinates.
 
-Template URIs shall include the variables `+{level}+`, `+{x}+`, `+{y}+`. Template URIs for octrees shall also include `+{z}+`. When referring to a specific tile, the tile's coordinates are substituted for these variables.
+Template URIs **MAY** include the variables `{level}`, `{x}`, `{y}`. Template URIs for octrees **MAY** also include `{z}`. When referring to a specific tile, the tile's coordinates are substituted for these variables.
 
 Template URIs, when given as relative paths, are resolved relative to the tileset JSON file.
 
-.Examples of template URIs to identify the content for implicit tiles
-image::figures/template-uri.png[]
+![](./figures/template-uri.png)
 
 ## Subtrees
 
@@ -167,13 +156,11 @@ In order to support sparse datasets, additional information is needed to indicat
 
 *Subtrees* are fixed size sections of the tileset tree used for storing availability. The tileset is partitioned into subtrees to bound the size of each availability buffer for optimal network transfer and caching. The `subtreeLevels` property defines the number of levels in each subtree. The subdivision scheme determines the number of children per tile.
 
-.The structure of a subtree for implicit tiling
-image::figures/subtree-anatomy.png[subtree anatomy]
+![](./figures/subtree-anatomy.png)
 
 After partitioning a tileset into subtrees, the result is a tree of subtrees.
 
-.A tree of subtrees representing an implicit tileset
-image::figures/subtree-tree.png[Tree of subtrees]
+![](./figures/subtree-tree.png)
 
 ### Availability
 
@@ -190,19 +177,19 @@ To form the 1D bitstream, the tiles are ordered with the following rules:
 - Within each level of the subtree, the tiles are ordered using the [Morton Z-order curve](https://en.wikipedia.org/wiki/Z-order_curve)
 - The bits for each level are concatenated into a single bitstream
 
-.The computation of indices for accessing an availability bitstream, based on the coordinates of implicit tiles
-image::figures/availability-ordering.png[Availability Ordering]
+![](./figures/availability-ordering.png)
+
 
 In the diagram above, colored cells represent 1 bits, grey cells represent 0 bits.
 
 Storing tiles in Morton order provides these benefits:
 
-* Efficient indexing - The Morton index for a tile is computed in constant time by interleaving bits.
-* Efficient traversal - The Morton index for a parent or child tile are computed in constant time by removing or adding bits, respectively.
-* Locality of reference - Consecutive tiles are near to each other in 3D space.
-* Better Compression - Locality of reference leads to better compression of availability bitstreams.
+- Efficient indexing - The Morton index for a tile is computed in constant time by interleaving bits.
+- Efficient traversal - The Morton index for a parent or child tile are computed in constant time by removing or adding bits, respectively.
+- Locality of reference - Consecutive tiles are near to each other in 3D space.
+- Better Compression - Locality of reference leads to better compression of availability bitstreams.
 
-For more detailed information about working with Morton indices and availability bitstreams, see xref:{url-specification-implicittiling-availability}#implicittiling-availability-indexing[Availability Indexing].
+For more detailed information about working with Morton indices and availability bitstreams, see [Availability Indexing](./AVAILABILITY.md).
 
 #### Tile Availability
 
@@ -210,13 +197,10 @@ Tile availability determines which tiles exist in a subtree.
 
 Tile availability has the following restrictions:
 
-* If a non-root tile's availability is 1, its parent tile's availability shall also be 1.
-* A subtree shall have at least one available tile.
+- If a non-root tile's availability is 1, its parent tile's availability shall also be 1.
+- A subtree shall have at least one available tile.
 
 ![](./figures/tile-availability.png)
-
-.Illustration of a tile availability bitstream. Tiles that are available are represented with a `1` in the bitstream.
-image::figures/tile-availability.png[Tile Availability]
 
 #### Content Availability
 
@@ -224,11 +208,10 @@ Content availability determines which tiles have a content resource. The content
 
 Content availability has the following restrictions:
 
-* If content availability is 1 its corresponding tile availability shall also be 1. Otherwise, it would be possible to specify content files that are not reachable by the tiles of the tileset.
-* If content availability is 0 and its corresponding tile availability is 1 then the tile is considered to be an empty tile.
+- If content availability is 1 its corresponding tile availability shall also be 1. Otherwise, it would be possible to specify content files that are not reachable by the tiles of the tileset.
+- If content availability is 0 and its corresponding tile availability is 1 then the tile is considered to be an empty tile.
 
-.Illustration of a content availability bitstream. Tiles that have associated content are represented with a `1` in the bitstream.
-image::figures/content-availability.png[Content Availability]
+![](./figures/content-availability.png)
 
 #### Child Subtree Availability
 
@@ -236,16 +219,15 @@ Child subtree availability determines which subtrees are reachable from the deep
 
 Unlike tile and content availability, which store bits for every level in the subtree, child subtree availability stores bits for nodes one level deeper than the deepest level of the subtree, and represent the root nodes of child subtrees. This is used to determine which other subtrees are reachable before requesting tiles. If availability is 0 for all child subtrees, then the tileset does not subdivide further.
 
-.Illustration of a child subtree availability bitstream. Tiles that are the roots of available subtrees are represented by a `1` in the bitstream.
-image::figures/child-subtree-availability.png[Child Subtree Availability]
+![](./figures/child-subtree-availability.png)
 
 ### Metadata
 
 Subtrees may store metadata at multiple granularities.
 
-* *Tile metadata* - metadata for available tiles in the subtree
-* *Content metadata* - metadata for available content in the subtree
-* *Subtree metadata* - metadata about the subtree as a whole
+- *Tile metadata* - metadata for available tiles in the subtree
+- *Content metadata* - metadata for available content in the subtree
+- *Subtree metadata* - metadata about the subtree as a whole
 
 #### Tile Metadata
 
@@ -285,3 +267,4 @@ Properties assigned to subtrees provide metadata about the subtree as a whole. S
 
 - Finish extension
 - Template URI bypasses glTF 2.1 `files` mechanism, which would prevent [packaging external assets](https://github.com/KhronosGroup/glTF/issues/2589).
+- Incorporate [3DTILES_implicit_tiling_custom_template_variables](https://github.com/CesiumGS/3d-tiles/pull/815)
