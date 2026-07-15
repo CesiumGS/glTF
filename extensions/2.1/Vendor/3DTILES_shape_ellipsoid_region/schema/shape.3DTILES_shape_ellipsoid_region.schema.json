@@ -50,9 +50,7 @@
             "minimum": -3.14159265359,
             "maximum": 3.14159265359,
             "default": 3.14159265359
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "semiMajorAxisRadius",
