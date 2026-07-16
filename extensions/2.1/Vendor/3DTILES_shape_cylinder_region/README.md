@@ -61,6 +61,7 @@ The cylinder is centered at the origin, where the radius is measured along the `
 ```json
 "shapes": [
   {
+    "name": "Cylindrical Shell Region",
     "type": "cylinder region",
     "extensions": {
       "3DTILES_shape_cylinder_region": {
@@ -98,6 +99,7 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
 ```json
 "shapes": [
   {
+    "name": "Cylindrical Sector Region",
     "type": "cylinder region",
     "extensions": {
       "3DTILES_shape_cylinder_region": {
