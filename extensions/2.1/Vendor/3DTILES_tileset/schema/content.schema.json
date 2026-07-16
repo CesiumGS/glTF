@@ -6,16 +6,27 @@
     "description": "Content object in node-level 3DTILES_tileset extension.",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
-        "externalAsset": {
-            "allOf": [ { "$ref": "glTFid.schema.json" } ],
-            "description": "The index of the external asset referenced by this content."
-        },
         "boundingVolume": {
             "allOf": [ { "$ref": "boundingVolume.schema.json" } ],
             "description": "The content bounding volume."
+        },
+        "type": {
+            "description": "The type of content pointed to by node.externalAsset.",
+            "anyOf": [
+                {
+                    "const": "content"
+                },
+                {
+                    "const": "conditionalContent"
+                },
+                {
+                    "const": "externalTileset"
+                },
+                {
+                    "type": "string"
+                }
+            ],
+            "default": "content"
         }
-    },
-    "required": [
-        "externalAsset"
-    ]
+    }
 }
