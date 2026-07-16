@@ -58,6 +58,7 @@ This example corresponds to the image below it:
 ```json
 "shapes": [
   {
+    "name": "Global Ellipsoidal Height Region",
     "type": "ellipsoid region",
     "extensions": {
       "3DTILES_shape_ellipsoid_region": {
@@ -78,6 +79,7 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
 ```json
 "shapes": [
   {
+    "name": "Geographic Bounding Region (Ellipsoid)",
     "type": "ellipsoid region",
     "extensions": {
       "3DTILES_shape_ellipsoid_region": {
