@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "content.schema.json",
+    "title": "Content",
+    "type": "object",
+    "description": "Content object in node-level 3DTILES_tileset extension.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "boundingVolume": {
+            "allOf": [ { "$ref": "boundingVolume.schema.json" } ],
+            "description": "The content bounding volume."
+        },
+        "type": {
+            "description": "The type of content pointed to by node.externalAsset.",
+            "anyOf": [
+                {
+                    "const": "content"
+                },
+                {
+                    "const": "conditionalContent"
+                },
+                {
+                    "const": "externalTileset"
+                },
+                {
+                    "type": "string"
+                }
+            ],
+            "default": "content"
+        }
+    }
+}
