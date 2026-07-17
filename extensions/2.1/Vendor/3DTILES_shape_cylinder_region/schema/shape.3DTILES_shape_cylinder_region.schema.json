@@ -5,12 +5,12 @@
     "type": "object",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
-        "minRadius": {
+        "minimumRadius": {
             "type": "number",
             "description": "The inner radius of the cylinder region along the X and Z axes, in meters.",
             "minimum": 0
         },
-        "maxRadius": {
+        "maximumRadius": {
             "type": "number",
             "description": "The outer radius of the cylinder region along the X and Z axes, in meters.",
             "minimum": 0
@@ -20,26 +20,24 @@
             "description": "The height of the cylinder in meters along the Y-axis, in meters.",
             "minimum": 0
         },
-        "minAngle": {
+        "minimumAngle": {
             "type": "number",
             "description": "The minimum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region starts. Must be in the range [-pi, pi].",
             "minimum": -3.14159265359,
             "maximum": 3.14159265359,
             "default": -3.14159265359
         },
-        "maxAngle": {
+        "maximumAngle": {
             "type": "number",
             "description": "The maximum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region ends. Must be in the range [-pi, pi].",
             "minimum": -3.14159265359,
             "maximum": 3.14159265359,
             "default": 3.14159265359
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
-        "minRadius",
-        "maxRadius",
+        "minimumRadius",
+        "maximumRadius",
         "height"
     ]
 }
