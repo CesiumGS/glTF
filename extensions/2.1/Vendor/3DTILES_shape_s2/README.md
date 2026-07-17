@@ -222,7 +222,7 @@ The following example illustrates usage of `3DTILES_shape_s2`:
       "name": "Root Tile Node (S2 Level 0)",
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 50000,
+          "geometricError": 500000,
           "refine": "REPLACE"
         }
       },
@@ -235,7 +235,7 @@ The following example illustrates usage of `3DTILES_shape_s2`:
       "name": "Level 1 Child Node (S2 Level 1)",
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 500000
+          "geometricError": 250000
         }
       },
       "boundingVolume": {
@@ -247,7 +247,7 @@ The following example illustrates usage of `3DTILES_shape_s2`:
       "name": "Level 2 Child Node (S2 Level 2)",
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 250000
+          "geometricError": 125000
         }
       },
       "boundingVolume": {
@@ -259,7 +259,7 @@ The following example illustrates usage of `3DTILES_shape_s2`:
       "name": "Level 3 Leaf Node (S2 Level 3)",
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 125000
+          "geometricError": 62500
         }
       },
       "boundingVolume": {
