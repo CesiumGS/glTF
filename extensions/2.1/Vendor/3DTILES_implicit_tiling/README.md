@@ -77,7 +77,7 @@ The following constraints apply to implicit root tiles:
 
 - The `children` property **MUST NOT** be defined
 - The `externalAsset` property **MUST NOT** be defined
-- The contents referenced by `contentUri` **MUST NOT** be [external tilesets](../3DTILES_external_tileset/README.md)
+- The contents referenced by `contentUri` **MUST NOT** be [external tilesets](../3DTILES_tileset/README.md#external-tilesets)
 
 ## TODO
 
