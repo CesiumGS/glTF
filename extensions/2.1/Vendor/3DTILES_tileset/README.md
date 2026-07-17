@@ -309,7 +309,9 @@ Tiles are structured into a tree incorporating *Hierarchical Level of Detail* (H
 
 A tile’s geometric error defines the selection metric for that tile. Its value is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not.
 
-Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If the child tile's geometric error is greater than or equal to its parent's geometric error, the tile is considered *unconditionally refinable*.
+![Illustration of geometric error](./figures/3d-tiles-overview-page0005-GE-drawing.svg)
+
+Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If a child tile's geometric error is greater than or equal to its parent's geometric error, that child tile is considered [unconditionally refinable](#unconditional-refinement).
 
 In a client implementation, geometric error is used with other screen space metrics—​e.g., distance from the tile to the camera, screen size, and resolution—to calculate the SSE introduced if this tile is rendered and its children are not. If the introduced SSE exceeds the maximum allowed, then the tile is refined and its children are considered for rendering.
 
@@ -341,7 +343,9 @@ Parent Tile|Refined
 
 ### Unconditional Refinement
 
-TODO
+A tile that is "unconditionally refined" will always be REFINED, it will never be RENDERED. Such tiles are identified by having a geometric error greater than or equal to its parent's geometric error.
+
+One example of an unconditionally refined tile is a tile referencing an [external tileset](#external-tilesets). This tile has no renderable content itself, but may have child tiles with renderable content.
 
 ### Bounding Volumes
 
@@ -648,6 +652,4 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Re-introduce viewerRequestVolume as extension
 - Better picture for replacement refinement
 - More examples of geometric error in appendix
-- Add geometric error image from reference card
-- Section on unconditional refinement
 - Update external tilesets image

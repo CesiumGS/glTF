@@ -8,3 +8,8 @@ version = 1
 path = "figures/*"
 SPDX-FileCopyrightText = "2026 Bentley Systems, Incorporated"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "schema/*"
+SPDX-FileCopyrightText = "2026 Bentley Systems, Incorporated"
+SPDX-License-Identifier = "CC-BY-4.0"
