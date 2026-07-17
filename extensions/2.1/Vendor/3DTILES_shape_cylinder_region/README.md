@@ -39,11 +39,11 @@ The cylinder does not need to be completely represented by the volume—for inst
 
 | Property | Type | Description | Required |
 |---|---|---|---|
-| **minRadius** | `number` | The inner radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
-| **maxRadius** | `number` | The outer radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
+| **minimumRadius** | `number` | The inner radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
+| **maximumRadius** | `number` | The outer radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **height** | `number` | The height of the cylinder in meters along the Y-axis. | Yes, minimum: `0.0` |
-| **minAngle** | `number` | The minimum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
-| **maxAngle** | `number` | The maximum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
+| **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
+| **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
 
 ### Details
 
@@ -65,8 +65,8 @@ The cylinder is centered at the origin, where the radius is measured along the `
     "type": "cylinder region",
     "extensions": {
       "3DTILES_shape_cylinder_region": {
-        "minRadius": 0.5,
-        "maxRadius": 1.0,
+        "minimumRadius": 0.5,
+        "maximumRadius": 1.0,
         "height": 2.0
       }
     }
@@ -81,7 +81,7 @@ The cylinder is centered at the origin, where the radius is measured along the `
   </tr>
 </table>
 
-A cylinder region may also be confined to a certain angular range. The `minAngle` and `maxAngle` properties define the angles at which the region starts and stops on the cylinder.
+A cylinder region may also be confined to a certain angular range. The `minimumAngle` and `maximumAngle` properties define the angles at which the region starts and stops on the cylinder.
 
 Angles are given in radians within the range `[-pi, pi]` and open counter-clockwise around the cylinder. The bounds are aligned such that an angle of `0` aligns with the glTF right axis, i.e., the `-x` axis (see figure below.)
 
@@ -103,11 +103,11 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
     "type": "cylinder region",
     "extensions": {
       "3DTILES_shape_cylinder_region": {
-        "minRadius": 0.5,
-        "maxRadius": 1.0,
+        "minimumRadius": 0.5,
+        "maximumRadius": 1.0,
         "height": 2.0,
-        "minAngle": -1.570796,
-        "maxAngle": 1.570796
+        "minimumAngle": -1.570796,
+        "maximumAngle": 1.570796
       }
     }
   }

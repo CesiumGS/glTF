@@ -389,12 +389,12 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
         "3DTILES_shape_ellipsoid_region": {
           "semiMajorAxisRadius": 6378137.0,
           "semiMinorAxisRadius": 6356752.314245179,
-          "minHeight": 0.0,
-          "maxHeight": 250000.0,
-          "minLongitude": -3.141592653589793,
-          "maxLongitude": 3.141592653589793,
-          "minLatitude": -1.5707963267948966,
-          "maxLatitude": 1.5707963267948966
+          "minimumHeight": 0.0,
+          "maximumHeight": 250000.0,
+          "minimumLongitude": -3.141592653589793,
+          "maximumLongitude": 3.141592653589793,
+          "minimumLatitude": -1.5707963267948966,
+          "maximumLatitude": 1.5707963267948966
         }
       }
     },

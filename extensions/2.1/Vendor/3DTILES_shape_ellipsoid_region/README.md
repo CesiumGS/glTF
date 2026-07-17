@@ -37,12 +37,12 @@ An ellipsoid region shape is defined by adding the `3DTILES_shape_ellipsoid_regi
 |---|---|---|---|
 | **semiMajorAxisRadius** | `number` | The radius along the semi-major axis of the reference ellipsoid in meters. Corresponds to the radii along the X and Z axes. | Yes, minimum: `0.0` |
 | **semiMinorAxisRadius** | `number` | The radius along the semi-minor axis of the reference ellipsoid in meters. Corresponds to the radius along the Y-axis. | Yes, minimum: `0.0` |
-| **minHeight** | `number` | The minimum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
-| **maxHeight** | `number` | The maximum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
-| **minLatitude** | `number` | The minimum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
-| **maxLatitude** | `number` | The maximum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
-| **minLongitude** | `number` | The minimum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
-| **maxLongitude** | `number` | The maximum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
+| **minimumHeight** | `number` | The minimum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
+| **maximumHeight** | `number` | The maximum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
+| **minimumLatitude** | `number` | The minimum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
+| **maximumLatitude** | `number` | The maximum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
+| **minimumLongitude** | `number` | The minimum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
+| **maximumLongitude** | `number` | The maximum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
 
 ### Details
 
@@ -51,7 +51,7 @@ The reference ellipsoid is centered at the origin. The `semiMajorAxisRadius` ind
 > [!NOTE]
 > The `x` and `z` radii are made equal to simplify the math required to render implicit regions along the ellipsoid.
 
-The `minHeight` and `maxHeight` properties indicate the heights of the region from the ellipsoid's surface in meters. A height of `0` sits right at the surface. Negative heights are also valid—they simply extend underneath the ellipsoid's surface.
+The `minimumHeight` and `maximumHeight` properties indicate the heights of the region from the ellipsoid's surface in meters. A height of `0` sits right at the surface. Negative heights are also valid—they simply extend underneath the ellipsoid's surface.
 
 This example corresponds to the image below it:
 
@@ -64,8 +64,8 @@ This example corresponds to the image below it:
       "3DTILES_shape_ellipsoid_region": {
         "semiMajorAxisRadius": 3.5,
         "semiMinorAxisRadius": 2.0,
-        "minHeight": 0.0,
-        "maxHeight": 0.5
+        "minimumHeight": 0.0,
+        "maximumHeight": 0.5
       }
     }
   }
@@ -74,7 +74,7 @@ This example corresponds to the image below it:
 
 ![](figures/hollow-ellipsoid.png)
 
-An ellipsoid region may also be confined to a specific latitude and/or longitude range. The `minLatitude` and `maxLatitude` properties represent the latitude values at which the region starts and stops, defined in the range `[-pi/2, pi/2]`. Similarly, the `minLongitude` and `maxLongitude` properties represent the longitude bounds within the range `[-pi, pi]`.
+An ellipsoid region may also be confined to a specific latitude and/or longitude range. The `minimumLatitude` and `maximumLatitude` properties represent the latitude values at which the region starts and stops, defined in the range `[-pi/2, pi/2]`. Similarly, the `minimumLongitude` and `maximumLongitude` properties represent the longitude bounds within the range `[-pi, pi]`.
 
 ```json
 "shapes": [
@@ -85,12 +85,12 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
       "3DTILES_shape_ellipsoid_region": {
         "semiMajorAxisRadius": 3.5,
         "semiMinorAxisRadius": 2.0,
-        "minHeight": 0.0,
-        "maxHeight": 0.5,
-        "minLongitude": 0.0,
-        "maxLongitude": 1.57079632679,
-        "minLatitude": -0.78539816339,
-        "maxLatitude": 0.78539816339
+        "minimumHeight": 0.0,
+        "maximumHeight": 0.5,
+        "minimumLongitude": 0.0,
+        "maximumLongitude": 1.57079632679,
+        "minimumLatitude": -0.78539816339,
+        "maximumLatitude": 0.78539816339
       }
     }
   }
@@ -99,7 +99,7 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
 
 ![](figures/half-ellipsoid.png)
 
-It is valid for the `maxLongitude` property to be less than `minLongitude`. This would define a region that crosses over the line at `-pi` or `pi`, equivalent to the International Date Line on Earth.
+It is valid for the `maximumLongitude` property to be less than `minimumLongitude`. This would define a region that crosses over the line at `-pi` or `pi`, equivalent to the International Date Line on Earth.
 
 ## Optional vs. Required
 
