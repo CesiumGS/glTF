@@ -30,24 +30,21 @@ Implicit tiling defines a concise representation of quadtrees and octrees in 3D 
 
 Implicit tiling also allows for better interoperability with existing GIS data formats with implicitly defined tiling schemes. Some examples are [TMS](https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification), [WMTS](https://www.ogc.org/standards/wmts), [S2](http://s2geometry.io/), and [CDB](https://docs.opengeospatial.org/is/15-113r5/15-113r5.html).
 
-In order to support sparse datasets, *availability* data determines which tiles exist. To support massive datasets, availability is partitioned into fixed-size *subtrees*. Subtrees may store *metadata* for available tiles and contents.
+In order to support sparse datasets, *availability* data determines which tiles exist. To support massive datasets, availability is partitioned into fixed-size *subtrees*. Subtrees may store *properties* for available tiles and contents.
 
-An `implicitTiling` object may be added to any tile in the tileset. The object defines how the tile is subdivided and where to locate content resources. It may be added to multiple tiles to create more complex subdivision schemes.
+The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset. The extension defines how the tile is subdivided and where to locate content resources. It may be added to multiple tiles to create more complex subdivision schemes.
 
 <p align="center">
   <img src="./figures/sparse-octree.png"/><br/>
-  A point cloud organized into a sparse octree. Data source: Trimble.
+  <em>A point cloud organized into a sparse octree. Data source: Trimble.</em>
 </p>
 
 ## Implicit Root Tile
 
-An `implicitTiling` object may be added to any tile in the tileset. Such a tile is called an *implicit root tile*, to distinguish it from the root tile of the tileset.
+The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset. Such a tile is called an *implicit root tile*, to distinguish it from the root tile of the tileset. The implicit root tile is [unconditionally refinable](../3DTILES_tileset/README.md#unconditional-refinement).
 
 ```json
 {
-  "boundingVolume": {
-    "shape": 0
-  },
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 5000.0,
@@ -55,11 +52,14 @@ An `implicitTiling` object may be added to any tile in the tileset. Such a tile 
     },
     "3DTILES_implicit_tiling": {
       "contentUri": "content/{level}/{x}/{y}.glb",
-      "subtreeUri": "subtrees/{level}/{x}/{y}.json",
+      "subtreeUri": "subtrees/{level}/{x}/{y}.subtree.glb",
       "subdivisionScheme": "QUADTREE",
       "availableLevels": 21,
       "subtreeLevels": 7
     }
+  },
+  "boundingVolume": {
+    "shape": 0
   }
 }
 ```
@@ -120,7 +120,7 @@ Property|Subdivision Rule
 >
 > Let the extent of the root bounding volume along one dimension *d* be *(min<sub>d</sub>, max<sub>d</sub>)*. The number of bounding volumes along that dimension for a given level  is *2<sup>level</sup>*. The size of each bounding volume at this level, along dimension *d*, is *size<sub>d</sub> = (max<sub>d</sub> - min<sub>d</sub>) / 2<sup>level</sup>*. The extent of the bounding volume of a child can then be computed directly as *(min<sub>d</sub> + size<sub>d</sub> * i, min<sub>d</sub> + size<sub>d</sub> * (i + 1))*, where *i* is the index of the child in dimension *d*.
 
-The computed tile `boundingVolume` and `geometricError` can be overridden with [tile metadata](#tile-metadata), if desired. Content bounding volumes are not computed automatically but they may be provided by [content metadata](#content-metadata). Tile and content bounding volumes shall maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence).
+The computed tile `boundingVolume` and `geometricError` can be overridden with [tile semantics](#tile-semantics), if desired. Content bounding volumes are not computed automatically but they may be provided by [content semantics](#content-semantics). Tile and content bounding volumes **SHOULD** maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence).
 
 ## Tile Coordinates
 
@@ -197,18 +197,18 @@ Tile availability determines which tiles exist in a subtree.
 
 Tile availability has the following restrictions:
 
-- If a non-root tile's availability is 1, its parent tile's availability shall also be 1.
-- A subtree shall have at least one available tile.
+- If a non-root tile's availability is 1, its parent tile's availability **MUST** also be 1.
+- A subtree **MUST** have at least one available tile.
 
 ![](./figures/tile-availability.png)
 
 #### Content Availability
 
-Content availability determines which tiles have a content resource. The content resource is located using the template URI of the tile content. When the tile has xref:{url-specification}README.adoc#core-tile-content[multiple contents], then there is one content availability bitstream for each content. If there are no tiles with a content resource, then `tile.content` and `tile.contents` shall be omitted.
+Content availability determines which tiles have a content resource. The content resource is located using the template URI of the tile content. If there are no tiles with a content resource, then `contentUri` **MUST** be omitted.
 
 Content availability has the following restrictions:
 
-- If content availability is 1 its corresponding tile availability shall also be 1. Otherwise, it would be possible to specify content files that are not reachable by the tiles of the tileset.
+- If content availability is 1 its corresponding tile availability **MUST** also be 1. Otherwise, it would be possible to specify content files that are not reachable by the tiles of the tileset.
 - If content availability is 0 and its corresponding tile availability is 1 then the tile is considered to be an empty tile.
 
 ![](./figures/content-availability.png)
@@ -221,50 +221,40 @@ Unlike tile and content availability, which store bits for every level in the su
 
 ![](./figures/child-subtree-availability.png)
 
-### Metadata
+### Semantics
 
-Subtrees may store metadata at multiple granularities.
+Tile properties such as bounding volume, refinement type, and geometric error that are computed automatically based on [Subdivision Rules](#subdivision-rules) but may be overridden by values stored in the subtree.
 
-- *Tile metadata* - metadata for available tiles in the subtree
-- *Content metadata* - metadata for available content in the subtree
-- *Subtree metadata* - metadata about the subtree as a whole
+In particular, `tileBoundingBox`, `tileBoundingSphere`, `tileBoundingRegion`, `tileMinimumHeight`, and `tileMaximumHeight` semantics may define a tighter bounding volume for a tile than is implicitly calculated.
 
-#### Tile Metadata
+> [!NOTE]
+>
+> The following diagram shows how tile height semantics may be used to define tighter bounding regions for an implicit tileset: The overall height of the bounding region of the whole tileset is 320. The bounding regions for the child tiles will be computed by splitting the bounding regions of the respective parent tile at its center. By default, the height will remain constant. By storing the _actual_ height of the contents in the respective region, and providing it as the `tileMaximumHeight` for each available tile, it is possible to define the tightest-fitting bounding region for each level.
+>
+> ![](figures/tile-height-semantics.png)
 
-When tiles are listed explicitly within a tileset, each tile's metadata is also embedded explicitly within the tile definition. When the tile hierarchy is _implicit_, as enabled by implicit tiling, tiles are not listed exhaustively and metadata cannot be directly embedded in tile definitions. To support metadata for tiles within implicit tiling schemes, property values for all available tiles in a subtree are encoded in a xref:{url-specification-metadata-referenceimplementation-propertytable}README.adoc#metadata-referenceimplementation-propertytable-property-table-implementation[property table]. The binary representation is particularly efficient for larger datasets with many tiles.
+### Properties
 
-Tile metadata exists only for available tiles and is tightly packed by an increasing tile index according to the <<implicittiling-availability,Availability Ordering>>. Each available tile shall have a value -- representation of missing values within a tile is possible only with the `noData` indicator defined by the xref:{url-specification-metadata}README.adoc#metadata-binary-table-format[_Binary Table Format_] specification.
+Subtrees may store application-specific properties at multiple granularities.
+
+- *Tile properties* - properties for available tiles in the subtree
+- *Content properties* - properties for available content in the subtree
+
+#### Tile Properties
+
+When tiles are listed explicitly within a tileset, each tile's properties are also embedded explicitly within the tile definition. When the tile hierarchy is _implicit_, as enabled by implicit tiling, tiles are not listed exhaustively and properties cannot be directly embedded in tile definitions. To support properties for tiles within implicit tiling schemes, property values for all available tiles in a subtree are encoded in a [property table](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
+
+Property values exist only for available tiles and are tightly packed by an increasing tile index according to the [Availability Ordering](#availability). Each available tile **MUST** have a value — representation of missing values within a tile is possible only with the `noData` indicator defined by a [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) schema.
 
 > [!NOTE]
 >
 > To determine the index into a property value array for a particular tile, count the number of available tiles occurring before that index, according to the tile Availability Ordering. If `i` available tiles occur before a particular tile, that tile's property values are stored at index `i` of each property value array. These indices may be precomputed for all available tiles, as a single pass over the subtree availability buffer.
 
-Tile properties can have xref:{url-specification-metadata-semantics}README.adoc#metadata-semantics-3d-metadata-semantic-reference[Semantics] which define how property values should be interpreted. In particular, `TILE_BOUNDING_BOX`, `TILE_BOUNDING_REGION`, `TILE_BOUNDING_SPHERE`, `TILE_MINIMUM_HEIGHT`, and `TILE_MAXIMUM_HEIGHT` semantics each define a more specific bounding volume for a tile than is implicitly calculated from implicit tiling. If more than one of these semantics are available for a tile, clients may select the most appropriate option based on use case and performance requirements.
+#### Content Properties
 
-> [!NOTE]
->
-> The following diagram shows how tile height semantics may be used to define tighter bounding regions for an implicit tileset: The overall height of the bounding region of the whole tileset is 320. The bounding regions for the child tiles will be computed by splitting the bounding regions of the respective parent tile at its center. By default, the height will remain constant. By storing the _actual_ height of the contents in the respective region, and providing it as the `TILE_MAXIMUM_HEIGHT` for each available tile, it is possible to define the tightest-fitting bounding region for each level.
-
-.Illustration of storing the actual heights of individual tiles using the `TILE_MAXIMUM_HEIGHT` semantic
-image::figures/tile-height-semantics.png[]
-====
-
-The `TILE_GEOMETRIC_ERROR` semantic allows tiles to provide a geometric error that overrides the implicitly computed geometric error.
-
-#### Content Metadata
-
-Subtrees may also store metadata for tile content. Content metadata exists only for available content and is tightly packed by increasing tile index. Binary property values are encoded in a compact xref:{url-specification-metadata}README.adoc#metadata-binary-table-format[_Binary Table Format_] defined by the 3D Metadata Specification and are stored in a xref:{url-specification-metadata-referenceimplementation-propertytable}README.adoc#metadata-referenceimplementation-propertytable-property-table-implementation[property table]. If the implicit root tile has multiple contents then content metadata is stored in multiple property tables.
-
-Content bounding volumes are not computed automatically by implicit tiling but may be provided by properties with semantics `CONTENT_BOUNDING_BOX`, `CONTENT_BOUNDING_REGION`, `CONTENT_BOUNDING_SPHERE`, `CONTENT_MINIMUM_HEIGHT`, and `CONTENT_MAXIMUM_HEIGHT`.
-
-If the tile content is assigned to a xref:{url-specification}README.adoc#core-tile-content[`group`] then all contents in the implicit tree are assigned to that group.
-
-#### Subtree Metadata
-
-Properties assigned to subtrees provide metadata about the subtree as a whole. Subtree metadata is encoded in JSON according to the xref:{url-specification-metadata}README.adoc#metadata-json-format[JSON Format] specification.
+Subtrees may also store properties for tile content. Property values exist only for available content and are tightly packed by increasing tile index.
 
 ## TODO
 
-- Finish extension
 - Template URI bypasses glTF 2.1 `files` mechanism, which would prevent [packaging external assets](https://github.com/KhronosGroup/glTF/issues/2589).
 - Incorporate [3DTILES_implicit_tiling_custom_template_variables](https://github.com/CesiumGS/3d-tiles/pull/815)

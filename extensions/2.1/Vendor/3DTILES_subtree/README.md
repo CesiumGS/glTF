@@ -26,7 +26,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-This extension specifies a well defined subset of glTF 2.1 for representing a subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md). A subtree stores tile, content, and child subtree availability, as well as metadata for available tiles and contents. A subtree is not intended for rendering and **SHOULD NOT** have any scenes.
+This extension specifies a well defined subset of glTF 2.1 for representing a subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md). A subtree stores tile, content, and child subtree availability, as well as properties for available tiles and contents. A subtree is not intended for rendering and **SHOULD NOT** have any scenes.
 
 ## File Extensions
 
@@ -38,11 +38,19 @@ Tile availability (`tileAvailability`) and child subtree availability (`childSub
 
 Content availability (`contentAvailability`) **MUST** be provided if the implicit root tile has a `contentUri` property, otherwise it **MUST** be omitted.
 
-Availability may be represented either as an array of values stored in an accessor or as a constant value.
+Availability may be represented either as a bitstream or a constant value. `bitstream` is an integer index that identifies the buffer view containing the availability bitstream. `constant` is an integer indicating whether all of the elements are available (`1`) or all are unavailable (`0`). `availableCount` is an integer indicating how many `1` bits exist in the availability bitstream.
 
-* `values` is an integer index that identifies the accessor containing the availability values. Accessor values **MUST** be either `1` indicating that the element is available or `0` indicating that the element is unavailable. The accessor `type` **MUST** be `SCALAR` and `componentType` must be `5121` (UNSIGNED_BYTE). `availableCount` is an integer indicating how many elements in the accessor are available.
-* `constant` is an integer indicating whether all of the elements are available (`1`) or all are unavailable (`0`).
+Availability bitstreams are packed in binary. For a bitstream with `N` values, the buffer view that stores these boolean values will consist of `ceil(N / 8)` bytes. When `N` is not divisible by `8`, then the unused bits of the last byte of this buffer **MUST** be set to 0.
 
+> [!NOTE]
+> Example accessing a boolean value for element `i`
+>
+> ```javascript
+> byteIndex = floor(i / 8)
+> bitIndex = i % 8
+> bitValue = (buffer[byteIndex] >> bitIndex) & 1
+> value = bitValue == 1
+> ```
 
 > **Example:** The JSON description of a subtree where each tile is available, but not all tiles have content, and not all child subtrees are available:
 >
