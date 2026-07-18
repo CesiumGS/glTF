@@ -1,10 +1,6 @@
-# SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
-#
-# SPDX-License-Identifier: CC-BY-4.0
-
 version = 1
 
 [[annotations]]
-path = "figures/*"
+path = ["figures/**/*.jpg", "figures/**/*.png", "figures/**/*.svg", "schema/**/*.schema.json"]
 SPDX-FileCopyrightText = "2026 Bentley Systems, Incorporated"
 SPDX-License-Identifier = "CC-BY-4.0"
