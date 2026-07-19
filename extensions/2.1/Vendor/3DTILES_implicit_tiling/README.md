@@ -30,7 +30,7 @@ Implicit tiling defines a concise representation of quadtrees and octrees in 3D 
 
 Implicit tiling also allows for better interoperability with existing GIS data formats with implicitly defined tiling schemes. Some examples are [TMS](https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification), [WMTS](https://www.ogc.org/standards/wmts), [S2](http://s2geometry.io/), and [CDB](https://docs.opengeospatial.org/is/15-113r5/15-113r5.html).
 
-In order to support sparse datasets, *availability* data determines which tiles exist. To support massive datasets, availability is partitioned into fixed-size *subtrees*. Subtrees may store *properties* for available tiles and contents.
+In order to support sparse datasets, *availability* data determines which tiles exist. To support massive datasets, availability is partitioned into fixed-size *subtrees*. Subtrees may store application-specific *properties* for available tiles and contents.
 
 The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset. The extension defines how the tile is subdivided and where to locate content resources. It may be added to multiple tiles to create more complex subdivision schemes.
 
@@ -106,8 +106,6 @@ Sphere bounding volumes are disallowed, as these cannot be divided into a quadtr
 
 Implicit tiling only requires defining the subdivision scheme, refinement strategy, bounding volume, and geometric error at the implicit root tile. For descendant tiles, these properties are computed automatically, based on the following rules:
 
-Subdivision rules for implicit tiling:
-
 Property|Subdivision Rule
 --|--
 `subdivisionScheme`|Constant for all descendant tiles.
@@ -146,7 +144,7 @@ A *Template URI* is a URI pattern used to refer to tiles by their tile coordinat
 
 Template URIs **MAY** include the variables `{level}`, `{x}`, `{y}`. Template URIs for octrees **MAY** also include `{z}`. When referring to a specific tile, the tile's coordinates are substituted for these variables.
 
-Template URIs, when given as relative paths, are resolved relative to the tileset JSON file.
+Template URIs, when given as relative paths, are resolved relative to the tileset file.
 
 ![](./figures/template-uri.png)
 
@@ -168,7 +166,7 @@ Each subtree contains tile availability, content availability, and child subtree
 
 - *Tile availability* indicates which tiles exist within the subtree
 - *Content availability* indicates which tiles have associated content resources
-- *Child subtree availability* indicates what subtrees are reachable from this subtree
+- *Child subtree availability* indicates which subtrees are reachable from this subtree
 
 Each type of availability is represented as a separate bitstream. Each bitstream is a 1D array where each element represents a node in the quadtree or octree. A 1 bit indicates that the element is available, while a 0 bit indicates that the element is unavailable. Alternatively, if all the bits in a bitstream are the same, a single constant value can be used instead.
 
@@ -244,7 +242,7 @@ Subtrees may store application-specific properties at multiple granularities.
 
 When tiles are listed explicitly within a tileset, each tile's properties are also embedded explicitly within the tile definition. When the tile hierarchy is _implicit_, as enabled by implicit tiling, tiles are not listed exhaustively and properties cannot be directly embedded in tile definitions. To support properties for tiles within implicit tiling schemes, property values for all available tiles in a subtree are encoded in a [property table](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
 
-Property values exist only for available tiles and are tightly packed by an increasing tile index according to the [Availability Ordering](#availability). Each available tile **MUST** have a value — representation of missing values within a tile is possible only with the `noData` indicator defined by a [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) schema.
+Property values exist only for available tiles and are tightly packed by an increasing tile index according to the [Availability Ordering](#availability). Each available tile **MUST** have a value — representation of missing values within a tile is possible only with the `noData` indicator defined by the schema.
 
 > [!NOTE]
 >
@@ -253,6 +251,10 @@ Property values exist only for available tiles and are tightly packed by an incr
 #### Content Properties
 
 Subtrees may also store properties for tile content. Property values exist only for available content and are tightly packed by increasing tile index.
+
+### Subtree File Format
+
+A subtree file is a glTF with the [`3DTILES_subtree`](../3DTILES_subtree/README.md) extension that contains availability and property values for a single subtree. See [`3DTILES_subtree`](../3DTILES_subtree/README.md) for more details.
 
 ## TODO
 

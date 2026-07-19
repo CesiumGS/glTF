@@ -52,8 +52,8 @@ For a bitstream with `N` values, the buffer view that stores these availability 
 > available = bitValue == 1
 > ```
 
-> **Example:** The JSON description of a subtree where each tile is available, but not all tiles have content, and not all child subtrees are available:
->
+The following examples shows a subtree where each tile is available, but not all tiles have content, and not all child subtrees are available:
+
 > ```json
 > {
 >   "buffers": [
@@ -96,9 +96,9 @@ Property name|Type|Component Type|Description
 --|--|--|--
 `tileBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the first three elements of the fourth column defines the box's translation.
 `tileBoundingSphere`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements define the x, y, and z values for the center of the sphere and the the last element defines the radius.
-`tileBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the tile, where the values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
-`tileMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the tile above or below the ellipsoid. Equivalent to the minimum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
-`tileMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the tile above or below the ellipsoid. Equivalent to the maximum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
+`tileBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region representing the geographic extents of the tile, where values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
+`tileMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the tile above or below the ellipsoid. Equivalent to the `minimumHeight` component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
+`tileMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the tile above or below the ellipsoid. Equivalent to the `maximumHeight` component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `tileHorizonOcclusionPoint`<sup>1</sup>|`VEC3`|`5130` (DOUBLE)|The horizon occlusion point of the tile expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire tile is below the horizon. See [Horizon Culling](https://cesium.com/blog/2013/04/25/horizon-culling/) for more information.
 `tileGeometricError`|`SCALAR`|`5130` (DOUBLE)|The geometric error of the tile.
 `tileRefine`|`SCALAR`|`5121` (UNSIGNED_BYTE)|The tile refinement type. Valid values are `0` (`"ADD"`) and `1` (`"REPLACE"`).
@@ -112,13 +112,14 @@ Property name|Type|Component Type|Description
 --|--|--|--
 `contentBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the first three elements of the fourth column defines the box's translation.
 `contentBoundingSphere`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements define the x, y, and z values for the center of the sphere and the the last element defines the radius.
-`contentBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the content, where the values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
-`contentMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the content above or below the ellipsoid. Equivalent to the minimum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
-`contentMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the content above or below the ellipsoid. Equivalent to the maximum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
+`contentBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region representing the geographic extents of the tile, where values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
+`contentMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the content above or below the ellipsoid. Equivalent to the `minimumHeight` component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
+`contentMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the content above or below the ellipsoid. Equivalent to the `maximumHeight` component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `contentHorizonOcclusionPoint`<sup>1</sup>|`VEC3`|`5130` (DOUBLE)|The horizon occlusion point of the content expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire content is below the horizon. See [Horizon Culling](https://cesium.com/blog/2013/04/25/horizon-culling/) for more information.
 `contentLayer`|`SCALAR`|`5121` (UNSIGNED_BYTE), `5123` (UNSIGNED_SHORT), `5125` (UNSIGNED_INT)| The content layer. See [3DTILES_layers](../3DTILES_layers/README.md).
 
-> **Example:** The same example as above but with tile and content semantics. Available tiles have a `tileHorizonOcclusionPoint` semantic and available contents have `contentMinimumHeight` and `contentMaximumHeight` semantics.
+The following example shows the same subtree as above but with tile and content semantics. Available tiles have a `tileHorizonOcclusionPoint` and available contents have a `contentMinimumHeight` and `contentMaximumHeight`.
+
 > ```json
 > {
 >   "buffers": [
