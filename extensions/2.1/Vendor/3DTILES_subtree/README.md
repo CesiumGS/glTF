@@ -26,11 +26,11 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-This extension specifies a well defined subset of glTF 2.1 for representing a subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md). A subtree stores tile, content, and child subtree availability, as well as properties for available tiles and contents. A subtree is not intended for rendering and **SHOULD NOT** have any scenes.
+This extension specifies a subset of glTF 2.1 for representing a subtree in [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md). A subtree stores tile, content, and child subtree availability, as well as properties for available tiles and contents. A subtree is not intended for rendering and **SHOULD NOT** have any scenes.
 
 ## File Extensions
 
-Assets that use the `3DTILES_subtree` extension **SHOULD** use the `.subtree.gltf` or `.subtree.glb` file extensions. Though not required, this convention helps differentiate subtree files from tileset and content files.
+Assets that use the `3DTILES_subtree` extension **SHOULD** use the `.subtree.gltf` or `.subtree.glb` file extensions. This convention helps differentiate subtree files from tileset and content files.
 
 ## Availability
 
@@ -40,72 +40,48 @@ Content availability (`contentAvailability`) **MUST** be provided if the implici
 
 Availability may be represented either as a bitstream or a constant value. `bitstream` is an integer index that identifies the buffer view containing the availability bitstream. `constant` is an integer indicating whether all of the elements are available (`1`) or all are unavailable (`0`). `availableCount` is an integer indicating how many `1` bits exist in the availability bitstream.
 
-Availability bitstreams are packed in binary. For a bitstream with `N` values, the buffer view that stores these boolean values will consist of `ceil(N / 8)` bytes. When `N` is not divisible by `8`, then the unused bits of the last byte of this buffer **MUST** be set to 0.
+For a bitstream with `N` values, the buffer view that stores these availability values will consist of `ceil(N / 8)` bytes. When `N` is not divisible by `8`, then the unused bits of the last byte of this buffer **MUST** be set to 0.
 
 > [!NOTE]
-> Example accessing a boolean value for element `i`
+> Example accessing availability for element `i`
 >
 > ```javascript
 > byteIndex = floor(i / 8)
 > bitIndex = i % 8
 > bitValue = (buffer[byteIndex] >> bitIndex) & 1
-> value = bitValue == 1
+> available = bitValue == 1
 > ```
 
 > **Example:** The JSON description of a subtree where each tile is available, but not all tiles have content, and not all child subtrees are available:
 >
 > ```json
 > {
->   "extensionsUsed": ["3DTILES_subtree"],
->   "extensionsRequired": ["3DTILES_subtree"],
->   "asset": {
->     "version": "2.1"
->   },
 >   "buffers": [
 >     {
->       "uri": "availability.bin",
->       "byteLength": 344
+>       "byteLength": 48
 >     }
 >   ],
 >   "bufferViews": [
 >     {
 >       "buffer": 0,
 >       "byteOffset": 0,
->       "byteLength": 85
+>       "byteLength": 11
 >     },
 >     {
->       "buffer": 0,
->       "byteOffset": 88,
->       "byteLength": 256
+>       "buffer": 1,
+>       "byteOffset": 16,
+>       "byteLength": 32
 >     }
 >   ],
->   "accessors": [
->     {
->       "type": "SCALAR",
->       "componentType": 5121,
->       "count": 85,
->       "bufferView": 0
->     },
->     {
->       "type": "SCALAR",
->       "componentType": 5121,
->       "count": 256,
->       "bufferView": 1
->     }
->   ],
->   "extensions": {
->     "3DTILES_subtree": {
->       "tileAvailability": {
->         "constant": 1,
->       },
->       "contentAvailability": [{
->         "values": 0,
->         "availableCount": 60
->       }],
->       "childSubtreeAvailability": {
->         "values": 1
->       }
->     }
+>   "tileAvailability": {
+>     "constant": 1,
+>   },
+>   "contentAvailability": [{
+>     "bitstream": 0,
+>     "availableCount": 60
+>   }],
+>   "childSubtreeAvailability": {
+>     "bitstream": 1
 >   }
 > }
 > ```
@@ -118,9 +94,9 @@ In particular, `tileBoundingBox`, `tileBoundingSphere`, `tileBoundingRegion`, `t
 
 Property name|Type|Component Type|Description
 --|--|--|--
-`tileBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the fourth column defines the box's translation.
+`tileBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the first three elements of the fourth column defines the box's translation.
 `tileBoundingSphere`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements define the x, y, and z values for the center of the sphere and the the last element defines the radius.
-`tileBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the tile, where the values are stored in west, south, east, north order in degrees. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
+`tileBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the tile, where the values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
 `tileMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the tile above or below the ellipsoid. Equivalent to the minimum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `tileMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the tile above or below the ellipsoid. Equivalent to the maximum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `tileHorizonOcclusionPoint`<sup>1</sup>|`VEC3`|`5130` (DOUBLE)|The horizon occlusion point of the tile expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire tile is below the horizon. See [Horizon Culling](https://cesium.com/blog/2013/04/25/horizon-culling/) for more information.
@@ -134,13 +110,80 @@ Property name|Type|Component Type|Description
 
 Property name|Type|Component Type|Description
 --|--|--|--
-`contentBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the content, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the fourth column defines the box's translation.
+`contentBoundingBox`|`MAT4`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix defines the box's rotation and scale and the first three elements of the fourth column defines the box's translation.
 `contentBoundingSphere`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements define the x, y, and z values for the center of the sphere and the the last element defines the radius.
-`contentBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the content, where the values are stored in west, south, east, north order in degrees. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
+`contentBoundingRegion`|`VEC4`|`5130` (DOUBLE)|The bounding region of the content, where the values are stored in west, south, east, north order in radians. See [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md).
 `contentMinimumHeight`|`SCALAR`|`5130` (DOUBLE)|The minimum height of the content above or below the ellipsoid. Equivalent to the minimum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `contentMaximumHeight`|`SCALAR`|`5130` (DOUBLE)|The maximum height of the content above or below the ellipsoid. Equivalent to the maximum height component of [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md) and [3DTILES_shape_s2](../3DTILES_shape_s2/README.md).
 `contentHorizonOcclusionPoint`<sup>1</sup>|`VEC3`|`5130` (DOUBLE)|The horizon occlusion point of the content expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire content is below the horizon. See [Horizon Culling](https://cesium.com/blog/2013/04/25/horizon-culling/) for more information.
 `contentLayer`|`SCALAR`|`5121` (UNSIGNED_BYTE), `5123` (UNSIGNED_SHORT), `5125` (UNSIGNED_INT)| The content layer. See [3DTILES_layers](../3DTILES_layers/README.md).
+
+> **Example:** The same example as above but with tile and content semantics. Available tiles have a `tileHorizonOcclusionPoint` semantic and available contents have `contentMinimumHeight` and `contentMaximumHeight` semantics.
+> ```json
+> {
+>   "buffers": [
+>     {
+>       "name": "Availability Buffer",
+>       "uri": "availability.bin",
+>       "byteLength": 48
+>     },
+>     {
+>       "name": "Semantics Buffer",
+>       "uri": "semantics.bin",
+>       "byteLength": 3000
+>     }
+>   ],
+>   "bufferViews": [
+>     { "buffer": 0, "byteOffset": 0, "byteLength": 11 },
+>     { "buffer": 0, "byteOffset": 16, "byteLength": 32 },
+>     { "buffer": 1, "byteOffset": 0, "byteLength": 2040 },
+>     { "buffer": 1, "byteOffset": 2040, "byteLength": 480 },
+>     { "buffer": 1, "byteOffset": 2520, "byteLength": 480 },
+>   ],
+>   "accessors": [
+>     {
+>       "name": "horizon occlusion points",
+>       "type": "VEC3",
+>       "componentType": 5130,
+>       "bufferView": 2
+>       "count": 85
+>     },
+>     {
+>       "name": "content min heights",
+>       "type": "SCALAR",
+>       "componentType": 5130,
+>       "bufferView": 3,
+>       "count": 60
+>     },
+>     {
+>       "name": "content max heights",
+>       "type": "SCALAR",
+>       "componentType": 5130,
+>       "bufferView": 4,
+>       "count": 60
+>     }
+>   ],
+>   "tileAvailability": {
+>     "constant": 1
+>   },
+>   "contentAvailability": [{
+>     "bitstream": 0,
+>     "availableCount": 60
+>   }],
+>   "childSubtreeAvailability": {
+>     "bitstream": 1
+>   },
+>   "tileHorizonOcclusionPoint": {
+>     "values": 0
+>   },
+>   "contentMinimumHeight": {
+>     "values": 1
+>   },
+>   "contentMaximumHeight": {
+>     "values": 2
+>   }
+> }
+> ```
 
 ## Metadata
 
@@ -209,7 +252,7 @@ Subtrees may store metadata for available tiles and content.
 >     {
 >       "name": "Availability Buffer",
 >       "uri": "availability.bin",
->       "byteLength": 344
+>       "byteLength": 48
 >     },
 >     {
 >       "name": "Metadata Buffer",
@@ -218,8 +261,8 @@ Subtrees may store metadata for available tiles and content.
 >     }
 >   ],
 >   "bufferViews": [
->     { "buffer": 0, "byteOffset": 0, "byteLength": 85 },
->     { "buffer": 0, "byteOffset": 88, "byteLength": 256 },
+>     { "buffer": 0, "byteOffset": 0, "byteLength": 11 },
+>     { "buffer": 0, "byteOffset": 16, "byteLength": 32 },
 >     { "buffer": 1, "byteOffset": 0, "byteLength": 2040 },
 >     { "buffer": 1, "byteOffset": 2040, "byteLength": 1530 },
 >     { "buffer": 1, "byteOffset": 3576, "byteLength": 344 },
@@ -250,11 +293,11 @@ Subtrees may store metadata for available tiles and content.
 >         "constant": 1,
 >       },
 >       "contentAvailability": [{
->         "values": 0,
+>         "bitstream": 0,
 >         "availableCount": 60
 >       }],
 >       "childSubtreeAvailability": {
->         "values": 1
+>         "bitstream": 1
 >       }
 >     },
 >     "EXT_structural_metadata": {
