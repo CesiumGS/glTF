@@ -182,13 +182,13 @@ The top-level `3DTILES_tileset` extension has the following properties:
 
 - `geometricError` is a nonnegative number that defines the error, in meters, that determines if the tileset is rendered. At runtime, the geometric error is used to compute *Screen-Space Error* (SSE), the error measured in pixels. If the SSE does not exceed a required minimum, the tileset should not be rendered, and none of its tiles should be considered for rendering. See [Geometric error](#geometric-error).
 
-> **Note:** The tileset geometric error is different than tile geometric error. The tileset geometric error is used to determine whether the root tile is considered for rendering whereas the tile geometric error is used to determine whether the tile's children are considered for rendering.
+> **Note:** The tileset geometric error is different from tile geometric error. The tileset geometric error is used to determine whether the root tile is considered for rendering whereas the tile geometric error is used to determine whether the tile's children are considered for rendering.
 
 Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### Tile
 
-Tiles are represented as nodes in the glTF node hierarchy. A tile consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
+Tiles are represented as nodes in the glTF node hierarchy. A tile consists of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
 
 ![](./figures/tile.png)
 
@@ -498,7 +498,7 @@ Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_imp
   <img src="./figures/implicit-tiling-small.png"/>
 </p>
 
-## Conditional Content
+### Conditional Content
 
 TODO
 
@@ -565,6 +565,12 @@ The following example shows a tileset with tileset properties, tile properties, 
   ]
 }
 ```
+
+### Viewer Request Volumes
+
+TODO
+
+When rendering a variety of different data as 3D Tiles, choosing which datasets to render based on `geometricError` alone may be challenging. The [3DTILES_viewer_request_volume extension](../3DTILES_viewer_request_volume/README.md) extension allows a node to define a volume, using the same schema as `boundingVolume`, that the viewer shall be inside of before the tile's content will be requested and before the tile will be refined based on `geometricError`.
 
 ### Declarative Styling
 
@@ -653,3 +659,4 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 - Better picture for replacement refinement
 - More examples of geometric error in appendix
 - Update external tilesets image
+- Is declarative styling going to be an extension? Or where does it fit in the schema?
