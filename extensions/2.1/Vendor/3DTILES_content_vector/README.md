@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# 3DTILES_content_vector
+# 3DTILES\_content\_vector
 
 ## Contributors
 
