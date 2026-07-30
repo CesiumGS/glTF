@@ -17,21 +17,17 @@
         },
         "height": {
             "type": "number",
-            "description": "The height of the cylinder in meters along the Y-axis, in meters.",
+            "description": "The height of the cylinder along the Y-axis, in meters.",
             "minimum": 0
         },
         "minimumAngle": {
             "type": "number",
-            "description": "The minimum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region starts. Must be in the range [-pi, pi].",
-            "minimum": -3.14159265359,
-            "maximum": 3.14159265359,
+            "description": "The minimum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region starts. Together with maximumAngle this must satisfy (0 <= abs(maximumAngle - minimumAngle) <= 2 * pi).",
             "default": -3.14159265359
         },
         "maximumAngle": {
             "type": "number",
-            "description": "The maximum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region ends. Must be in the range [-pi, pi].",
-            "minimum": -3.14159265359,
-            "maximum": 3.14159265359,
+            "description": "The maximum angle of the cylinder region in radians. In other words, this is the angle where the cylinder region ends. Together with maximumAngle this must satisfy (0 <= abs(maximumAngle - minimumAngle) <= 2 * pi).",
             "default": 3.14159265359
         }
     },

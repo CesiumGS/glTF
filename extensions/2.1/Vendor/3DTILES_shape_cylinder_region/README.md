@@ -27,7 +27,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension defines a cylinder-conforming region as an additional shape type for glTF 2.1 shapes. These regions are useful for visualizing real-world data that has been captured by cylindrical sensors.
 
-`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` should be set to `"cylinder region"`. The properties define a region following the surface of a cylinder between two different radius values.
+`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`. The `minimumRadius`, `maximumRadius`, and `height` properties are required. These properties define a region following the surface of a cylinder between two different radius values. Two optional properties, `minimumAngle` and `maximumAngle`, define the maximum angle of the cylinder region in radians.
 
 The cylinder does not need to be completely represented by the volume—for instance, the region may be hollow inside like a tube. However, an inner radius of `0.0` results in a completely solid cylinder.
 
@@ -42,8 +42,20 @@ The cylinder does not need to be completely represented by the volume—for inst
 | **minimumRadius** | `number` | The inner radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **maximumRadius** | `number` | The outer radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **height** | `number` | The height of the cylinder in meters along the Y-axis. | Yes, minimum: `0.0` |
-| **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
-| **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
+| **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `-3.14159265359` |
+| **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `3.14159265359` |
+
+#### Radius Validation
+
+The radii **MUST** satisfy:
+
+$$radius_{min} \leqslant radius_{max}$$
+
+#### Angle Validation
+
+To preserve sampling at the antemeridian, the minimum and maximum angles **MUST** be within the range:
+
+$$0 \leqslant | angle_{max} - angle_{min} | \leqslant 2 \cdot pi$$
 
 ### Details
 

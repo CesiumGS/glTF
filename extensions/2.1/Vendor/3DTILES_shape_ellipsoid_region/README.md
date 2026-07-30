@@ -23,7 +23,7 @@ Written against the glTF 2.1 spec.
 
 This extension defines an ellipsoid-conforming region as an additional shape type for glTF 2.1 shapes. These regions are commonly used in geospatial applications to describe volumes that conform to the curvature of the Earth, or other bodies.
 
-`3DTILES_shape_ellipsoid_region` extends the `shape` object in glTF 2.1. The `shape.type` should be set to `"ellipsoid region"`. The properties define the region following the surface of the ellipsoid between two different height values.
+`3DTILES_shape_ellipsoid_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"ellipsoid region"`. The properties define the region following the surface of the ellipsoid between two different height values.
 
 The volume does not necessarily contain the full ellipsoid—and for many geospatial use cases, it will not. Rather, the ellipsoid is used as a reference from which the actual region is extruded. However, a region may extend beneath the surface of the ellipsoid. Given the right height values, the region could contain the entire ellipsoid if desired.
 
@@ -39,10 +39,22 @@ An ellipsoid region shape is defined by adding the `3DTILES_shape_ellipsoid_regi
 | **semiMinorAxisRadius** | `number` | The radius along the semi-minor axis of the reference ellipsoid in meters. Corresponds to the radius along the Y-axis. | Yes, minimum: `0.0` |
 | **minimumHeight** | `number` | The minimum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
 | **maximumHeight** | `number` | The maximum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
-| **minimumLatitude** | `number` | The minimum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
-| **maximumLatitude** | `number` | The maximum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
-| **minimumLongitude** | `number` | The minimum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `-3.14159265359` |
-| **maximumLongitude** | `number` | The maximum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range `[-pi, pi]`. | No, default: `3.14159265359` |
+| **minimumLatitude** | `number` | The minimum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
+| **maximumLatitude** | `number` | The maximum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
+| **minimumLongitude** | `number` | The minimum longitude of the region, in radians. See [Longitude Limits](#longitude-limits). | No, default: `-3.14159265359` |
+| **maximumLongitude** | `number` | The maximum longitude of the region, in radians. See [Longitude Limits](#longitude-limits). | No, default: `3.14159265359` |
+
+#### Latitude Limits
+
+TODO/TBD: What happens at the poles??? Are we dealing with geodetic or geocentric latitude? Why aren't we defining minLat <= maxLat???
+
+#### Longitude Limits
+
+When evaluated, the `minimumLongitude` and `maximumLongitude` values **MUST** satisfy this requirement:
+
+$$0 \leqslant | longitude_{max} - longitude_{min} | \leqslant 2 \cdot \pi$$
+
+This helps to preserve sampling at the antemeridian.
 
 ### Details
 

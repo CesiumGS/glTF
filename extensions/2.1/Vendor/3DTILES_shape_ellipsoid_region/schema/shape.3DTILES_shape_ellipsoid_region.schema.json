@@ -25,30 +25,26 @@
         },
         "minimumLatitude": {
             "type": "number",
-            "description": "The minimum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range [-pi/2, pi/2].",
+            "description": "The minimum latitude of the region, in radians. Must be in the range [-pi/2, pi/2].",
             "minimum": -1.57079632679,
             "maximum": 1.57079632679,
             "default": -1.57079632679
         },
         "maximumLatitude": {
             "type": "number",
-            "description": "The maximum latitude (a.k.a. polar angle) of the region, in radians. Must be in the range [-pi/2, pi/2].",
+            "description": "The maximum latitude of the region, in radians. Must be in the range [-pi/2, pi/2].",
             "minimum": -1.57079632679,
             "maximum": 1.57079632679,
             "default": 1.57079632679
         },
         "minimumLongitude": {
             "type": "number",
-            "description": "The minimum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range [-pi, pi].",
-            "minimum": -3.14159265359,
-            "maximum": 3.14159265359,
+            "description": "The minimum longitude of the region, in radians. Minimum and maximum longitude must evaluate to (0 <= abs(maximumLongitude - minimumLongitude) <= 2 * pi).",
             "default": -3.14159265359
         },
         "maximumLongitude": {
             "type": "number",
-            "description": "The maximum longitude (a.k.a. azimuthal angle) of the region, in radians. Must be in the range [-pi, pi].",
-            "minimum": -3.14159265359,
-            "maximum": 3.14159265359,
+            "description": "The maximum longitude of the region, in radians. Minimum and maximum longitude must evaluate to (0 <= abs(maximumLongitude - minimumLongitude) <= 2 * pi).",
             "default": 3.14159265359
         }
     },
