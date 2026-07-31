@@ -51,8 +51,8 @@ The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset.
       "refine": "REPLACE"
     },
     "3DTILES_implicit_tiling": {
-      "contentUri": "content/{level}/{x}/{y}.glb",
-      "subtreeUri": "subtrees/{level}/{x}/{y}.subtree.glb",
+      "contentUri": "content/{level}/{right}/{forward}.glb",
+      "subtreeUri": "subtrees/{level}/{right}/{forward}.subtree.glb",
       "subdivisionScheme": "QUADTREE",
       "availableLevels": 21,
       "subtreeLevels": 7
@@ -84,7 +84,7 @@ The following constraints apply to implicit root tiles:
 
 A *subdivision scheme* is a recursive pattern for dividing a bounding volume of a tile into smaller children tiles that take up the same space.
 
-A *quadtree* divides space only on the `x` and `y` dimensions. It divides each tile into 4 smaller tiles where the `x` and `y` dimensions are halved. The quadtree `z` minimum and maximum remain unchanged. The resulting tree has 4 children per tile.
+A *quadtree* divides space only on the `right` (-x) and `forward` (+z) dimensions. It divides each tile into 4 smaller tiles where the `right` and `forward` dimensions are halved. The quadtree `up` (+y) minimum and maximum remain unchanged. The resulting tree has 4 children per tile.
 
 <p align="center">
   <img src="./figures/quadtree.png"/><br/>
@@ -122,19 +122,19 @@ The computed tile `boundingVolume` and `geometricError` can be overridden with [
 
 ## Tile Coordinates
 
-*Tile coordinates* are a tuple of integers that uniquely identify a tile. Tile coordinates are either `(level, x, y)` for quadtrees or `(level, x, y, z)` for octrees. All tile coordinates are 0-indexed.
+*Tile coordinates* are a tuple of integers that uniquely identify a tile. Tile coordinates are either `(level, right, forward)` for quadtrees or `(level, right, forward, up)` for octrees. All tile coordinates are 0-indexed.
 
 `level` is 0 for the implicit root tile. This tile's children are at level 1, and so on.
 
-`x`, `y`, and `z` coordinates define the location of the tile within the level.
+`right`, `forward`, and `up` coordinates define the location of the tile within the level.
 
 For `box` bounding volumes:
 
 Coordinate|Positive Direction
 --|--
-`x`|Along the `+x` axis of the bounding box
-`y`|Along the `+y` axis of the bounding box
-`z`|Along the `+z` axis of the bounding box
+`right`|Along the right axis of the bounding box (`+x` to `-x`)
+`forward`|Along the forward axis of the bounding box (`-z` to `+z`)
+`up`|Along the up axis of the bounding box (`-y` to `+y`)
 
 ![](./figures/box-coordinates.png)
 
@@ -142,7 +142,7 @@ Coordinate|Positive Direction
 
 A *Template URI* is a URI pattern used to refer to tiles by their tile coordinates.
 
-Template URIs **MAY** include the variables `{level}`, `{x}`, `{y}`. Template URIs for octrees **MAY** also include `{z}`. When referring to a specific tile, the tile's coordinates are substituted for these variables.
+Template URIs **MAY** include the variables `{level}`, `{right}`, `{forward}`. Template URIs for octrees **MAY** also include `{up}`. When referring to a specific tile, the tile's coordinates are substituted for these variables.
 
 Template URIs, when given as relative paths, are resolved relative to the tileset file.
 
@@ -244,5 +244,3 @@ A subtree is a glTF with the [`3DTILES_subtree`](../3DTILES_subtree/README.md) e
 
 - Template URI bypasses glTF 2.1 `files` mechanism, which would prevent [packaging external assets](https://github.com/KhronosGroup/glTF/issues/2589).
 - Incorporate [3DTILES_implicit_tiling_custom_template_variables](https://github.com/CesiumGS/3d-tiles/pull/815)
-- Update template URI image .b3dm
-- Decide on z-up or y-up

@@ -2,11 +2,11 @@
 
 ## Converting from Tile Coordinates to Morton Index
 
-A [Morton index](https://en.wikipedia.org/wiki/Z-order_curve) is computed by interleaving the bits of the `(x, y)` or `(x, y, z)` coordinates of a tile. Specifically:
+A [Morton index](https://en.wikipedia.org/wiki/Z-order_curve) is computed by interleaving the bits of the `(right, forward)` or `(right, forward, up)` coordinates of a tile. Specifically:
 
 ```js
-quadtreeMortonIndex = interleaveBits(x, y)
-octreeMortonIndex = interleaveBits(x, y, z)
+quadtreeMortonIndex = interleaveBits(right, forward)
+octreeMortonIndex = interleaveBits(right, forward, up)
 ```
 
 For example:
@@ -87,18 +87,18 @@ tile.globalLevel = subtreeRoot.globalLevel + tile.localLevel
   <em>Illustration of how to compute the global level of a tile, from the global level of the root of the containing subtree, and the local level of the tile in this subtree.</em>
 </p>
 
-`(x, y, z)` coordinates follow the same pattern as Morton indices. The only difference is that the concatenation of bits happens component-wise. That is:
+`(right, forward, up)` coordinates follow the same pattern as Morton indices. The only difference is that the concatenation of bits happens component-wise. That is:
 
 ```js
-tile.globalX = concatBits(subtreeRoot.globalX, tile.localX)
-tile.globalY = concatBits(subtreeRoot.globalY, tile.localY)
+tile.globalRight = concatBits(subtreeRoot.globalRight, tile.localRight)
+tile.globalForward = concatBits(subtreeRoot.globalForward, tile.localForward)
 
 // Octrees only
-tile.globalZ = concatBits(subtreeRoot.globalZ, tile.localZ)
+tile.globalUp = concatBits(subtreeRoot.globalUp, tile.localUp)
 ```
 
 <p align="center">
-  <img src="./figures/global-to-local-xy.png"/><br/>
+  <img src="./figures/global-to-local.png"/><br/>
   <em>Illustration of the computation of the global tile coordinates, from the global coordinates of the containing subtree, and the local coordinates of the tile in this subtree.</em>
 </p>
 
@@ -109,17 +109,17 @@ The coordinates of a parent or child tile can also be computed with bitwise oper
 ```js
 childTile.level = parentTile.level + 1
 childTile.mortonIndex = concatBits(parentTile.mortonIndex, childIndex)
-childTile.x = concatBits(parentTile.x, childX)
-childTile.y = concatBits(parentTile.y, childY)
+childTile.right = concatBits(parentTile.right, childRight)
+childTile.forward = concatBits(parentTile.forward, childForward)
 
 // Octrees only
-childTile.z = concatBits(parentTile.z, childZ)
+childTile.up = concatBits(parentTile.up, childUp)
 ```
 
 Where:
 
 * `childIndex` is an integer in the range `[0, N)` that is the index of the child tile relative to the parent.
-* `childX`, `childY`, and `childZ` are single bits that represent which half of the parent's bounding volume the child is in in each direction.
+* `childRight`, `childForward`, and `childUp` are single bits that represent which half of the parent's bounding volume the child is in in each direction.
 
 <p align="center">
   <img src="./figures/parent-and-child-coordinates.png"/><br/>
