@@ -19,6 +19,10 @@ Draft
 
 Written against the glTF 2.1 spec.
 
+## Optional vs. Required
+
+This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
+
 ## Overview
 
 This extension defines an ellipsoid-conforming region as an additional shape type for glTF 2.1 shapes. These regions are commonly used in geospatial applications to describe volumes that conform to the curvature of the Earth, or other bodies.
@@ -41,14 +45,33 @@ An ellipsoid region shape is defined by adding the `3DTILES_shape_ellipsoid_regi
 | **maximumHeight** | `number` | The maximum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
 | **minimumLatitude** | `number` | The minimum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
 | **maximumLatitude** | `number` | The maximum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
-| **minimumLongitude** | `number` | The minimum longitude of the region, in radians. See [Longitude Limits](#longitude-limits). | No, default: `-3.14159265359` |
-| **maximumLongitude** | `number` | The maximum longitude of the region, in radians. See [Longitude Limits](#longitude-limits). | No, default: `3.14159265359` |
+| **minimumLongitude** | `number` | The minimum longitude of the region, in radians. See [Longitude](#longitude) for evaluation details. | No, default: `-3.14159265359` |
+| **maximumLongitude** | `number` | The maximum longitude of the region, in radians. See [Longitude](#longitude) for evaluation details. | No, default: `3.14159265359` |
 
-#### Latitude Limits
+#### Axis Radius
 
-TODO/TBD: What happens at the poles??? Are we dealing with geodetic or geocentric latitude? Why aren't we defining minLat <= maxLat???
+The semi-minor and semi-major axes of the reference ellipsoid are defined as floats using the `semiMinorAxisRadius` and `semiMajorAxisRadius` properties. Both the `semiMinorAxisRadius` and `semiMajorAxisRadius` are required and **MUST** be defined.
 
-#### Longitude Limits
+The property value of `semiMajorAxisRadius` corresponds to the radii along the X and Z axes. The property value of `semiMinorAxisRadius` corresponds to the radius along the Y-axis.
+
+> [!IMPORTANT]
+> For prolate spheroids, the geometrical semi-major axis (polar radius along Y) is larger than the equatorial radius (X and Z). However, for schema consistency across all shape types, this extension always uses `semiMajorAxisRadius` for the X and Z axes (equatorial radii) and `semiMinorAxisRadius` for the Y-axis (polar radius), following the convention of oblate reference bodies like Earth.
+
+#### Height
+
+The minimum and maximum height of the region relative to the ellipsoid's surface is defined by the `minimumHeight` and `maximumHeight` properties. These represent the height in meters referenced to the surface. Negative values are below the surface, and positive values are above the service.
+
+The height values must satisfy the condition $height_{min} \leqslant height_{max}$.
+
+#### Latitude
+
+The latitudinal span of the region is defined using the `minimumLatitude` and `maximumLatitude` properties. The values are the geodetic latitude represented in radians.
+
+Both `minimumLatitude` and `maximumLatitude` **MUST** be in the range $-\frac{\pi}{2} \leqslant latitude \leqslant \frac{\pi}{2}$ and satisfy the condition $latitude_{min} \leqslant latitude_{max}$.
+
+#### Longitude
+
+The longitudinal span of the region is defined using the `minimumLongitude` and `maximumLongitude` properties. These values are stored as radians.
 
 When evaluated, the `minimumLongitude` and `maximumLongitude` values **MUST** satisfy this requirement:
 
@@ -112,7 +135,3 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
 ![](figures/half-ellipsoid.png)
 
 It is valid for the `maximumLongitude` property to be less than `minimumLongitude`. This would define a region that crosses over the line at `-pi` or `pi`, equivalent to the International Date Line on Earth.
-
-## Optional vs. Required
-
-This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
