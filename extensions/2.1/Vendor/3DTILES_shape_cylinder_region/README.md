@@ -39,23 +39,40 @@ The cylinder does not need to be completely represented by the volume—for inst
 
 | Property | Type | Description | Required |
 |---|---|---|---|
-| **minimumRadius** | `number` | The inner radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
-| **maximumRadius** | `number` | The outer radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
+| **minimumRadius** | `number` | The minimum (inner) radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
+| **maximumRadius** | `number` | The maximum (outer) radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **height** | `number` | The height of the cylinder in meters along the Y-axis. | Yes, minimum: `0.0` |
 | **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `-3.14159265359` |
 | **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `3.14159265359` |
 
-#### Radius Validation
+#### Radius
 
-The radii **MUST** satisfy:
+The inner and outer radii are defined using the `minimumRadius` and `maximumRadius` properties. The outer radius of the cylinder is defined by the value stored in `maximumRadius`, and the inner radius of the cylinder is defined by the value stored in `minimumRadius`. The inner radius allows the creation of a hole in the middle of the cylinder. These properties are required.
 
-$$radius_{min} \leqslant radius_{max}$$
+The property values are stored as float point values and **MUST** satisfy the conditions:
 
-#### Angle Validation
+$$\begin{align}
+radius_{min} &\leqslant 0.0 \\
+radius_{max} &\leqslant 0.0 \\
+radius_{min} &\leqslant radius_{max}
+\end{align}$$
 
-To preserve sampling at the antemeridian, the minimum and maximum angles **MUST** be within the range:
+#### Height
 
-$$0 \leqslant | angle_{max} - angle_{min} | \leqslant 2 \cdot pi$$
+The height of the cylinder region in meters is defined by the `height` property. This property is required. The height is stored as a floating point value and **MUST** satisfy the condition:
+
+$$0.0 \leqslant height$$
+
+#### Angle
+
+The `minimumAngle` and `maximumAngle` represent optional properties that allow defining an arc for the cylinder region, oriented along `x` and `y` axes of the cylinder. The value of `minimumAngle` defaults to $-\pi$ and the value of `maximumAngle` defaults to $\pi$ when these properties are omitted, representing a full cylinder.
+
+To preserve sampling at the antemeridian, the minimum and maximum angles **MUST** satisfy the conditions:
+
+$$\begin{align}
+angle_{min} \leqslant angle_{max} \\
+0 \leqslant | angle_{max} - angle_{min} | \leqslant 2 \cdot pi
+\end{align}$$
 
 ### Details
 
