@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Marco Hutter, Cesium
 - Sean Lilley, Cesium
+- Björn Blissing, Vantor
 
 ## Status
 
@@ -17,13 +18,15 @@ Draft
 
 ## Dependencies
 
-Written against the glTF 2.1 spec.
+Written against the glTF 2.1 specification.
 
 Depends on [KHR_node_visibility](../../../2.0/Khronos/KHR_node_visibility).
 
 ## Optional vs. Required
 
-This extension is optional.
+This extension is optional. 
+
+Implementations that do not support this extension (but only the `KHR_node_visibility` extension) will simply use the value of the `visible` flag that is defined in the `KHR_node_visibility` extension.
 
 ## Overview
 
@@ -97,9 +100,19 @@ The `3DTILES_node_visibility_conditions` object that is associated with the `KHR
 
 ## Runtime Behavior
 
-This extension does not define the exact runtime behavior. It only offers the mechanism for _defining_ the conditions. The _evaluation_ of the conditions is application-specific. 
+The process for determining the value of the `visible` flag is as follows:
 
-A common implementation could be to evaluate the condition using simple equality checks. The application could inspect the top-level extension object, and allow the user to select the values for each condition variable from the given values in the `domain`. The node that carries the extension object would then turn `visible` if an only if each condition value matches the corresponding value that was selected from the top-level object. In this case, the _values_ of the `conditions` dictionary would directly correspond to elements of the respective `domain`.
+- A client defines a _visibility criteria_ object. If no such object is provided, then the `visible` flag keeps the value that it has in the file (defaulting to `false` if it was not defined)
+- The visibility criteria object MAY have arbitrary properties.
+- The client examines all `3DTILES_node_visibility_conditions` objects, and determines if they are matching the visibility criteria criteria object as follows:
+  - The client examines every property in the visibility criteria object.
+  - If the name of the property does not appear in the dimensions defined in the `dimensions` property of the top-level extension object, then the property is ignored.
+  - Otherwise, the client tests whether the value of the property in the visibility criteria object matches the corresponding value that is given in the `conditions`. The exact matching process is implementation-defined. Implementations MAY interpret the values as opaque values and perform an exact equality comparison, or they MAY interpret them using application-defined semantics (for example, interpreting a string as a date range and considering a criterion date to satisfy the condition when it falls within that range). This extension does not define how values are interpreted.
+  - If all property values from the conditions match the values from the visibility criteria object, then the `visible` flag of the `KHR_node_visibility` extension object is set to `true`. Otherwise, it is set to `false`. 
+
+
+> TODO_GLTF There currently is no easy mechanism for "wildcards" that allow activating ALL contents (regardless of their keys). This would be required in order to let this extension easily mimic the 'multiple contents' extension.
+
 
 ## JSON Schema
 
