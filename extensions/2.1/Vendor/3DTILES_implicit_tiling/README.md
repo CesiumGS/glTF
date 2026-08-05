@@ -220,7 +220,7 @@ Unlike tile and content availability, which store bits for every level in the su
 
 ### Attributes
 
-Each subtree may store attribute values for available tiles and content. This may include, for example, tighter fitting bounding volumes than those computed automatically based on [Subdivision Rules](#subdivision-rules).
+Each subtree may store attribute values for available tiles and contents. This may include, for example, tighter fitting bounding volumes than those computed automatically based on [Subdivision Rules](#subdivision-rules).
 
 Attribute values are tightly packed by an increasing tile index according to the [Availability Ordering](#availability).
 

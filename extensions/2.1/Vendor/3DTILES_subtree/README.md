@@ -96,17 +96,16 @@ For a bitstream with `N` values, the buffer view that stores these availability 
 
 ## Attributes
 
-A subtree may store attribute values for available tiles and content. This may include, for example, tighter fitting bounding volumes than those computed automatically based on [Subdivision Rules](../3DTILES_implicit_tiling/README.md#subdivision-rules).
+A subtree may store attribute values for available tiles and contents. This may include, for example, tighter fitting bounding volumes than those computed automatically based on [Subdivision Rules](../3DTILES_implicit_tiling/README.md#subdivision-rules).
 
 Each attribute is defined as a property of an attributes object. The name of the property corresponds to a semantic identifying the attribute. The value of the property is the index of an accessor that contains the data. The number of elements in the accessor **MUST** equal the number of available elements.
 
-Tile attributes are provided in the `tileAttributes` object and content attributes are provided in the `contentAttribute` object.
-
+Tile attributes are provided in the `tileAttributes` object and content attributes are provided in the `contentAttributes` object.
 
 If more than one bounding volume attribute is provided, clients may select the most appropriate option based on use case and performance requirements.
 
 > **Example:** A subtree with tile and content attributes:
-> 
+>
 > ```json
 > {
 >   "buffers": [
@@ -179,7 +178,7 @@ Below is the list of tile attribute semantics. Additional semantics may be defin
 Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"TILE_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).
-`"TILE_BOUNDING_SPHERE"`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
+`"TILE_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
 `"TILE_GEOMETRIC_ERROR"`|`"SCALAR"`|`5130` (DOUBLE)|The geometric error of the tile. See [Geometric Error](../3DTILES_tileset/README.md#geometric-error).
 `"TILE_REFINE"`|`"SCALAR"`|`5121` (UNSIGNED_BYTE)|The tile refinement. Elements in the accessor **MUST** be either `0` (`"ADD"`) or `1` (`"REPLACE"`). See [Refinement](../3DTILES_tileset/README.md#refinement).
 `"TILE_TRANSFORM"`|`"MAT4"`|`5130` (DOUBLE)|The tile transform. See [Transforms](../3DTILES_tileset/README.md#transforms).
@@ -190,16 +189,16 @@ Below is the list of content attribute semantics. Additional semantics may be de
 
 Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
-`CONTENT_BOUNDING_BOX`|`MAT4`|`5130` (DOUBLE)|The bounding box of the content, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).
-`CONTENT_BOUNDING_SPHERE`|`VEC4`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
+`"CONTENT_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the content, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).
+`"CONTENT_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
 
 ## Properties
 
-Subtrees may store application-specific properties for available tiles and content. Property values are stored in [property tables](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
+Subtrees may store application-specific properties for available tiles and contents. Property values are stored in [property tables](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
 
-`tilePropertyTable` is the index of a property table containing property values for available tiles.
+`tileProperties` is the index of a property table containing property values for available tiles.
 
-`contentPropertyTable` is the index of a property table containing property values for available content. If the implicit root tile does not have a `contentUri` property, then none of the implicit tiles have content, and `contentPropertyTable` property **MUST** be omitted.
+`contentProperties` is the index of a property table containing property values for available content. If the implicit root tile does not have a `contentUri` property, then none of the implicit tiles have content, and `contentProperties` property **MUST** be omitted.
 
 > **Example:** A subtree with tile and content properties:
 >
@@ -244,8 +243,8 @@ Subtrees may store application-specific properties for available tiles and conte
 >       "childSubtreeAvailability": {
 >         "bitstream": 1
 >       },
->       "tilePropertyTable": 0,
->       "contentPropertyTable": 1
+>       "tileProperties": 0,
+>       "contentProperties": 1
 >     },
 >     "EXT_structural_metadata": {
 >       "schema": {
