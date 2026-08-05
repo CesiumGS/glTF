@@ -512,21 +512,69 @@ The following example shows a tileset with tileset properties, tile properties, 
 {
   "extensionsUsed": ["3DTILES_tileset", "EXT_structural_metadata"],
   "extensionsRequired": ["3DTILES_tileset"],
-  "externalAssets": [
-    {
-      "uri": "root.glb"
-    }
-  ],
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 240
     },
     "EXT_structural_metadata": {
-      "class": "city",
-      "properties": {
-        "name": "New York City",
-        "country": "United States",
-        "population": 8804190
+      "schema": {
+        "id": "schema",
+        "classes": {
+          "city": {
+            "properties": {
+              "name": {
+                "type": "STRING"
+              },
+              "country": {
+                "type": "STRING"
+              },
+              "population": {
+                "type": "SCALAR",
+                "componentType": "UINT64"
+              }
+            }
+          },
+          "block": {
+            "properties": {
+              "borough": {
+                "type": "STRING"
+              },
+              "zipCode": {
+                "type": "SCALAR",
+                "componentType": "UINT32"
+              },
+              "population": {
+                "type": "SCALAR",
+                "componentType": "UINT64"
+              }
+            }
+          },
+          "geometryData": {
+            "properties": {
+              "vertices": {
+                "type": "SCALAR",
+                "componentType": "UINT32"
+              },
+              "primitives": {
+                "type": "SCALAR",
+                "componentType": "UINT32"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "asset": {
+    "version": "2.1",
+    "extensions": {
+      "EXT_structural_metadata": {
+        "class": "city",
+        "properties": {
+          "name": "New York City",
+          "country": "United States",
+          "population": 8804190
+        }
       }
     }
   },
