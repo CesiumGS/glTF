@@ -429,18 +429,23 @@ Additionally, [EXT_georeference](../EXT_georeference/README.md) may be used to t
 
 A tileset may be defined in either a **global** or **local** coordinate system. A tileset's global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn't have to be, e.g., a power plant may be defined fully in its local coordinate system.
 
-A tileset defined in a **local** coordinate system follows the standard glTF conventions: right-handed, +Y up, and linear units in meters.
+A tileset defined in a local coordinate system follows the standard glTF conventions: right-handed, +Y up, and linear units in meters.
 
-A tileset defined in a **global** coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset **MUST** specify a **geocentric (planetocentric)** coordinate reference system (CRS) with [EXT_crs](../EXT_crs/README.md).
+A tileset defined in a global coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
 <p align="center">
   <img src="./figures/ecef.png"/>
   <br>
-  <em>An illustration of an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
+  <em>An illustration <a href="https://epsg.org/crs_4978/WGS-84.html">EPSG 4978</a>, an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
  </em>
 </p>
 
-The example below shows a tileset defined in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) geocentric coordinate reference system.
+A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with one of the following extensions:
+
+- [EXT_crs_wkid](../EXT_crs_wkid/README.md)
+- [EXT_crs_wkt2](../EXT_crs_wkt2/README.md)
+
+The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
 ```json
 {
@@ -456,16 +461,16 @@ The example below shows a tileset defined in a [WGS 84](https://epsg.org/ellipso
 }
 ```
 
-> **Note:** Other coordinate reference system types, such as geographic and projected CRS, are not allowed by 3D Tiles as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
+> **Note:** 3D Tiles only allows local and geocentric (planetocentric) coordinate reference systems. Other coordinate reference system types, such as geographic and projected coordinate reference systems, are not allowed by 3D Tiles as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
 
-Tilesets may reference [external tilesets](#external-tilesets) in different coordinate systems. For example, a tileset could start in a geocentric CRS and then transition to a local engineering reference frame for higher precision.
+Tilesets may reference [external tilesets](#external-tilesets) in different coordinate systems. For example, a tileset could start in a geocentric coordinate reference system and then transition to a local engineering reference frame for higher precision.
 
 The following rules apply for CRS transitions:
 
 - Tilesets in a local coordinate system **MUST** only reference other tilesets in a local coordinate system
 - Tilesets in a geocentric coordinate system **MUST** only reference tilesets in a local coordinate system or tilesets in the same geocentric coordinate system.
 
-A [tile transform](#transforms) may be applied to transform a tile's local coordinate system to the parent tile's global coordinate system.
+A [tile transform](#transforms) may be applied to transform a tile's local coordinate system to the parent tile's geocentric coordinate system.
 
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and **CANNOT** be used by tiles defined in a local coordinate system.
 
