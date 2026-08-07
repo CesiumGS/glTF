@@ -27,8 +27,9 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 This extension declares the Coordinate Reference System (CRS) in which a glTF 2.1 asset was authored. The CRS is provided as a [Well-Known Text (version 2)](https://www.ogc.org/standards/wkt-crs/) string.
 
-The following example shows an asset defined in UTM Zone 11N coordinates.
+Assets with this extension are declared to have been authored for geospecific usage, with a particular CRS. Without this extension, glTF assets are understood to have been authored using the coordinate system of the base glTF specification — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section.
 
+The following example shows an asset defined in UTM Zone 11N coordinates.
 
 ```json
 {
@@ -42,3 +43,7 @@ The following example shows an asset defined in UTM Zone 11N coordinates.
   }
 }
 ```
+
+The extension has the following properties:
+
+- `wkt2` - the CRS as a [Well-Known Text (version 2)](https://www.ogc.org/standards/wkt-crs/) string.
