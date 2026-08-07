@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Janine Liu, Cesium
 - Sean Lilley, Cesium
+- Adam Morris, Cesium
 
 ## Status
 
