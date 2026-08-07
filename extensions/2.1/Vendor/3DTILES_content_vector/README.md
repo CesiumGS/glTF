@@ -121,9 +121,6 @@ When the `3DTILES_content_vector` extension is attached to a `content` definitio
 
 When `true`, a default 3D Tiles requirement is modified: `content.boundingVolume` is no longer required to be fully contained within node (tile) `.boundingVolume`.
 
-> [!WARNING]
-> TODO: Confirm that tile/content relationship above still holds.
-
 Client implementations SHOULD visually "clip" this content at the limits of `node.boundingVolume`. Overflow of content outside the tile bounding volume is referred to as a "buffer" region.
 
 The buffer region is provided to mitigate seams and discontinuities at tile boundaries. For polylines and polygons crossing tile boundaries and rendered with certain visual styles — particularly "wide" lines or outlines — display in tile A may be affected by the continuation of the same geometry a short distance ("buffer") into tile B. By clipping precisely at the tile boundary, sections of the geometry in tile B may still influence display within tile A, without duplicate rendering and/or z-fighting in tile B.
@@ -147,9 +144,6 @@ As a result, `content.boundingVolume` may extend arbitrarily outside of node (ti
 _This section is non-normative._
 
 Point, polyline, and polygon geometries are often associated with other geometries comprising a single conceptual feature. Polyline and polygon geometries may also be cut across neighboring tiles during the tiling process. In such cases, `EXT_mesh_features` and `EXT_structural_metadata` may be used to reference and store properties associated with vector features. Global unique IDs, stored as columns in `EXT_structural_metadata`, may be used to allow features split across multiple tiles to participate in interaction (e.g. highlighting) as a single entity.
-
-> [!WARNING]
-> TODO: Confirm that `EXT_mesh_features` and `EXT_structural_metadata` carry over into 3D Tiles 2.0?
 
 ## Layers
 
