@@ -1,0 +1,19 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "node.3DTILES_viewer_request_volume.schema.json",
+    "title": "node.3DTILES_viewer_request_volume",
+    "type": "object",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "shape": {
+            "allOf" : [ { "$ref" : "glTFid.schema.json" } ],
+            "description" : "The id of the shape used as the request volume."
+        },
+        "extensions": { },
+        "extras": { }
+    },
+    "additionalProperties" : false,
+    "required": [
+        "shape"
+    ]
+}
