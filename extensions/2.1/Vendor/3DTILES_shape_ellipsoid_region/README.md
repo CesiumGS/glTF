@@ -135,3 +135,19 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
 ![](figures/half-ellipsoid.png)
 
 It is valid for the `maximumLongitude` property to be less than `minimumLongitude`. This would define a region that crosses over the line at `-pi` or `pi`, equivalent to the International Date Line on Earth.
+
+## Implicit Subdivision
+
+When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(longitude, height, latitude)` for the ellipsoid region.
+
+A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. An `OCTREE` subdivision will subdivide along the longitude, height, and latitude axes.
+
+| Root Region  | Quadtree | Octree |
+|---|---|---|
+| ![Parent Cell](figures/root.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+
+Coordinate|Positive Direction
+--|--
+x| From west to east (increasing longitude)
+y| From bottom to top (increasing height)
+z| From south to north (increasing latitude)

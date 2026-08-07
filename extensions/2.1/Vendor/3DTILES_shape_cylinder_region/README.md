@@ -148,3 +148,19 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
     </td>
   </tr>
 </table>
+
+## Implicit Subdivision
+
+When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(radius, height, angle)` for the cylinder region.
+
+A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCTREE` subdivision will subdivide along the radius, height, and angle axes.
+
+| Root Cylinder  | Quadtree | Octree |
+|---|---|---|
+| ![Parent Cell](figures/root.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+
+Coordinate|Positive Direction
+--|--
+x| From the center outwards (increasing radius)
+y| From bottom to top (increasing height)
+z| From $-\pi$ to $\pi$ (counter-clockwise angle)
