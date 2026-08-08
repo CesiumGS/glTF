@@ -44,7 +44,7 @@ This extension georeferences a node to the provided geographic coordinates.
 
 The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)). In this case local coordinates will be transformed to geocentric (planetocentric) coordinates.
 
-This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with an extension such as [`EXT_crs_wkid`](../EXT_crs_wkid/README.md) or [`EXT_crs_wkt2`](../EXT_crs_wkt2/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
+This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`EXT_crs`](../EXT_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
 
 The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal
 

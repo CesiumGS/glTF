@@ -440,10 +440,7 @@ A tileset defined in a global coordinate system differs from the default convent
  </em>
 </p>
 
-A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with one of the following extensions:
-
-- [EXT_crs_wkid](../EXT_crs_wkid/README.md)
-- [EXT_crs_wkt2](../EXT_crs_wkt2/README.md)
+A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_crs](../EXT_crs/README.md).
 
 The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
@@ -453,9 +450,14 @@ The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WG
     "version": "2.1"
   },
   "extensions": {
-    "EXT_crs_wkid": {
-      "authority": "EPSG",
-      "wkid": 4978
+    "EXT_crs": {
+      "type": "wkid",
+      "extensions": {
+        "EXT_crs_wkid": {
+          "authority": "EPSG",
+          "wkid": 4978
+        }
+      }
     }
   }
 }
