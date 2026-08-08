@@ -40,9 +40,9 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Unconditional Refinement](#unconditional-refinement)
   - [Bounding Volumes](#bounding-volumes)
   - [Transforms](#transforms)
-  - [Coordinate Reference System](#coordinate-reference-system-crs)
   - [Spatial Coherence](#spatial-coherence)
   - [Spatial Data Structures](#spatial-data-structures)
+  - [Coordinate Reference System](#coordinate-reference-system-crs)
 - [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
   - [Conditional Content](#conditional-content)
@@ -425,6 +425,30 @@ Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DT
 
 Additionally, [EXT_georeference](../EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
 
+### Spatial Coherence
+
+As described above, the tree has spatial coherence; each tile has a bounding volume completely enclosing its content, and the content for child tiles are completely inside the parent's bounding volume. This does not imply that a child's bounding volume is completely inside its parent's bounding volume. For example:
+
+<p align="center">
+  <img src="./figures/parentBoundingSphere.jpg"/><br/>
+  Bounding sphere for a terrain tile.
+</p>
+
+<p align="center">
+  <img src="./figures/childBoundingSphere.jpg"/><br/>
+  <em>Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.</em>
+</p>
+
+### Spatial Data Structures
+
+3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by a root tile and, recursively, its children tiles, which can be organized by different types of spatial data structures.
+
+A runtime engine is generic and will render any tree defined by a tileset. Any combination of tile formats and refinement approaches can be used, enabling flexibility in supporting heterogeneous datasets, see [Refinement](#refinement).
+
+A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
+
+[Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
+
 ### Coordinate Reference System (CRS)
 
 A tileset may be defined in either a **global** or **local** coordinate system. A tileset's global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn't have to be, e.g., a power plant may be defined fully in its local coordinate system.
@@ -475,30 +499,6 @@ The following rules apply for CRS transitions:
 A [tile transform](#transforms) may be applied to transform a tile's local coordinate system to the parent tile's geocentric coordinate system.
 
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and **CANNOT** be used by tiles defined in a local coordinate system.
-
-### Spatial Coherence
-
-As described above, the tree has spatial coherence; each tile has a bounding volume completely enclosing its content, and the content for child tiles are completely inside the parent's bounding volume. This does not imply that a child's bounding volume is completely inside its parent's bounding volume. For example:
-
-<p align="center">
-  <img src="./figures/parentBoundingSphere.jpg"/><br/>
-  Bounding sphere for a terrain tile.
-</p>
-
-<p align="center">
-  <img src="./figures/childBoundingSphere.jpg"/><br/>
-  <em>Bounding spheres for the four child tiles. The children's content is completely inside the parent's bounding volume, but the children's bounding volumes are not since they are not tightly fit.</em>
-</p>
-
-### Spatial Data Structures
-
-3D Tiles incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. A tileset is composed of a tree, defined by a root tile and, recursively, its children tiles, which can be organized by different types of spatial data structures.
-
-A runtime engine is generic and will render any tree defined by a tileset. Any combination of tile formats and refinement approaches can be used, enabling flexibility in supporting heterogeneous datasets, see [Refinement](#refinement).
-
-A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, other spatial data structures may be more optimal.
-
-[Appendix A: Spatial data structures](#appendix-a-spatial-data-structures) gives a brief description of how 3D Tiles can represent various spatial data structures.
 
 ## Supporting Extensions
 
