@@ -27,22 +27,25 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 ## Overview
 
-This extension declares the Coordinate Reference System (CRS) in which a glTF 2.1 asset was authored. 
+Assets with this extension are declared to have been authored for geospecific usage, with a particular coordinate reference system (CRS) that overrides the [coordinate system](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) of the base glTF specification.
+
+A CRS may be one of the following types:
+
+- **Geographic** - longitude, latitude, height
+- **Geocentric** - global cartesian coordinates - x, y, z
+- **Projected** - local cartesian coordinates in a 2D projected space - x, y, height
+- **Compound** - combination of a horizontal + vertical CRS
+- **Local** - local cartesian coordinates - x, y, z
 
 
+For example, an asset may declare a projected CRS that is +X east, +Y north, +Z up and U.S. Survey Feet. This overrides the default glTF coordinate system of -X right, +Y up, +Z forward, and meters.
 
-Assets with this extension are declared to have been authored for geospecific usage, with a particular CRS that overrides the coordinate system of the base glTF specification — right-handed, +Y up, +Z forward, and -X right — as defined in the [Coordinate System and Units](https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units) section.
+There are several standard formats used to define coordinate reference systems. This extension doesn't adhere to a specific format,  instead defines a `"format"` property whose value **MUST** be defined by additional extensions:
 
-For example, the CRS may be a projected CRS that is Z-up and U.S. Survey Foot, or a geocentric CRS where there is no single "up" direction. In either case, the provided CRS overrides the default glTF coordinate system.
+- [EXT_crs_wkid](../EXT_crs_wkid/README.md) - Well-Known ID, commonly used to represent EPSG codes. Defines format `"wkid"`.
+- [EXT_crs_wkt2](../EXT_crs_wkt2/README.md) - Well-Known Text version 2. Defines format `"wkt2"`.
 
-There are several standard formats used to define coordinate reference systems. This extension doesn't adhere to a specific format,  instead defines a `"type"` property whose value **MUST** be defined by additional extensions.
-
-The list of additional extensions includes (but is not limited to):
-
-- [EXT_crs_wkid](../EXT_crs_wkid/README.md)
-- [EXT_crs_wkt2](../EXT_crs_wkt2/README.md)
-
-This flexibility allows implementations to chose with CRS formats they would like to support.
+Other formats may be defined by additional extensions.
 
 The following example shows an asset annotated to indicate a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)) with `EXT_crs` and `EXT_crs_wkid`.
 
