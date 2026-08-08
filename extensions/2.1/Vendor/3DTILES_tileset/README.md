@@ -257,8 +257,8 @@ The `content` object includes the following optional properties:
 
 `type`|Description
 --|--
-`"asset"`|A glTF asset without external assets.
-`"conditional"`|A glTF using the [`3DTILES_content_conditional`](../3DTILES_content_conditional/README.md) extension, see [Conditional Content](#conditional-content).
+`"content"`|A glTF asset without external assets.
+`"conditionalContent"`|A glTF using the [`3DTILES_content_conditional`](../3DTILES_content_conditional/README.md) extension, see [Conditional Content](#conditional-content).
 `"externalTileset`|A glTF using the `3DTILES_tileset` extension, see [External Tilesets](#external-tilesets).
 
 Additional values for "type" may be defined by extensions.
