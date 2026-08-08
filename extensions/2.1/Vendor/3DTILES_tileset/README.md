@@ -451,7 +451,7 @@ The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WG
   },
   "extensions": {
     "EXT_crs": {
-      "type": "wkid",
+      "format": "wkid",
       "extensions": {
         "EXT_crs_wkid": {
           "authority": "EPSG",

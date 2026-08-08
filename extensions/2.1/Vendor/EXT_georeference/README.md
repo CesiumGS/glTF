@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2026 The Khronos Group Inc.
+SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 
 SPDX-License-Identifier: CC-BY-4.0
 -->

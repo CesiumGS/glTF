@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "glTF.EXT_crs_wkid.schema.json",
-    "title": "glTF.EXT_crs_wkid",
+    "$id": "EXT_crs_wkid.schema.json",
+    "title": "EXT_crs_wkid",
     "type": "object",
     "description": "This extension declares the Coordinate Reference System (CRS) in which a glTF 2.1 asset was authored. The CRS is provided as a Well-Known ID (WKID), commonly an EPSG code.",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
