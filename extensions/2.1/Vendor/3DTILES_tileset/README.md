@@ -421,6 +421,8 @@ The transformation from each tile's local coordinate system to the tileset's glo
 
 The transform applies to the tile's bounding volume, content (if present), and content bounding volume (if present).
 
+The transform does not apply to `geometricError`&mdash;i.e., the scale defined by `transform` does not scale the geometric error&mdash;the geometric error is always defined in meters.
+
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. In such cases, the transform does not apply to these bounding volumes.
 
 Additionally, [EXT_georeference](../EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
