@@ -139,9 +139,9 @@ It is valid for the `maximumLongitude` property to be less than `minimumLongitud
 
 ## Implicit Subdivision
 
-When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(longitude, height, latitude)` for the ellipsoid region.
+When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(longitude, latitude, height)` for the ellipsoid region.
 
-A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. An `OCTREE` subdivision will subdivide along the longitude, height, and latitude axes.
+A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. An `OCTREE` subdivision will subdivide along the longitude, latitude, and height axes.
 
 | Root Region  | Quadtree | Octree |
 |---|---|---|
@@ -149,6 +149,7 @@ A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. A
 
 Coordinate|Positive Direction
 --|--
-x| From west to east (increasing longitude)
-y| From bottom to top (increasing height)
-z| From south to north (increasing latitude)
+longitude| From west to east (increasing longitude)
+latitude| From south to north (increasing latitude)
+height| From bottom to top (increasing height)
+
