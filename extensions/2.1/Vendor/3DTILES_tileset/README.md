@@ -421,7 +421,7 @@ The transformation from each tile's local coordinate system to the tileset's glo
 
 The transform applies to the tile's bounding volume, content (if present), and content bounding volume (if present).
 
-The transform does not apply to `geometricError`&mdash;i.e., the scale defined by `transform` does not scale the geometric error&mdash;the geometric error is always defined in meters.
+The transform does not apply to `geometricError`—i.e., the scale defined by `transform` does not scale the geometric error—the geometric error is always defined in meters.
 
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. In such cases, the transform does not apply to these bounding volumes.
 
