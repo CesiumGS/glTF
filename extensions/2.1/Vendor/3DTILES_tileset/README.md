@@ -610,9 +610,7 @@ The following example shows a tileset with tileset properties, tile properties, 
 
 ### Viewer Request Volumes
 
-TODO
-
-When rendering a variety of different data as 3D Tiles, choosing which datasets to render based on `geometricError` alone may be challenging. The [3DTILES_viewer_request_volume extension](../3DTILES_viewer_request_volume/README.md) extension allows a node to define a volume, using the same schema as `boundingVolume`, that the viewer shall be inside before the tile's content will be requested and before the tile will be refined based on `geometricError`.
+When rendering a variety of different data as 3D Tiles, choosing which datasets to render based on `geometricError` alone may be challenging. The [3DTILES_viewer_request_volume extension](../3DTILES_viewer_request_volume/README.md) extension defines a volume for a node, that the viewer shall be inside before the tile's content will be requested and before the tile will be refined based on `geometricError`.
 
 ### Declarative Styling
 
