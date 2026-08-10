@@ -58,7 +58,7 @@ This extension specifies a subset of glTF 2.1 for representing a tileset in [3D 
 
 Assets that use the `3DTILES_tileset` extension **SHOULD** use the `.tileset.gltf` or `.tileset.glb` file extensions. This convention helps differentiate tileset files from content files.
 
-The entry tileset **SHOULD** be named `root.tileset.gltf` to differentiate the entry tileset from [External Tilesets](#external-tilesets).
+The entry tileset **SHOULD** be named `root.tileset.gltf` or `root.tileset.glb` to differentiate the entry tileset from [External Tilesets](#external-tilesets).
 
 ## Constraints
 
@@ -714,7 +714,7 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 ## TODO
 
 - Re-introduce viewerRequestVolume as extension
-- Better picture for replacement refinement
 - More examples of geometric error in appendix
 - Update external tilesets image
-- Updates for https://github.com/CesiumGS/glTF/pull/117
+- Finish conditional content section https://github.com/CesiumGS/glTF/pull/117
+- Should the content "type" field by replaced by something like https://github.com/KhronosGroup/glTF/issues/2586#issuecomment-5234625074
