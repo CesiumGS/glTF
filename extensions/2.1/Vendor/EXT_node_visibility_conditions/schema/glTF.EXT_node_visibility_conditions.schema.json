@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "glTF.3DTILES_node_visibility_conditions.schema.json",
-  "title": "3DTILES_content_conditional extension",
-  "description": "Defines the structure of the extension object that is stored as the 3DTILES_node_visibility_conditions extension.",
+  "$id": "glTF.EXT_node_visibility_conditions.schema.json",
+  "title": "EXT_node_visibility_conditions extension",
+  "description": "Defines the structure of the extension object that is stored as the EXT_node_visibility_conditions extension.",
   "type": "object",
   "allOf": [ { "$ref": "glTFProperty.schema.json" } ],  
   "properties": {

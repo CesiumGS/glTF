@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "3DTILES_node_visibility_conditions.schema.json",
-  "title": "3DTILES_node_visibility_conditions",
+  "$id": "EXT_node_visibility_conditions.schema.json",
+  "title": "EXT_node_visibility_conditions",
   "description": "Defines the structure of the extension object that is associated with a KHR_node_visibility object to define the conditions for the visibility",
   "type": "object",
   "allOf": [ { "$ref": "glTFProperty.schema.json" } ],  

@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# 3DTILES_node_visibility_conditions
+# EXT_node_visibility_conditions
 
 ## Contributors
 
@@ -34,7 +34,7 @@ This extension adds support for conditions for the `KHR_node_visibility` extensi
 
 ## Extending the Visibility Extension
 
-The `KHR_node_visibility` extension is associated with a node, and defines the `visible` flag that indicates whether a node and all its descendants. The `3DTILES_node_visibility_conditions` extension extends this extension, and consists of two parts:
+The `KHR_node_visibility` extension is associated with a node, and defines the `visible` flag that indicates whether a node and all its descendants. The `EXT_node_visibility_conditions` extension extends this extension, and consists of two parts:
 
 - The main extension object is contained in the `KHR_node_visibility` extension object, and defines the conditions for the `visible` flag to be `true`
 - A top-level extension object defines the the condition variables that may appear in the extension object, and their possible values.
@@ -47,7 +47,7 @@ The following example is a glTF asset that uses the extension to define the cond
     "version": 2.1,
   },
   "extensions": {
-    "3DTILES_node_visibility_conditions": {
+    "EXT_node_visibility_conditions": {
       "dimensions": [
         {
           "name": "exampleTimeStamp",
@@ -78,7 +78,7 @@ The following example is a glTF asset that uses the extension to define the cond
         "KHR_node_visibility": {
           "visible": false,
           "extensions": {
-            "3DTILES_node_visibility_conditions": {
+            "EXT_node_visibility_conditions": {
               "conditions": {
                 "exampleTimeStamp": "2025-09-25",
                 "exampleRevision": "revision0",
@@ -96,14 +96,14 @@ The following example is a glTF asset that uses the extension to define the cond
 
 The top-level extension object defines the `dimensions` for the conditions. These are given as a dictionary that maps the name of the condition to the `domain`, which is an array containing all possible values for the condition variables.
 
-The `3DTILES_node_visibility_conditions` object that is associated with the `KHR_node_visibility` object of the only node defines the set of conditions based on which the `visible` flag of the `KHR_node_visibility` extension object should be `true` or `false`.
+The `EXT_node_visibility_conditions` object that is associated with the `KHR_node_visibility` object of the only node defines the set of conditions based on which the `visible` flag of the `KHR_node_visibility` extension object should be `true` or `false`.
 
 ## Runtime Behavior
 
-The process for determining the value of the `visible` flag based on the `3DTILES_node_visibility_conditions` object is left to the application. A common implementation could be that the client allows the user to select one value of each `domain` of the top-level extension object, and checks whether the corresponding values from the `3DTILES_node_visibility_conditions` object are equal to the selected values. This extension only defines the _structure_ for the conditions, but not their _interpretation_, so the exact interpretation of the conditions for setting the `visible` flag are left to the implementation or may be defined by future extensions.
+The process for determining the value of the `visible` flag based on the `EXT_node_visibility_conditions` object is left to the application. A common implementation could be that the client allows the user to select one value of each `domain` of the top-level extension object, and checks whether the corresponding values from the `EXT_node_visibility_conditions` object are equal to the selected values. This extension only defines the _structure_ for the conditions, but not their _interpretation_, so the exact interpretation of the conditions for setting the `visible` flag are left to the implementation or may be defined by future extensions.
 
 ## JSON Schema
 
-- [glTF.3DTILES_node_visibility_conditions.schema.json](schema/glTF.3DTILES_node_visibility_conditions.schema.json)
-- [3DTILES_node_visibility_conditions.schema.json](schema/3DTILES_node_visibility_conditions.schema.json)
+- [glTF.EXT_node_visibility_conditions.schema.json](schema/glTF.EXT_node_visibility_conditions.schema.json)
+- [EXT_node_visibility_conditions.schema.json](schema/EXT_node_visibility_conditions.schema.json)
 
