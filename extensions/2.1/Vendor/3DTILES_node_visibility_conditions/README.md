@@ -37,7 +37,7 @@ This extension adds support for conditions for the `KHR_node_visibility` extensi
 The `KHR_node_visibility` extension is associated with a node, and defines the `visible` flag that indicates whether a node and all its descendants. The `3DTILES_node_visibility_conditions` extension extends this extension, and consists of two parts:
 
 - The main extension object is contained in the `KHR_node_visibility` extension object, and defines the conditions for the `visible` flag to be `true`
-- A top-level extension object defines the structure of the conditions that may appear in the extension object.
+- A top-level extension object defines the the condition variables that may appear in the extension object, and their possible values.
 
 The following example is a glTF asset that uses the extension to define the condition for a node with an external asset to be visible:
 
@@ -100,19 +100,7 @@ The `3DTILES_node_visibility_conditions` object that is associated with the `KHR
 
 ## Runtime Behavior
 
-The process for determining the value of the `visible` flag is as follows:
-
-- A client defines a _visibility criteria_ object. If no such object is provided, then the `visible` flag keeps the value that it has in the file (defaulting to `false` if it was not defined)
-- The visibility criteria object MAY have arbitrary properties.
-- The client examines all `3DTILES_node_visibility_conditions` objects, and determines if they are matching the visibility criteria criteria object as follows:
-  - The client examines every property in the visibility criteria object.
-  - If the name of the property does not appear in the dimensions defined in the `dimensions` property of the top-level extension object, then the property is ignored.
-  - Otherwise, the client tests whether the value of the property in the visibility criteria object matches the corresponding value that is given in the `conditions`. The exact matching process is implementation-defined. Implementations MAY interpret the values as opaque values and perform an exact equality comparison, or they MAY interpret them using application-defined semantics (for example, interpreting a string as a date range and considering a criterion date to satisfy the condition when it falls within that range). This extension does not define how values are interpreted.
-  - If all property values from the conditions match the values from the visibility criteria object, then the `visible` flag of the `KHR_node_visibility` extension object is set to `true`. Otherwise, it is set to `false`. 
-
-
-> TODO_GLTF There currently is no easy mechanism for "wildcards" that allow activating ALL contents (regardless of their keys). This would be required in order to let this extension easily mimic the 'multiple contents' extension.
-
+The process for determining the value of the `visible` flag based on the `3DTILES_node_visibility_conditions` object is left to the application. A common implementation could be that the client allows the user to select one value of each `domain` of the top-level extension object, and checks whether the corresponding values from the `3DTILES_node_visibility_conditions` object are equal to the selected values. This extension only defines the _structure_ for the conditions, but not their _interpretation_, so the exact interpretation of the conditions for setting the `visible` flag are left to the implementation or may be defined by future extensions.
 
 ## JSON Schema
 
