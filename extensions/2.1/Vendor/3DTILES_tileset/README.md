@@ -295,7 +295,7 @@ When a tile points to an external tileset, the tile:
 
 - Cannot have any children; `node.children` **MUST** be omitted.
 - **MUST** set its content type to `"externalTileset"`.
-- Is [unconditionally refinable](#unconditionally-refinable) regardless of its geometric error.
+- Is [unconditionally refinable](#unconditional-refinement) regardless of its geometric error.
 
 ### Geometric Error
 
@@ -351,7 +351,7 @@ A list of extensions that enable additional shape types:
 - [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
 - [3DTILES_shape_s2](../3DTILES_shape_s2/README.md)
 
- The content may have an optional `boundingVolume`, the content bounding volume. Unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content. This enables tight view frustum culling, excluding from rendering any content not in the volume of what is potentially in view. When it is not defined, the tile's bounding volume is still used for culling.
+The content may have an optional `boundingVolume`, the content bounding volume. Unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content. This enables tight view frustum culling, excluding from rendering any content not in the volume of what is potentially in view. When it is not defined, the tile's bounding volume is still used for culling.
 
 The screenshot below shows the bounding volumes for the root tile for Canary Wharf. The `node.boundingVolume`, shown in red, encloses the entire area of the tileset; `content.boundingVolume` shown in blue, encloses just the four features (models) in the root tile.
 
