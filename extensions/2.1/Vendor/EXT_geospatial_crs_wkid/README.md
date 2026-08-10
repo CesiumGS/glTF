@@ -20,7 +20,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-Depends on [EXT_crs](../EXT_crs/README.md).
+Depends on [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
 ## Optional vs. Required
 
@@ -30,7 +30,7 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 This extension allows a coordinate reference system (CRS) to be provided as a Well-Known ID, commonly an [EPSG](https://epsg.org/home.html) code.
 
-`EXT_crs_wkid` extends the [`EXT_crs`](../EXT_crs/README.md) object. The "format" property **MUST** be `"wkid"`. The extension defines the following properties:
+`EXT_geospatial_crs_wkid` extends the [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md) object. The "format" property **MUST** be `"wkid"`. The extension defines the following properties:
 
 - `authority` is the organization that defines and manages a specific CRS identifier.
 - `wkid` is an integer that identifies the CRS.
@@ -45,10 +45,10 @@ The following example shows an asset annotated to indicate a [WGS 84](https://ep
     "version": "2.1"
   },
   "extensions": {
-    "EXT_crs": {
+    "EXT_geospatial_crs": {
       "format": "wkid",
       "extensions": {
-        "EXT_crs_wkid": {
+        "EXT_geospatial_crs_wkid": {
           "authority": "EPSG",
           "wkid": 4978,
           "epoch": "2019.81"
@@ -67,10 +67,10 @@ An asset defined in Moon planetocentric coordinates:
     "version": "2.1"
   },
   "extensions": {
-    "EXT_crs": {
+    "EXT_geospatial_crs": {
       "format": "wkid",
       "extensions": {
-        "EXT_crs_wkid": {
+        "EXT_geospatial_crs_wkid": {
           "authority": "IAU_2015",
           "wkid": 30100
         }
@@ -88,10 +88,10 @@ An asset defined with a horizontal CRS (UTM Zone 11N) and vertical CRS (NAVD 88)
     "version": "2.1"
   },
   "extensions": {
-    "EXT_crs": {
+    "EXT_geospatial_crs": {
       "format": "wkid",
       "extensions": {
-        "EXT_crs_wkid": {
+        "EXT_geospatial_crs_wkid": {
           "authority": "EPSG",
           "wkid": 32611,
           "vcsWkid": 5703
