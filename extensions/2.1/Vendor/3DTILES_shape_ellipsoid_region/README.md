@@ -30,6 +30,8 @@ This extension defines an ellipsoid-conforming region as an additional shape typ
 
 `3DTILES_shape_ellipsoid_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"ellipsoid region"`. The properties define the region following the surface of the ellipsoid between two different height values.
 
+The ellipsoid shape **MUST** conform to a global-geocentric coordinate reference system. The default coordinate reference system used is [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS_84) ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)). The coordinate reference system in use **MAY** be configured by adding a [EXT_geospatial_crs](../EXT_geospatial_crs/README.md) extension to the glTF asset. If defined, implementations **MUST** use the coordinate reference system defined by `EXT_geospatial_crs`.
+
 The volume does not necessarily contain the full ellipsoid—and for many geospatial use cases, it will not. Rather, the ellipsoid is used as a reference from which the actual region is extruded. However, a region may extend beneath the surface of the ellipsoid. Given the right height values, the region could contain the entire ellipsoid if desired.
 
 ## Ellipsoid Region Shape
@@ -40,23 +42,12 @@ An ellipsoid region shape is defined by adding the `3DTILES_shape_ellipsoid_regi
 
 | Property | Type | Description | Required |
 |---|---|---|---|
-| **semiMajorAxisRadius** | `number` | The radius along the semi-major axis of the reference ellipsoid in meters. Corresponds to the radii along the X and Z axes. | Yes, minimum: `0.0` |
-| **semiMinorAxisRadius** | `number` | The radius along the semi-minor axis of the reference ellipsoid in meters. Corresponds to the radius along the Y-axis. | Yes, minimum: `0.0` |
 | **minimumHeight** | `number` | The minimum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
 | **maximumHeight** | `number` | The maximum height of the region relative to the ellipsoid's surface, in meters. May be negative. | Yes |
 | **minimumLatitude** | `number` | The minimum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `-1.57079632679` |
 | **maximumLatitude** | `number` | The maximum latitude of the region, in radians. Must be in the range `[-pi/2, pi/2]`. | No, default: `1.57079632679` |
 | **minimumLongitude** | `number` | The minimum longitude of the region, in radians. See [Longitude](#longitude) for evaluation details. | No, default: `-3.14159265359` |
 | **maximumLongitude** | `number` | The maximum longitude of the region, in radians. See [Longitude](#longitude) for evaluation details. | No, default: `3.14159265359` |
-
-#### Axis Radius
-
-The semi-minor and semi-major axes of the reference ellipsoid are defined as floats using the `semiMinorAxisRadius` and `semiMajorAxisRadius` properties. Both the `semiMinorAxisRadius` and `semiMajorAxisRadius` are required and **MUST** be defined.
-
-The property value of `semiMajorAxisRadius` corresponds to the radii along the X and Z axes. The property value of `semiMinorAxisRadius` corresponds to the radius along the Y-axis.
-
-> [!IMPORTANT]
-> For prolate spheroids, the geometrical semi-major axis (polar radius along Y) is larger than the equatorial radius (X and Z). However, for schema consistency across all shape types, this extension always uses `semiMajorAxisRadius` for the X and Z axes (equatorial radii) and `semiMinorAxisRadius` for the Y-axis (polar radius), following the convention of oblate reference bodies like Earth.
 
 #### Height
 
@@ -82,11 +73,6 @@ This helps to preserve sampling at the antemeridian.
 
 ### Details
 
-The reference ellipsoid is centered at the origin. The `semiMajorAxisRadius` indicates the radius of the ellipsoid in meters along the `x` and `z` axes. The `semiMinorAxisRadius` indicates the radius of the ellipsoid in meters along the `y` axis.
-
-> [!NOTE]
-> The `x` and `z` radii are made equal to simplify the math required to render implicit regions along the ellipsoid.
-
 The `minimumHeight` and `maximumHeight` properties indicate the heights of the region from the ellipsoid's surface in meters. A height of `0` sits right at the surface. Negative heights are also valid—they simply extend underneath the ellipsoid's surface.
 
 This example corresponds to the image below it:
@@ -98,8 +84,6 @@ This example corresponds to the image below it:
     "type": "ellipsoid region",
     "extensions": {
       "3DTILES_shape_ellipsoid_region": {
-        "semiMajorAxisRadius": 3.5,
-        "semiMinorAxisRadius": 2.0,
         "minimumHeight": 0.0,
         "maximumHeight": 0.5
       }
@@ -119,8 +103,6 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
     "type": "ellipsoid region",
     "extensions": {
       "3DTILES_shape_ellipsoid_region": {
-        "semiMajorAxisRadius": 3.5,
-        "semiMinorAxisRadius": 2.0,
         "minimumHeight": 0.0,
         "maximumHeight": 0.5,
         "minimumLongitude": 0.0,
