@@ -71,7 +71,9 @@ The following example is a glTF asset that uses the extension to define a visibi
           "visible": false,
           "extensions": {
             "EXT_node_visibility_volume": {
-              "shape": 0
+              "boundingVolume": {
+                "shape": 0
+              }
             }
           },
         },
