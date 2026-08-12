@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# 3DTILES\_content\_voxels
+# 3DTILES\_tileset\_voxels
 
 ## Contributors
 
@@ -22,10 +22,11 @@ Draft
 Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
+Depends on [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata)
 
 ## Optional vs. Required
 
-This extension is always optional. It should be placed in the tileset JSON `extensionsUsed` list, but not in the `extensionsRequired` list.
+This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
 ## Contents
 
@@ -34,8 +35,6 @@ This extension is always optional. It should be placed in the tileset JSON `exte
 - [Notes](#notes)
 
 ## Overview
-
-TODO: update link to structural metadata extension
 
 This extension indicates the presence of voxel content and associates it with metadata definitions in the tileset's schema. Voxels are stored as glTFs with the [`EXT_voxels`](../EXT_voxels) extension and are typically paired with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) to unify the schema between a tileset and its tiles.
 
@@ -68,7 +67,7 @@ The `content` extension describes the structure of the voxel grid that the `cont
 
 #### Shape
 
-The shape and coordinate system of the voxel grid is determined by the content bounding volume. When undefined, the tile bounding volume is used instead.
+The shape and coordinate system of the voxel grid is determined by the bounding volume.
 
 The following bounding volume types are supported:
 
@@ -78,7 +77,7 @@ TODO: fix box link??
 * [`3DTILES_shape_ellipsoid_region`](../3DTILES_shape_ellipsoid_region/README.md) - geographic region in longitude, latitude, height coordinates
 * [`3DTILES_shape_cylinder_region`](../3DTILES_shape_cylinder_region/README.md) - oriented bounding cylinder
 
-The bounding volume **MUST** match the type of `shape` used for the glTF voxel grids, as specified in the [EXT_voxels extension](../EXT_voxels/README.md)
+The bounding volume **MUST** match the type of `shape` used for the per-node voxel grids, as specified in the [EXT_voxels extension](../EXT_voxels/README.md)
 
 #### Dimensions
 
@@ -92,7 +91,7 @@ Axis|Coordinate|Positive Direction
 1|`forward`|Along the `+z` axis of the bounding volume
 2|`up`|Along the `+y` axis of the bounding volume
 
-For `region` bounding volumes:
+For `3DTILES_shape_ellipsoid_region` bounding volumes:
 
 Axis|Coordinate|Positive Direction
 --|--|--
@@ -100,7 +99,7 @@ Axis|Coordinate|Positive Direction
 1|`latitude`|From south to north (increasing latitude)
 2|`height`|From bottom to top (increasing height)
 
-For `cylinder` bounding volumes:
+For `3DTILES_shape_cylinder_region` bounding volumes:
 
 Axis|Coordinate|Positive Direction
 --|--|--
@@ -122,7 +121,7 @@ The `padding` property specifies how many rows of voxel data in each dimension c
 
 `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g., a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-The `padding` property is optional; when omitted, `padding.before` and `padding.after` are both `[0, 0, 0]`. However, it **MUST** match the `padding` property specified in `EXT_primitive_voxels` on the glTF voxel grids.
+The `padding` property is optional; when omitted, `padding.before` and `padding.after` are both `[0, 0, 0]`. However, it **MUST** match the `padding` property specified in `EXT_voxels` on the glTF voxel grids.
 
 #### Class
 
