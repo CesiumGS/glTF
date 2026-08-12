@@ -29,9 +29,52 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 “Layers” are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
 
-This extension allows [content](../3DTILES_tileset/README.md#content) to be assigned to layers.
+The document-level `3DTILES_layers` extension defines the layers in the tileset. Each layer has a `"name"` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
 
-Below is an example of a root tile with two child tiles, each assigned to a different layer.
+```json
+{
+  "extensionsUsed": ["3DTILES_tileset", "3DTILES_layers"],
+  "extensionsRequired": ["3DTILES_tileset"],
+  "asset": {
+    "version": "2.1"
+  },
+  "extensions": {
+    "3DTILES_layers": {
+      "layers": [
+        {
+          "name": "cars"
+        },
+        {
+          "name": "trees"
+        }
+      ]
+    }
+  }
+}
+```
+
+3D Tiles [content](../3DTILES_tileset/README.md#content) may be assigned to layers. The content extension has a single property `"layer"` which is the index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
+
+```json
+{
+  "extensions": {
+    "3DTILES_tileset": {
+      "geometricError": 0.0,
+      "content": {
+        "3DTILES_layers": {
+          "layer": 0
+        }
+      }
+    }
+  },
+  "boundingVolume": {
+    "shape": 1
+  },
+  "externalAsset": 0
+}
+```
+
+Below is an example of an empty root tile with two child tiles, each assigned to a different layer.
 
 ```json
 {
@@ -106,9 +149,9 @@ Below is an example of a root tile with two child tiles, each assigned to a diff
 
 ## Properties
 
-Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
 
-This allows applications to perform styling or filtering based on the layer that the content belongs to:
+This allows applications to perform styling or filtering based on the layer that the content belongs to.
 
 ```json
 {
