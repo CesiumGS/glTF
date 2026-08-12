@@ -255,6 +255,8 @@ The `content` object includes the following optional properties:
 - `boundingVolume` is a tightly fitting bounding volume enclosing just the tile's content. See [Bounding Volumes](#bounding-volumes).
 - `type` (not shown) is a hint about the type of content. Possible values include:
 
+TODO: Replace `3DTILES_content_conditional` with `EXT_node_visibility_conditions`?
+
 `type`|Description
 --|--
 `"content"`|A glTF asset without external assets.

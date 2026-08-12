@@ -1,4 +1,4 @@
-# EXT_primitive_voxels
+# EXT_voxels
 
 <p align="center">
   <img src="figures/voxels.png">
@@ -19,51 +19,49 @@ Draft
 
 ## Dependencies
 
-Written against the glTF 2.0 specification.
+Written against the glTF 2.1 specification.
 
 ## Overview
 
-TODO: a lot of this needs to change!
-
-This extension allows nodes to represent volumetric (voxel) data via custom attributes. Primitives that use this extension must set their `mode` to the constant `0x7FFFFFFF` (`2147483647`) used to indicate voxels.
-
-Typical mesh primitives make use of the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by `EXT_primitive_voxels`. Instead, this extension relies on the `KHR_implicit_shapes` extension to describe the shape of the voxel grid.
+This extension allows nodes to represent volumetric (voxel) data via attributes.
 
 ```json
 {
-  "extensions": { 
-    "KHR_implicit_shapes": {
-      "shapes": [
-        {
-          "type": "box",
-          "box": {
-            "size": [2, 2, 2]
-          }
+  "shapes": [
+      {
+        "type": "box",
+        "box": {
+          "size": [1.0, 1.0, 1.0]
         }
-      ]
+      },
+  ],
+  "accessors": [
+    {    
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 24,
+      "type": "SCALAR"
     }
-  },
-  "meshes": [
+  ],
+  "nodes": [
     {
-      "primitives": [
-        {
+      "extensions": {
+        "EXT_voxels": {
+          "shape": 0,
+          "dimensions": [8, 8, 8],
           "attributes": {
-            "_TEMPERATURE": 0
-          },
-          "mode": 2147483647,
-          "extensions": {
-            "EXT_primitive_voxels": {
-                "shape": 0,
-                "dimensions": [8, 8, 8]
-            }
+            "TEMPERATURE": 0
           }
         }
-      ]
+      }
     }
   ]
 }
 ```
-TODO: update shape links
+The attributes directly reference an accessor, describing data associated with the voxel grid.
+
+The `mesh` property **MUST** be omitted.
 
 Though voxels are commonly associated with cubic geometry on a box-based grid, this extension also allows voxels to be based on other shapes, including cylinder-based regions specified by [`EXT_implicit_cylinder_region`](../EXT_implicit_cylinder_region/) and ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/). The supported shapes are visualized below.
 
@@ -78,9 +76,9 @@ Voxels exist inside a bounding volume that conforms to the shape of the grid. Th
 
 ### Box Grid
 
-A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
+A **box** grid is a Cartesian grid defined by `right`, `forward`, and `up` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `right`, `forward`, and `up` axes respectively.
 
-Elements are laid out in memory where the `x` data is contiguous in strides along the `y` axis, and each group of `y` strides represents a `z` slice.
+Elements are laid out in memory where the `right` data is contiguous in strides along the `forward` axis, and each group of `forward` strides represents a `up` slice.
 
 ![Uniform box grid](figures/uniform-box.png)
 <p align="center"><i>A uniform box grid that is subdivided into two cells along each axis.</i></p>
@@ -90,13 +88,13 @@ Elements are laid out in memory where the `x` data is contiguous in strides alon
 
 ### Cylinder Region Grid
 
-A **cylinder** region grid is subdivided along the radius, height, and angle ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
+A **cylinder** region grid is subdivided along the radius, angle, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
-The cylinder is aligned with the `y`-axis in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
+The cylinder is aligned with the local up-axis (`y`-axis) in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
-Elements are laid out in memory where the radial data is contiguous in strides along the cylinder's height, as if stacked in a column. Each group of height strides represents an angular slice on the cylinder.
+Elements are laid out in memory where the radial data is contiguous in strides along the cylinder angle. Each group of angle strides represents a height slice on the cylinder.
 
 ![Whole cylinder grid](figures/whole-cylinder.png)
 <p align="center"><i>A cylinder that is subdivided into two cells along each axis.</i></p>
@@ -130,7 +128,7 @@ Padding data must be included with the rest of the voxel data. In other words, g
 
 ```json
 "extensions": {
-  "EXT_primitive_voxels": {
+  "EXT_voxels": {
     "shape": 0,
     "dimensions": [8, 8, 8],
     "padding": {
@@ -143,11 +141,11 @@ Padding data must be included with the rest of the voxel data. In other words, g
 
 ### No Data Values
 
-Voxel primitives may optionally specify a "No Data" value (or "sentinel value") for its attributes to indicate where property values do not exist. This "No Data" value may be provided for any type of attribute, but must be defined according to the type of its `accessor`. For `normalized` accessors, the `noData` value should be specified as the raw data value *before* normalization.
+Voxel nodes may optionally specify a "No Data" value (or "sentinel value") for its attributes to indicate where property values do not exist. This "No Data" value may be provided for any type of attribute, but must be defined according to the type of its `accessor`. For `normalized` accessors, the `noData` value should be specified as the raw data value *before* normalization.
 
-The "No Data" values for attributes must be defined in the `noData` object. Any key in `noData` must match an existing key in the primitive's `attributes` object. However, not all `attributes` are required to provide a `noData` value.
+The "No Data" values for attributes must be defined in the `noData` object. Any key in `noData` must match an existing key in the extension's `attributes` object. However, not all `attributes` are required to provide a `noData` value.
 
-For instance, if a voxel primitive references the following accessors...
+For instance, if an attribute references the following accessors...
 
 ```jsonc
 "accessors": [
@@ -167,28 +165,23 @@ For instance, if a voxel primitive references the following accessors...
 ...then it may define `noData` values for its corresponding attributes like so:
 
 ```json
-"meshes": [
+"nodes": [
   {
-    "primitives": [
-      {
+    "extensions": {
+      "EXT_voxels": {
+        "shape": 0,
+        "dimensions": [8, 8, 8],
         "attributes": {
           "_TEMPERATURE": 0,
           "_DIRECTION": 1,
           "_DATA_CONFIDENCE": 2
         },
-        "mode": 2147483647,
-        "extensions": {
-          "EXT_primitive_voxels": {
-              "shape": 0,
-              "dimensions": [8, 8, 8],
-              "noData": {
-                "_TEMPERATURE": [-32768],
-                "_DIRECTION": [-999.99, -999.99, -999.99]
-              }
-          }
+        "noData": {
+          "_TEMPERATURE": [-32768],
+          "_DIRECTION": [-999.99, -999.99, -999.99]
         }
       }
-    ]
+    }
   }
 ]
 ```
@@ -230,27 +223,23 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
       ]
     }
   },
-  "meshes": [
+  "nodes": [
     {
-      "primitives": [
-        {
+      "extensions": {
+        "EXT_primitive_voxels": {
+          "dimensions": [8, 8, 8],
+          "padding": {
+            "before": [1, 1, 1],
+            "after": [1, 1, 1]
+          },
           "attributes": {
             "_TEMPERATURE": 0
-          },
-          "extensions": {
-            "EXT_primitive_voxels": {
-              "dimensions": [8, 8, 8],
-              "padding": {
-                "before": [1, 1, 1],
-                "after": [1, 1, 1]
-              }
-            },
-            "EXT_structural_metadata": {
-              "propertyAttributes": [0]
-            }
           }
+        },
+        "EXT_structural_metadata": {
+          "propertyAttributes": [0]
         }
-      ]
+      }
     }
   ]
 }
