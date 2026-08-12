@@ -508,7 +508,17 @@ The following example shows a tileset with tileset properties, tile properties, 
   "extensionsRequired": ["3DTILES_tileset"],
   "extensions": {
     "3DTILES_tileset": {
-      "geometricError": 240
+      "geometricError": 240,
+      "extensions": {
+        "EXT_structural_metadata": {
+          "class": "city",
+          "properties": {
+            "name": "New York City",
+            "country": "United States",
+            "population": 8804190
+          }
+        }
+      }
     },
     "EXT_structural_metadata": {
       "schema": {
@@ -560,17 +570,7 @@ The following example shows a tileset with tileset properties, tile properties, 
     }
   },
   "asset": {
-    "version": "2.1",
-    "extensions": {
-      "EXT_structural_metadata": {
-        "class": "city",
-        "properties": {
-          "name": "New York City",
-          "country": "United States",
-          "population": 8804190
-        }
-      }
-    }
+    "version": "2.1"
   },
   "nodes": [
     {
