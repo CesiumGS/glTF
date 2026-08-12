@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2026 The Khronos Group Inc.
+SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
@@ -44,28 +44,19 @@ This extension georeferences a node to the provided geographic coordinates.
 
 The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)). In this case local coordinates will be transformed to geocentric (planetocentric) coordinates.
 
-This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with an extension such as [`EXT_crs_wkid`](../EXT_crs_wkid/README.md) or [`EXT_crs_wkt2`](../EXT_crs_wkt2/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
+This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
 
 The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal
 
-If the node references an external asset with the [`EXT_crs_enu`](../EXT_crs_enu/README.md) extension, it applies a rotation which has the following results:
+This extension applies a rotation which has the following results:
 
-- The `+x` axis faces east
-- The `+y` axis faces north
-- The `+z` axis faces up
-
-Otherwise it applies a rotation which has the following results:
-
-- The `+x` axis (local left) faces north
+- The `-x` axis (local right) faces east
 - The `+y` axis (local up) faces up (normal to the tangent plane)
-- The `+z` axis (local forward) faces east
-
-
-Note that in both cases, the node is expected to use local, and not geocentric coordinates.
+- The `+z` axis (local forward) faces north
 
 <p align="center">
   <img src="./figures/enu-xyz.png"/><br/>
-  Alignment of local coordinates (right) to tangent plane of ellipsoid (left) when using <code><a href="../EXT_crs_enu/README.md">EXT_crs_enu</a></code>.
+  Alignment of local coordinates (right) to tangent plane of ellipsoid (left)</code>.
 </p>
 
 ## Transformation Order
@@ -84,13 +75,22 @@ In this example the node has a local 20° heading that is applied before the geo
       "height": -21.668226434267066
     }
   },
-  "rotation": [0, -0.173648, 0, 0.984807],
   "mesh": 0,
 }</code></pre></td>
     <td><img src="./figures/plane.jpg"/></td>
   </tr>
+  <tr>
+    <td><pre><code>{
+  "extensions": {
+    "EXT_georeference": {
+      "longitude": -75.15836368768382,
+      "latitude": 39.95090650840344,
+      "height": -21.668226434267066
+    }
+  },
+  "rotation": [0, -0.173648, 0, 0.984807],
+  "mesh": 0,
+}</code></pre></td>
+    <td><img src="./figures/plane-heading.jpg"/></td>
+  </tr>
 </table>
-
-## Appendix
-
-For computing the transformation matrix from local east-north-up (ENU) coordinates to geocentric coordinates see [`Cesium.Transforms.eastNorthUpToFixedFrame`](Cesium.Transforms.eastNorthUpToFixedFrame).

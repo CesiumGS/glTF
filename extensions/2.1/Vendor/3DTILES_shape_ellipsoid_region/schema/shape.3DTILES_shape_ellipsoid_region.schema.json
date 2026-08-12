@@ -5,16 +5,6 @@
     "type": "object",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
-        "semiMajorAxisRadius": {
-            "type": "number",
-            "description": "The radius along the semi-major axis of the reference ellipsoid in meters. Corresponds to the radii along the X and Z axes.",
-            "minimum": 0
-        },
-        "semiMinorAxisRadius": {
-            "type": "number",
-            "description": "The radius along the semi-minor axis of the reference ellipsoid in meters. Corresponds to the radius along the Y-axis.",
-            "minimum": 0
-        },
         "minimumHeight": {
             "type": "number",
             "description": "The minimum height of the region relative to the ellipsoid's surface, in meters. May be negative."
@@ -49,8 +39,6 @@
         }
     },
     "required": [
-        "semiMajorAxisRadius",
-        "semiMinorAxisRadius",
         "minimumHeight",
         "maximumHeight"
     ]

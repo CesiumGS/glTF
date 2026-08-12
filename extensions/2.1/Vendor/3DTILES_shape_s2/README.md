@@ -12,6 +12,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Sean Lilley, Cesium
 - Peter Gagliardi, Cesium
 - Marco Hutter, Cesium
+- Adam Morris, Cesium
 
 ## Status
 
