@@ -4,6 +4,7 @@
     "title": "Layer in 3DTILES_layers",
     "type": "object",
     "description": "An object defining a layer.",
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "name": {
             "type": "string",

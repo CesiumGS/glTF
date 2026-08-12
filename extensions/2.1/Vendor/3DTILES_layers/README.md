@@ -9,6 +9,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ## Contributors
 
 - Sean Lilley, Cesium
+- Don McCurdy, Cesium
 
 ## Status
 
@@ -25,6 +26,8 @@ Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 This extension is optional, meaning it should be placed in the glTF root's `extensionsUsed` list, but not in the `extensionsRequired` list.
 
 ## Overview
+
+“Layers” are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
 
 This extension allows [content](../3DTILES_tileset/README.md#content) to be assigned to layers.
 
@@ -101,7 +104,7 @@ Below is an example of a root tile with two child tiles, each assigned to a diff
 }
 ```
 
-## Metadata
+## Properties
 
 Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
 
@@ -162,6 +165,10 @@ This allows applications to perform styling or filtering based on the layer that
 
 ![](./figures/filtering-groups.jpg)
 
-## TODO
+## Subtree Attributes
 
-- Can layers in the root tileset be referenced by external tilesets?
+This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
+
+Attribute Semantic|Accessor Type|Component Type|Description
+--|--|--|--
+`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5130` (DOUBLE)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level 3DTILES_layers extension.

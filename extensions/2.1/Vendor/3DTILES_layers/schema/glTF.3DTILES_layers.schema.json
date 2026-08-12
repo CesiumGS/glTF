@@ -4,7 +4,7 @@
     "title": "3DTILES_layers glTF Document extension",
     "type": "object",
     "description": "glTF extension that defines layers that content may belong to.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "layers": {
             "type": "array",
