@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Janine Liu, Cesium
 - Sean Lilley, Cesium
+- Adam Morris, Cesium
 
 ## Status
 
@@ -148,3 +149,19 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
     </td>
   </tr>
 </table>
+
+## Implicit Subdivision
+
+When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(radius, angle, height)` for the cylinder region.
+
+A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCTREE` subdivision will subdivide along the radius, angle, and height axes.
+
+| Root Cylinder  | Quadtree | Octree |
+|---|---|---|
+| ![Parent Cell](figures/root.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+
+Coordinate|Positive Direction
+--|--
+radius| From the center outwards (increasing radius)
+angle| From $-\pi$ to $\pi$ (counter-clockwise angle)
+height| From bottom to top (increasing height)
