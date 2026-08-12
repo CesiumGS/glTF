@@ -149,7 +149,7 @@ Below is an example of an empty root tile with two child tiles, each assigned to
 
 ## Properties
 
-Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
 
 This allows applications to perform styling or filtering based on the layer that the content belongs to.
 
