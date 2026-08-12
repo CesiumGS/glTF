@@ -20,6 +20,9 @@ Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 
+This extension references glTF assets with the [3DTILES_subtree](../3DTILES_subtree/README.md) extension.
+
+
 ## Optional vs. Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
