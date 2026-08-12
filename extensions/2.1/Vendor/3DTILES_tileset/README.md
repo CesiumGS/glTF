@@ -457,6 +457,8 @@ A tileset may be defined in either a **global** or **local** coordinate system. 
 
 A tileset defined in a local coordinate system follows the standard glTF conventions: right-handed, +Y up, and linear units in meters.
 
+A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+
 A tileset defined in a global coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
 <p align="center">
@@ -465,8 +467,6 @@ A tileset defined in a global coordinate system differs from the default convent
   <em>An illustration of <a href="https://epsg.org/crs_4978/WGS-84.html">EPSG 4978</a>, an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
  </em>
 </p>
-
-A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
 The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
