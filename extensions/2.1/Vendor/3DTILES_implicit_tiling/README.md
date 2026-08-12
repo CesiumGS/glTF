@@ -130,11 +130,11 @@ The computed tile `boundingVolume` and `geometricError` can be overridden with [
 
 For `box` bounding volumes:
 
-Coordinate|Positive Direction
---|--
-`right`|Along the right axis of the bounding box (`+x` to `-x`)
-`forward`|Along the forward axis of the bounding box (`-z` to `+z`)
-`up`|Along the up axis of the bounding box (`-y` to `+y`)
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`right`|Along the right axis of the bounding box (`+x` to `-x`)
+1|`forward`|Along the forward axis of the bounding box (`-z` to `+z`)
+2|`up`|Along the up axis of the bounding box (`-y` to `+y`)
 
 ![](./figures/box-coordinates.png)
 
