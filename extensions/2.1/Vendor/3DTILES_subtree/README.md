@@ -296,7 +296,3 @@ Subtrees may store application-specific properties for available tiles and conte
 >   }
 > }
 > ```
-
-## TODO
-
-* Define attribute semantics in [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/), [3DTILES_layers](TODO), and [3DTILES_horizon_occlusion_point](TODO).

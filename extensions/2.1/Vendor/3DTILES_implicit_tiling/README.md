@@ -133,7 +133,7 @@ Axis|Coordinate|Positive Direction
 1|`forward`|Along the forward axis of the bounding box (`-z` to `+z`)
 2|`up`|Along the up axis of the bounding box (`-y` to `+y`)
 
-So the full set of tile coordinates for `box` would be `(level, right, forward, up)`
+So together the tile coordinates for `box` are `(level, right, forward, up)`
 
 ![](./figures/box-coordinates.png)
 
@@ -153,7 +153,7 @@ Template URIs, when given as relative paths, are resolved relative to the tilese
 
 ![](./figures/template-uri.png)
 
-Tile and content [properties](#properties) may also be used as variables, e.g.
+Tile and content [properties](#properties) may also be used as template variables, e.g.
 
 ```json
 "3DTILES_implicit_tiling": {
@@ -163,7 +163,7 @@ Tile and content [properties](#properties) may also be used as variables, e.g.
 
 This is useful for resolving tile content through mechanisms other than just its implicit tile coordinates.
 
-In case of name collisions, the following precedence order is used (from highest to lowest):
+In case of name collisions, the following precedence order is used (from highest priority to lowest priority):
 
 Precedence|Source
 --|--
@@ -183,7 +183,7 @@ The following restrictions apply:
 
 For `ENUM` properties, the enum's `name` is used instead of its integer value.
 
-The resolved URI must be a valid [URI](https://github.com/CesiumGS/3d-tiles/tree/main/specification#uris), e.g. string property values cannot have spaces or other restricted characters.
+The resolved URI must be a valid [URI](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#uris), e.g. string property values cannot have spaces or other restricted characters.
 
 ## Subtrees
 
@@ -275,7 +275,9 @@ Property values are tightly packed by an increasing tile index according to the 
 
 ### Subtree Files
 
-The implicit tiling extension defines a `subtreeUri` property for locating external subtree files. A subtree file is a glTF with the [`3DTILES_subtree`](../3DTILES_subtree/README.md) extension that encodes availability, attributes, and application-specific properties.
+The `subtreeUri` property in the extension object is used for locating external subtree files. A subtree file is a glTF with the `3DTILES_subtree` extension that encodes availability, attributes, and application-specific properties.
+
+For more information about the subtree format, see [`3DTILES_subtree`](../3DTILES_subtree/README.md).
 
 ## Appendix A: Availability Indexing
 
