@@ -30,7 +30,7 @@ This extension defines a cylinder-conforming region as an additional shape type 
 
 `3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`. The `minimumRadius`, `maximumRadius`, and `height` properties are required. These properties define a region following the surface of a cylinder between two different radius values. Two optional properties, `minimumAngle` and `maximumAngle`, define the maximum angle of the cylinder region in radians.
 
-The cylinder does not need to be completely represented by the volume—for instance, the region may be hollow inside like a tube. However, an inner radius of `0.0` results in a completely solid cylinder.
+The cylinder does not need to be completely represented by the volume — for instance, the region may be hollow inside like a tube. However, an inner radius of `0.0` results in a completely solid cylinder.
 
 ## Cylinder Region Shape
 
@@ -152,7 +152,7 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
 
 ## Implicit Subdivision
 
-When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(radius, angle, height)` for the cylinder region.
+When used with [Implicit Tiling](../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(radius, angle, height)` for the cylinder region.
 
 A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCTREE` subdivision will subdivide along the radius, angle, and height axes.
 

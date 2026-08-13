@@ -1,10 +1,5 @@
 # EXT_voxels
 
-<p align="center">
-  <img src="figures/voxels.png">
-</p>
-<p align="center"><i>Geothermal temperature data surrounding Lake Thunseree, Switzerland, visualized in CesiumJS using <code>EXT_primitive_voxels</code>. Data courtesy of Swisstopo.</i></p>
-
 ## Contributors
 
 - Janine Liu, Cesium
@@ -72,7 +67,7 @@ Though voxels are commonly associated with cubic geometry on a box-based grid, t
 Voxels exist inside a bounding volume that conforms to the shape of the grid. The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer. The way that `dimensions` is interpreted depends on the grid geometry, as explained below.
 
 > [!NOTE]
-> The following examples use small voxel `dimensions` for illustrative purposes. In practice, voxel primitives will use much larger values for their `dimensions`.
+> The following examples use small voxel `dimensions` for illustrative purposes. In practice, voxel nodes will use much larger values for their `dimensions`.
 
 ### Box Grid
 
@@ -92,7 +87,7 @@ A **cylinder** region grid is subdivided along the radius, angle, and height ran
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
-The cylinder is aligned with the local up-axis (`y`-axis) in the primitive's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
+The cylinder is aligned with the local up-axis (`y`-axis) in the node's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
 Elements are laid out in memory where the radial data is contiguous in strides along the cylinder angle. Each group of angle strides represents a height slice on the cylinder.
 
@@ -120,11 +115,11 @@ Elements are laid out in memory where the longitude data is contiguous in stride
 
 ### Padding
 
-The `padding` property specifies how many rows of attribute data in each dimension come from neighboring grids. This is useful in situations where the primitive represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects e.g. trilinear interpolation, blurring, or antialiasing.
+The `padding` property specifies how many rows of attribute data in each dimension come from neighboring grids. This is useful in situations where the node represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects e.g. trilinear interpolation, blurring, or antialiasing.
 
 `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g. a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of `[d1, d2, d3]`, `padding.before` of `[b1, b2, b3]`, and `padding.after` of `[a1, a2, a3]`, the voxel primitive's attributes must contain `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements. In the following example, the attributes on this voxel primitive must supply `(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 1000` elements.
+Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of `[d1, d2, d3]`, `padding.before` of `[b1, b2, b3]`, and `padding.after` of `[a1, a2, a3]`, the voxel node's attributes must contain `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements. In the following example, the attributes on this voxel node must supply `(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 1000` elements.
 
 ```json
 "extensions": {
@@ -141,13 +136,13 @@ Padding data must be included with the rest of the voxel data. In other words, g
 
 ### No Data Values
 
-Voxel nodes may optionally specify a "No Data" value (or "sentinel value") for its attributes to indicate where property values do not exist. This "No Data" value may be provided for any type of attribute, but must be defined according to the type of its `accessor`. For `normalized` accessors, the `noData` value should be specified as the raw data value *before* normalization.
+A voxel node may optionally specify a "No Data" value (or "sentinel value") for its attributes to indicate where property values do not exist. This "No Data" value may be provided for any type of attribute, but must be defined according to the type of its `accessor`. For `normalized` accessors, the `noData` value should be specified as the raw data value *before* normalization.
 
 The "No Data" values for attributes must be defined in the `noData` object. Any key in `noData` must match an existing key in the extension's `attributes` object. However, not all `attributes` are required to provide a `noData` value.
 
 For instance, if an attribute references the following accessors...
 
-```jsonc
+```json
 "accessors": [
   {
     "type": "SCALAR",
@@ -226,7 +221,7 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
   "nodes": [
     {
       "extensions": {
-        "EXT_primitive_voxels": {
+        "EXT_voxels": {
           "dimensions": [8, 8, 8],
           "padding": {
             "before": [1, 1, 1],
@@ -245,7 +240,7 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
 }
 ```
 
-`EXT_structural_metadata` may also specify a `noData` value for a property attribute property. If `EXT_primitive_voxels` contains an entry in `noData` for the same attribute, the values **SHOULD** match betwen the two extensions.
+`EXT_structural_metadata` may also specify a `noData` value for a property attribute property. If `EXT_voxels` contains an entry in `noData` for the same attribute, the values **SHOULD** match betwen the two extensions.
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.
