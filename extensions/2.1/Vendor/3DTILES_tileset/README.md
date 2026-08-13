@@ -713,8 +713,6 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 
 ## TODO
 
-- Re-introduce viewerRequestVolume as extension
 - More examples of geometric error in appendix
-- Update external tilesets image
 - Finish conditional content section https://github.com/CesiumGS/glTF/pull/117
 - Should the content "type" field by replaced by something like https://github.com/KhronosGroup/glTF/issues/2586#issuecomment-5234625074
