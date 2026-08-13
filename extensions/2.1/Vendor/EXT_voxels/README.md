@@ -254,10 +254,12 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
           },
           "attributes": {
             "_TEMPERATURE": 0
+          },
+          "extensions": {
+            "EXT_structural_metadata": {
+              "propertyAttributes": [0]
+            }
           }
-        },
-        "EXT_structural_metadata": {
-          "propertyAttributes": [0]
         }
       }
     }

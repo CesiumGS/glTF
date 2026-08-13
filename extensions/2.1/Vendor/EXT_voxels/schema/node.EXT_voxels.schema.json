@@ -30,7 +30,7 @@
         },
         "attributes": {
             "type": "object",
-            "description": "A plain JSON object, where each key corresponds to a mesh attribute semantic and each value is the index of the accessor containing attribute's data.",
+            "description": "A plain JSON object, where each key corresponds to an attribute semantic and each value is the index of the accessor containing attribute's data.",
             "minProperties": 1,
             "additionalProperties": {
                 "$ref": "glTFid.schema.json"
