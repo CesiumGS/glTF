@@ -60,6 +60,7 @@ This extension allows nodes to represent volumetric (voxel) data via attributes.
   ]
 }
 ```
+
 The attributes directly reference an accessor, describing data associated with the voxel grid.
 
 The `mesh` property **MUST** be omitted.

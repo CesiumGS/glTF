@@ -68,12 +68,12 @@ The document-level extension describes the structure of the voxel grid that each
 
 The shape and coordinate system of the voxel grid is determined by the `shape` property.
 
-The shape type **MUST** be `"box"` unless additional shape types are enabled through extensions. These extensions include:
+The shape type **MUST** be `box` unless additional shape types are enabled through extensions. These extensions include:
 
 - [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md)
 - [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
 
-The `shape` type **MUST** match the `shape` used for the per-node voxel grids, as specified in the [EXT_voxels extension](../EXT_voxels/README.md)
+The `shape` type **MUST** match the `shape` used for the per-node voxel grids, as specified in the [EXT_voxels](../EXT_voxels/README.md) extension.
 
 #### Dimensions
 
@@ -163,7 +163,7 @@ The `class` **MUST** match the `class` used to classify the glTF voxels in their
 
 ## Example
 
-_This section is non-normative_
+_This section is non-normative._
 
 The following example is a tileset JSON that uses voxel content with implicit tiling.
 

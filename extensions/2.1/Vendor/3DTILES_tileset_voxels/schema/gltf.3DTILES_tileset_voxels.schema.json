@@ -8,11 +8,7 @@
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
         "shape": {
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ],
+            "$ref": "glTFid.schema.json",
             "description": "The index of the shape that the voxel grid adheres to."
         },
         "dimensions": {
@@ -32,9 +28,7 @@
         "class": {
             "type": "string",
             "description": "The class that property values conform to. The value shall be a class ID declared in the `classes` dictionary."
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "shape",
