@@ -77,31 +77,31 @@ The `shape` type **MUST** match the `shape` used for the per-node voxel grids, a
 
 #### Dimensions
 
-The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. Dimensions must be nonzero, and elements must be laid out on a first-axis contiguous basis. The meaning of each "axis" depends on the voxel grid's shape, explained below.
+The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. Dimensions must be nonzero, and elements must be laid out on a first-axis contiguous basis, as specified in [EXT_voxels](../EXT_voxels/README.md). The meaning of each "axis" depends on the voxel grid's shape, explained below.
 
-For `box` bounding volumes:
+For `box` shapes:
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`right`|Along the `+x` to `-x` axis of the bounding volume
-1|`forward`|Along the `+z` axis of the bounding volume
-2|`up`|Along the `+y` axis of the bounding volume
+Axis|Coordinate
+--|--
+0|`right`
+1|`forward`
+2|`up`
 
-For `3DTILES_shape_ellipsoid_region` bounding volumes:
+For `3DTILES_shape_ellipsoid_region` shapes:
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`longitude`|From west to east (increasing longitude)
-1|`latitude`|From south to north (increasing latitude)
-2|`height`|From bottom to top (increasing height)
+Axis|Coordinate
+--|--
+0|`longitude`
+1|`latitude`
+2|`height`
 
-For `3DTILES_shape_cylinder_region` bounding volumes:
+For `3DTILES_shape_cylinder_region` shapes:
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`radius`|From center (increasing radius)
-1|`angle`|From `-pi` to `pi` counter-clockwise (see figure below)
-2|`height`|From bottom to top (increasing height)
+Axis|Coordinate
+--|--
+0|`radius`
+1|`angle`
+2|`height`
 
 ![Cylinder Coordinates](figures/cylinder-coordinates.png)
 

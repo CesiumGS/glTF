@@ -80,6 +80,12 @@ Voxels exist inside a bounding volume that conforms to the shape of the grid. Th
 
 A **box** grid is a Cartesian grid defined by `right`, `forward`, and `up` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `right`, `forward`, and `up` axes respectively.
 
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`right`|Along the right axis of the bounding box ($+x$ to $-x$)
+1|`forward`|Along the forward axis of the bounding box ($-z$ to $+z$)
+2|`up`|Along the up axis of the bounding box ($-y$ to $+y$)
+
 Elements are laid out in memory where the `right` data is contiguous in strides along the `forward` axis, and each group of `forward` strides represents a `up` slice.
 
 ![Uniform box grid](figures/uniform-box.png)
@@ -96,6 +102,12 @@ A **cylinder** region grid is subdivided along the radius, angle, and height ran
 
 The cylinder is aligned with the local up-axis (`y`-axis) in the node's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`radius`|From center (increasing radius)
+1|`angle`|From $-\pi$ to $\pi$ counter-clockwise (see figure below)
+2|`height`|From bottom to top (increasing height)
+
 Elements are laid out in memory where the radial data is contiguous in strides along the cylinder angle. Each group of angle strides represents a height slice on the cylinder.
 
 ![Whole cylinder grid](figures/whole-cylinder.png)
@@ -107,6 +119,12 @@ Elements are laid out in memory where the radial data is contiguous in strides a
 ### Ellipsoid Region Grid
 
 An **ellipsoid** region grid is subdivided along the longitude, latitude, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
+
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`longitude`|From west to east (increasing longitude)
+1|`latitude`|From south to north (increasing latitude)
+2|`height`|From bottom to top (increasing height)
 
 Elements are laid out in memory where the longitude data is contiguous in strides along the region's latitude. Each group of latitude strides represents a height slice on the region.
 
@@ -126,7 +144,7 @@ The `padding` property specifies how many rows of attribute data in each dimensi
 
 `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g. a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of `[d1, d2, d3]`, `padding.before` of `[b1, b2, b3]`, and `padding.after` of `[a1, a2, a3]`, the voxel node's attributes must contain `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements. In the following example, the attributes on this voxel node must supply `(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 1000` elements.
+Padding data must be included with the rest of the voxel data. In other words, given `dimensions` of $[d_1, d_2, d_3]$, `padding.before` of $[b_1, b_2, b_3]$, and `padding.after` of $[a_1, a_2, a_3]$, the voxel node's attributes must contain $(d_1 + a_1 + b_1)*(d_2 + a_2 + b_2)*(d_3 + a_3 + b_3)$ elements. In the following example, the attributes on this voxel node must supply $(8 + 1 + 1)*(8 + 1 + 1)*(8 + 1 + 1) = 1000$ elements.
 
 ```json
 "extensions": {
