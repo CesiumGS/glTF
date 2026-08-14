@@ -10,10 +10,6 @@
         }
     ],
     "properties": {
-        "shape": {
-            "$ref": "glTFid.schema.json",
-            "description": "The index of the shape that the voxel grid adheres to."
-        },
         "dimensions": {
             "type": "array",
             "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape indicated by `shape`.",
@@ -30,7 +26,7 @@
         },
         "attributes": {
             "type": "object",
-            "description": "A plain JSON object, where each key corresponds to an attribute semantic and each value is the index of the accessor containing attribute's data.",
+            "description": "A plain JSON object, where each key corresponds to an attribute semantic and each value is the index of the accessor containing the attribute's data.",
             "minProperties": 1,
             "additionalProperties": {
                 "$ref": "glTFid.schema.json"
@@ -52,7 +48,6 @@
         }
     },
     "required": [
-        "shape",
         "dimensions",
         "attributes"
     ]

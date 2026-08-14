@@ -7,10 +7,6 @@
     "gltf_detailedDescription": "Voxels are stored as glTFs with the EXT_voxels extension and are paired with EXT_structural_metadata to unify the schema between a tileset and its tiles. This extension is often paired with Implicit Tiling for efficient representation of massive sparse voxel datasets. This extension lets runtimes detect voxel content in advance to allocate necessary resources before tiles load.",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
-        "shape": {
-            "$ref": "glTFid.schema.json",
-            "description": "The index of the shape that the voxel grid adheres to."
-        },
         "dimensions": {
             "type": "array",
             "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape indicated by `shape`.",
@@ -31,7 +27,6 @@
         }
     },
     "required": [
-        "shape",
         "dimensions",
         "class"
     ]

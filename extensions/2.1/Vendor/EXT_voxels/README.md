@@ -22,6 +22,22 @@ Draft
 
 Written against the glTF 2.1 specification.
 
+## Optional vs. Required
+
+This extension is required, meaning it **MUST** be placed in both `extensionsUsed` and `extensionsRequired`.
+
+## Contents
+
+- [Overview](#overview)
+- [Bounding Volume](#bounding-volume)
+- [Dimensions](#dimensions)
+  - [Box Shape](#box-shape)
+  - [Cylinder Region Shape](#cylinder-region-shape)
+  - [Ellipsoid Region Shape](#ellipsoid-region-shape)
+- [Padding](#padding)
+- [No Data Values](#no-data-values)
+- [Metadata](#metadata)
+
 ## Overview
 
 This extension allows nodes to represent volumetric (voxel) data via attributes.
@@ -49,12 +65,14 @@ This extension allows nodes to represent volumetric (voxel) data via attributes.
     {
       "extensions": {
         "EXT_voxels": {
-          "shape": 0,
           "dimensions": [8, 8, 8],
           "attributes": {
             "TEMPERATURE": 0
           }
         }
+      },
+      "boundingVolume": {
+        "shape": 0
       }
     }
   ]
@@ -65,20 +83,28 @@ The attributes directly reference an accessor, describing data associated with t
 
 The `mesh` property **MUST** be omitted.
 
+## Bounding Volume
+
+Voxels exist inside a bounding volume that conforms to the shape of the grid.
+
+The `boundingVolume` property **MUST** be provided when the node uses the `EXT_voxels` extension.
+
 Though voxels are commonly associated with cubic geometry on a box-based grid, this extension also allows voxels to be based on other shapes, including cylinder-based regions specified by [`EXT_implicit_cylinder_region`](../EXT_implicit_cylinder_region/) and ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/). The supported shapes are visualized below.
 
 |Box|Cylinder|Ellipsoid|
 | ------------- | ------------- | ------------- |
 |![Box Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
 
-Voxels exist inside a bounding volume that conforms to the shape of the grid. The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer. The way that `dimensions` is interpreted depends on the grid geometry, as explained below.
+## Dimensions
+
+The `dimensions` property refers to the number of subdivisions within the bounding volume. Each value of `dimensions` must be a positive integer. The way that `dimensions` is interpreted depends on the shape of the bounding volume, as explained below.
 
 > [!NOTE]
 > The following examples use small voxel `dimensions` for illustrative purposes. In practice, voxel nodes will use much larger values for their `dimensions`.
 
-### Box Grid
+### Box Shape
 
-A **box** grid is a Cartesian grid defined by `right`, `forward`, and `up` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `right`, `forward`, and `up` axes respectively.
+A **box** shape is divided into a Cartesian grid defined by `right`, `forward`, and `up` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `right`, `forward`, and `up` axes respectively.
 
 Axis|Coordinate|Positive Direction
 --|--|--
@@ -94,9 +120,9 @@ Elements are laid out in memory where the `right` data is contiguous in strides 
 ![Non-uniform box grid](figures/non-uniform-box.png)
 <p align="center"><i>A box grid that is non-uniformly scaled and also non-uniformly subdivided.</i></p>
 
-### Cylinder Region Grid
+### Cylinder Region Shape
 
-A **cylinder** region grid is subdivided along the radius, angle, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
+A **cylinder** region shape is subdivided along the radius, angle, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
@@ -116,9 +142,9 @@ Elements are laid out in memory where the radial data is contiguous in strides a
 ![Non-uniform cylinder grid](figures/non-uniform-cylinder.png)
 <p align="center"><i>A smaller cylinder region with radial and angular bounds that is non-uniformly subdivided.</i></p>
 
-### Ellipsoid Region Grid
+### Ellipsoid Region Shape
 
-An **ellipsoid** region grid is subdivided along the longitude, latitude, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
+An **ellipsoid** region shape is subdivided along the longitude, latitude, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
 Axis|Coordinate|Positive Direction
 --|--|--
@@ -138,7 +164,7 @@ Elements are laid out in memory where the longitude data is contiguous in stride
 ![Whole ellipsoid grid](figures/whole-ellipsoid.png)
 <p align="center"><i>A hollow ellipsoid region that covers the entire ellipsoid, subdivided into two cells along each axis.</i></p>
 
-### Padding
+## Padding
 
 The `padding` property specifies how many rows of attribute data in each dimension come from neighboring grids. This is useful in situations where the node represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects e.g. trilinear interpolation, blurring, or antialiasing.
 
@@ -149,7 +175,6 @@ Padding data must be included with the rest of the voxel data. In other words, g
 ```json
 "extensions": {
   "EXT_voxels": {
-    "shape": 0,
     "dimensions": [8, 8, 8],
     "padding": {
       "before": [1, 1, 1],
@@ -159,7 +184,7 @@ Padding data must be included with the rest of the voxel data. In other words, g
 }
 ```
 
-### No Data Values
+## No Data Values
 
 A voxel node may optionally specify a "No Data" value (or "sentinel value") for its attributes to indicate where property values do not exist. This "No Data" value may be provided for any type of attribute, but must be defined according to the type of its `accessor`. For `normalized` accessors, the `noData` value should be specified as the raw data value *before* normalization.
 
@@ -189,7 +214,6 @@ For instance, if an attribute references the following accessors...
   {
     "extensions": {
       "EXT_voxels": {
-        "shape": 0,
         "dimensions": [8, 8, 8],
         "attributes": {
           "_TEMPERATURE": 0,
@@ -208,7 +232,7 @@ For instance, if an attribute references the following accessors...
 
 Note that `_DATA_CONFIDENCE` intentionally does not specify a `noData` value. The attribute is expected to contain a valid value for every voxel cell.
 
-### Metadata
+## Metadata
 
 This extension may be paired with the `EXT_structural_metadata` extension to convey more semantic information about the voxel attributes.
 
@@ -268,6 +292,3 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
 ```
 
 `EXT_structural_metadata` may also specify a `noData` value for a property attribute property. If `EXT_voxels` contains an entry in `noData` for the same attribute, the values **SHOULD** match betwen the two extensions.
-
-## Optional vs. Required
-This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.

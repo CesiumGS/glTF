@@ -23,154 +23,51 @@ Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 Depends on [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+Depends on [EXT_voxels](../EXT_voxels/README.md).
 
 ## Optional vs. Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
-## Contents
-
-- [Overview](#overview)
-- [Example](#example)
-- [Notes](#notes)
-
 ## Overview
 
-This extension indicates the presence of voxel content and associates it with metadata definitions. Voxels are stored as glTFs with the [`EXT_voxels`](../EXT_voxels) extension and are paired with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) to unify the metadata schema across all the tiles of the tileset.
+This extension defines a structure for volumetric data (voxels) in 3D Tiles.
 
-This extension is often paired with [Implicit Tiling](../3DTILES_implicit_tiling/README.md) for efficient representation of massive sparse voxel datasets. Although rendering implementations may vary, this extension can let runtimes detect voxel content in advance, such that they can allocate the necessary resources before any tiles load.
+- Each tile content **MUST** have a single node with the [`EXT_voxels extension`](../EXT_voxels/README.md).
+- The tileset's root tile **MUST** use [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md).
+- The shape defined in each tile's `EXT_voxels` extension **MUST** be equivalent to the implicitly derived bounding volume.
+- Each tile's `EXT_voxels` extension **MUST** associate its attribute data with metadata definitions using [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
 
-The document-level extension describes the structure of the voxel grid that each tile will contain.
+### Dimensions
 
-```json
-{
-  "extensions": {
-    "3DTILES_tileset": {
-      "geometricError": 500.0,
-    },
-    "EXT_structural_metadata": {
-      "schemaUri": "schema.json"
-    },
-    "3DTILES_tileset_voxels": {
-      "shape": 0,
-      "dimensions": [8, 8, 8],
-      "padding": {
-        "before": [1, 1, 1],
-        "after": [1, 1, 1]
-      },
-      "class": "voxel"
-    }
-  }
-}
-```
+The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. The allowed values, their order, and meaning are as defined in [EXT_voxels](../EXT_voxels/README.md#dimensions)
 
-#### Shape
+The value of the `dimensions` property **MUST** match the value of `dimensions` defined in the `EXT_voxels` extension for each tile.
 
-The shape and coordinate system of the voxel grid is determined by the `shape` property.
+### Padding
 
-The shape type **MUST** be `box` unless additional shape types are enabled through extensions. These extensions include:
-
-- [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md)
-- [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
-
-The `shape` type **MUST** match the `shape` used for the per-node voxel grids, as specified in the [EXT_voxels](../EXT_voxels/README.md) extension.
-
-#### Dimensions
-
-The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. Dimensions must be nonzero, and elements must be laid out on a first-axis contiguous basis, as specified in [EXT_voxels](../EXT_voxels/README.md). The meaning of each "axis" depends on the voxel grid's shape, explained below.
-
-For `box` shapes:
-
-Axis|Coordinate
---|--
-0|`right`
-1|`forward`
-2|`up`
-
-For `3DTILES_shape_ellipsoid_region` shapes:
-
-Axis|Coordinate
---|--
-0|`longitude`
-1|`latitude`
-2|`height`
-
-For `3DTILES_shape_cylinder_region` shapes:
-
-Axis|Coordinate
---|--
-0|`radius`
-1|`angle`
-2|`height`
-
-![Cylinder Coordinates](figures/cylinder-coordinates.png)
-
-These conventions align with how implicit tile coordinates defined in [Implicit Tiling](../../specification/ImplicitTiling/). The figure below shows `"dimensions": [8, 8, 8]` for each shape type:
-
-|Box|Region|Cylinder|
-| ------------- | ------------- | ------------- |
-|![Box Voxel Grid](figures/box.png)|![Region Voxel Grid](figures/sphere.png)|![Cylinder Voxel Grid](figures/cylinder.png)|
-
-#### Padding
-
-The `padding` property specifies how many rows of voxel data in each dimension come from neighboring grids. This is useful in situations where the content represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects, e.g., trilinear interpolation, blurring, or anti-aliasing.
+The `padding` property specifies how many rows of voxel data in each dimension are copied from neighboring tiles. This is useful in situations where the content represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects, e.g., trilinear interpolation, blurring, or anti-aliasing.
 
 `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g., a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-The `padding` property is optional; when omitted, `padding.before` and `padding.after` are both `[0, 0, 0]`. However, it **MUST** match the `padding` property specified in `EXT_voxels` on the glTF voxel grids.
+The `padding` property is optional; when omitted, `padding.before` and `padding.after` are both `[0, 0, 0]`. However, it **MUST** match the `padding` property specified in `EXT_voxels` for each tile.
 
-#### Class
+### Class
 
-The `class` property refers to a class ID in the metadata schema associated with the tileset, as defined in the [`EXT_structural_metadata` extension](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The class describes which properties exist in the voxel grid. In the example below, each voxel has a `temperature` value and a `salinity` value. When a property value equals the `noData` value it indicates that no data exists for that voxel.
+The `class` property refers to a class ID in the metadata schema associated with the tileset, as defined in the [`EXT_structural_metadata` extension](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The class describes which properties exist in the voxel grid. In the example below, each voxel may have a `temperature` value and/or a `salinity` value. When a property value equals the `noData` value it indicates that no data exists for that voxel.
 
-```json
-{
-  "extensions": {
-    "EXT_structural_metadata": {
-      "schema": {
-        "classes": {
-          "voxel": {
-            "properties": {
-              "temperature": {
-                "type": "SCALAR",
-                "componentType": "FLOAT32",
-                "noData": 999.9
-              },
-              "salinity": {
-                "type": "SCALAR",
-                "componentType": "UINT8",
-                "normalized": true,
-                "noData": 255
-              }
-            }
-          }
-        }
-      }
-    },
-    "3DTILES_tileset": {
-      "geometricError": 500.0,
-    },
-    "3DTILES_tileset_voxels": {
-      "shape": 0,
-      "dimensions": [8, 8, 8],
-      "class": "voxel"
-    }
-  }
-}
-```
-
-The `class` **MUST** match the `class` used to classify the glTF voxels in their `EXT_strutural_metadata` extension.
+The `class` **MUST** match the `class` used to classify the voxels in the `EXT_structural_metadata` extension, inside `EXT_voxels` for each tile.
 
 ## Example
 
 _This section is non-normative._
 
-The following example is a tileset JSON that uses voxel content with implicit tiling.
+The following example describes a voxel tileset containing two metadata values in each voxel grid.
 
 ```json
 {
   "extensionsUsed": ["3DTILES_tileset", "3DTILES_tileset_voxels", "EXT_structural_metadata"],
-  "extensionsRequired": ["3DTILES_tileset", "3DTILES_tileset_voxels"],
+  "extensionsRequired": ["3DTILES_tileset", "3DTILES_tileset_voxels", "EXT_structural_metadata"],
   "asset": {
     "version": "2.1"
   },
