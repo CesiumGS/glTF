@@ -28,9 +28,7 @@
                     "type": "string"
                 }
             ]
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "geometricError"

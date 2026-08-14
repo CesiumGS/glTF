@@ -77,9 +77,7 @@ The content references a set of *features*, such as 3D models representing build
 
 Tiles are organized in a tree which incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. Each tile has a *bounding volume*, an object defining a spatial extent completely enclosing its content. The tree has [spatial coherence](#spatial-coherence); the content for child tiles are completely inside the parent's bounding volume.
 
-<p align="center">
-  <img src="./figures/tree.png"/>
-</p>
+![A tree representing hierarchical level-of-detail.](./figures/tree.png)
 
 A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, the tree can be any spatial data structure with spatial coherence, including k-d trees, quadtrees, octrees, and grids. [Implicit tiling](#implicit-tiling) defines a concise representation of quadtrees and octrees.
 
@@ -255,12 +253,10 @@ The `content` object includes the following optional properties:
 - `boundingVolume` is a tightly fitting bounding volume enclosing just the tile's content. See [Bounding Volumes](#bounding-volumes).
 - `type` (not shown) is a hint about the type of content. Possible values include:
 
-TODO: Replace `3DTILES_content_conditional` with `EXT_node_visibility_conditions`?
-
 `type`|Description
 --|--
 `"content"`|A glTF asset without external assets.
-`"conditionalContent"`|A glTF using the [`3DTILES_content_conditional`](../3DTILES_content_conditional/README.md) extension, see [Conditional Content](#conditional-content).
+`"conditionalContent"`|A glTF using the [`3DTILES_node_visibility_conditions`](../3DTILES_node_visibility_conditions/README.md) extension, see [Conditional Content](#conditional-content).
 `"externalTileset`|A glTF using the `3DTILES_tileset` extension, see [External Tilesets](#external-tilesets).
 
 Additional values for "type" may be defined by extensions.
@@ -309,7 +305,7 @@ A tile's geometric error defines the selection metric for that tile. Its value i
 
 Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If a child tile's geometric error is greater than or equal to its parent's geometric error, that child tile is considered [unconditionally refinable](#unconditional-refinement).
 
-In a client implementation, geometric error is used with other screen space metrics—​e.g., distance from the tile to the camera, screen size, and resolution—to calculate the SSE introduced if this tile is rendered and its children are not. If the introduced SSE exceeds the maximum allowed, then the tile is refined and its children are considered for rendering.
+In a client implementation, geometric error is used with other screen space metrics—e.g., distance from the tile to the camera, screen size, and resolution—to calculate the SSE introduced if this tile is rendered and its children are not. If the introduced SSE exceeds the maximum allowed, then the tile is refined and its children are considered for rendering.
 
 The geometric error is formulated based on a metric like point density, mesh or texture decimation, or another factor specific to that tileset. In general, a higher geometric error means a tile will refine more aggressively, and children tiles will be loaded and rendered sooner.
 
@@ -359,8 +355,12 @@ The screenshot below shows the bounding volumes for the root tile for Canary Wha
 
 <p align="center">
   <img src="./figures/contentsBox.png"/><br/>
-  <em>Bounding volumes for the root tile of a tileset. Building data from <a href="http://www.cybercity3d.com/">CyberCity3D</a>. Imagery data from <a href=https://www.microsoft.com/maps/>Bing Maps</a>.</em>
+  <em></em>
 </p>
+
+> ![Image of bounding volumes.](./figures/contentsBox.png)
+>
+> Bounding volumes for the root tile of a tileset. Building data from [CyberCity3D](http://www.cybercity3d.com/). Imagery data from [Bing Maps](https://www.microsoft.com/maps/).
 
 #### Bounding Box
 
@@ -463,12 +463,9 @@ A tileset defined in a global coordinate system **MUST** specify its coordinate 
 
 A tileset defined in a global coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
-<p align="center">
-  <img src="./figures/ecef.png"/>
-  <br>
-  <em>An illustration of <a href="https://epsg.org/crs_4978/WGS-84.html">EPSG 4978</a>, an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
- </em>
-</p>
+> ![Image of an Earth-centered, Earth-fixed geocentric coordinate reference system.](./figures/ecef.png)
+>
+> An illustration of [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html), an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
 
 The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
@@ -491,7 +488,8 @@ The example below shows a tileset using [EPSG 4978](https://epsg.org/crs_4978/WG
 }
 ```
 
-> **Note:** 3D Tiles only allows local and geocentric (planetocentric) coordinate reference systems. Other coordinate reference system types, such as geographic and projected coordinate reference systems, are not allowed as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
+> [!NOTE]
+> 3D Tiles only allows local and geocentric (planetocentric) coordinate reference systems. Other coordinate reference system types, such as geographic and projected coordinate reference systems, are not allowed as they often require dedicated coordinate transformation libraries and ancillary data, such as grid shift files, in order to be rendered in 3D globe engines.
 
 Tilesets may reference [external tilesets](#external-tilesets) in different coordinate systems. For example, a tileset could start in a geocentric coordinate reference system and then transition to a local engineering reference frame for higher precision.
 
@@ -512,9 +510,7 @@ The bounding volume hierarchy may be defined explicitly — as shown previou
 
 Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension.
 
-<p align="center">
-  <img src="./figures/implicit-tiling-small.png"/>
-</p>
+![A diagram demonstrating implicit tiling.](./figures/implicit-tiling-small.png)
 
 ## Conditional Content
 
@@ -644,46 +640,39 @@ For complete details, see the [Declarative Styling](https://github.com/CesiumGS/
 
 A quadtree is created when each tile has four uniformly subdivided children, similar to typical 2D geospatial tiling schemes. Empty child tiles can be omitted.
 
-<p align="center">
-  <img src="./figures/quadtree.png"/><br/>
-  Classic quadtree subdivision.
-</p>
+> ![A diagram showing quadtree subdivision.](./figures/quadtree.png)
+>
+> Classic quadtree subdivision.
 
 3D Tiles enable quadtree variations such as non-uniform subdivision and tight bounding volumes (as opposed to bounding, for example, the full 25% of the parent tile, which is wasteful for sparse datasets).
 
-<p align="center">
-  <img src="./figures/quadtree-tight.png"/><br/>
-  Quadtree with tight bounding volumes around each child.
-</p>
+> ![A diagram of a quadtree with tight bounding volumes.](./figures/quadtree-tight.png)
+>
+> Quadtree with tight bounding volumes around each child.
 
 For example, here is the root tile and its children for Canary Wharf. Note the bottom left, where the bounding volume does not include the water on the left where no buildings will appear:
 
-<p align="center">
-  <img src="./figures/nonUniformQuadtree.png"/><br/>
-  Building data from <a href="http://www.cybercity3d.com/">CyberCity3D</a>. Imagery data from <a href="https://www.microsoft.com/maps/">Bing Maps</a>.
-</p>
+> ![A diagram showing the bounding volumes of a root tile and it's children.](./figures/nonUniformQuadtree.png)
+>
+> Building data from [CyberCity3D](http://www.cybercity3d.com/). Imagery data from [Bing Maps](https://www.microsoft.com/maps/).
 
 3D Tiles also enable other quadtree variations such as [loose quadtrees](http://www.tulrich.com/geekstuff/partitioning.html), where child tiles overlap but spatial coherence is still preserved, i.e., a parent tile completely encloses all of its children. This approach can be useful to avoid splitting features, such as 3D models, across tiles.
 
-<p align="center">
-  <img src="./figures/quadtree-overlap.png"/><br/>
-  Quadtree with non-uniform and overlapping tiles.
-</p>
+> ![A diagram demonstrating loose quadtrees.](./figures/quadtree-overlap.png)
+>
+> Quadtree with non-uniform and overlapping tiles.
 
 Below, the green buildings are in the left child and the purple buildings are in the right child. Note that the tiles overlap so the two green and one purple building in the center are not split.
 
-<p align="center">
-  <img src="./figures/looseQuadtree.png"/>
-</p>
+![An image showing loose quadtrees in practice.](./figures/looseQuadtree.png)
 
 #### K-d trees
 
 A k-d tree is created when each tile has two children separated by a *splitting plane* parallel to the *x*, *y*, or *z* axis (or latitude, longitude, height). The split axis is often round-robin rotated as levels increase down the tree, and the splitting plane may be selected using the median split, surface area heuristics, or other approaches.
 
-<p align="center">
-  <img src="./figures/kdtree.png"/><br/>
-  Example k-d tree. Note the non-uniform subdivision.
-</p>
+> ![A diagram showing a k-d tree.](./figures/kdtree.png)
+>
+> Example k-d tree. Note the non-uniform subdivision.
 
 Note that a k-d tree does not have uniform subdivision like typical 2D geospatial tiling schemes and, therefore, can create a more balanced tree for sparse and non-uniformly distributed datasets.
 
@@ -693,23 +682,20 @@ Note that a k-d tree does not have uniform subdivision like typical 2D geospatia
 
 An octree extends a quadtree by using three orthogonal splitting planes to subdivide a tile into eight children. Like quadtrees, 3D Tiles allows variations to octrees such as non-uniform subdivision, tight bounding volumes, and overlapping children.
 
-<p align="center">
-  <img src="./figures/octree.png"/><br/>
-  Traditional octree subdivision.
-</p>
+> ![A diagram demonstrating octree subdivision.](./figures/octree.png)
+>
+> Traditional octree subdivision.
 
-<p align="center">
-  <img src="./figures/pointcloud-octree.png"/><br/>
-  Non-uniform octree subdivision for a point cloud using additive refinement. Point Cloud of <a href="http://robotics.cs.columbia.edu/~atroccol/ijcv/chappes.html">the Church of St Marie at Chappes, France</a> by Prof. Peter Allen, Columbia University Robotics Lab. Scanning by Alejandro Troccoli and Matei Ciocarlie.
-</p>
+> ![An image showing a point cloud with non-uniform octree subdivision.](./figures/pointcloud-octree.png)
+>
+> Non-uniform octree subdivision for a point cloud using additive refinement. Point Cloud of [the Church of St Marie at Chappes, France](http://robotics.cs.columbia.edu/~atroccol/ijcv/chappes.html) by Prof. Peter Allen, Columbia University Robotics Lab. Scanning by Alejandro Troccoli and Matei Ciocarlie.
 
 #### Grids
 
 3D Tiles enables uniform, non-uniform, and overlapping grids by supporting an arbitrary number of child tiles. For example, here is a top-down view of a non-uniform overlapping grid of Cambridge:
 
-<p align="center">
-  <img src="./figures/grid.png"/>
-</p>
+
+![A image showing a tileset with overlapping grids.](./figures/grid.png)
 
 3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
 
