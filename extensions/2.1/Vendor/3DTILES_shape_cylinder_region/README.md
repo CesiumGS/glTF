@@ -88,28 +88,25 @@ The cylinder is centered at the origin, where the radius is measured along the `
   <tr>
     <td>
 
-```json
-"shapes": [
-  {
-    "name": "Cylindrical Shell Region",
-    "type": "cylinder region",
-    "extensions": {
-      "3DTILES_shape_cylinder_region": {
-        "minimumRadius": 0.5,
-        "maximumRadius": 1.0,
-        "height": 2.0
-      }
-    }
-  }
-]
-```
-
-  </td>
-    <td>
-    <img src="figures/hollow-cylinder.png">
-    </td>
-  </tr>
-</table>
+> **Example**
+>
+> ```json
+> "shapes": [
+>   {
+>     "name": "Cylindrical Shell Region",
+>     "type": "cylinder region",
+>     "extensions": {
+>       "3DTILES_shape_cylinder_region": {
+>         "minimumRadius": 0.5,
+>         "maximumRadius": 1.0,
+>         "height": 2.0
+>       }
+>     }
+>   }
+> ]
+> ```
+>
+> ![](figures/hollow-cylinder.png)
 
 A cylinder region may also be confined to a certain angular range. The `minimumAngle` and `maximumAngle` properties define the angles at which the region starts and stops on the cylinder.
 
@@ -117,38 +114,25 @@ Angles are given in radians within the range `[-pi, pi]` and open counter-clockw
 
 ![](figures/cylinder-angle.png)
 
-<table>
-  <tr>
-    <th>
-    Example
-    </th>
-  </tr>
-  <tr>
-    <td>
-
-```json
-"shapes": [
-  {
-    "name": "Cylindrical Sector Region",
-    "type": "cylinder region",
-    "extensions": {
-      "3DTILES_shape_cylinder_region": {
-        "minimumRadius": 0.5,
-        "maximumRadius": 1.0,
-        "height": 2.0,
-        "minimumAngle": -1.570796,
-        "maximumAngle": 1.570796
-      }
-    }
-  }
-]
-```
-</td>
-    <td>
-    <img src="figures/half-cylinder.png">
-    </td>
-  </tr>
-</table>
+> ```json
+> "shapes": [
+>   {
+>     "name": "Cylindrical Sector Region",
+>     "type": "cylinder region",
+>     "extensions": {
+>       "3DTILES_shape_cylinder_region": {
+>         "minimumRadius": 0.5,
+>         "maximumRadius": 1.0,
+>         "height": 2.0,
+>         "minimumAngle": -1.570796,
+>         "maximumAngle": 1.570796
+>       }
+>     }
+>   }
+> ]
+> ```
+>
+> ![](figures/half-cylinder.png)
 
 ## Implicit Subdivision
 

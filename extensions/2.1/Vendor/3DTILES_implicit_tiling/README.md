@@ -37,10 +37,9 @@ In order to support sparse datasets, *availability* data determines which tiles 
 
 The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset. The extension defines how the tile is subdivided and where to locate content resources. It may be added to multiple tiles to create more complex subdivision schemes.
 
-<p align="center">
-  <img src="./figures/sparse-octree.png"/><br/>
-  <em>A point cloud organized into a sparse octree. Data source: Trimble.</em>
-</p>
+> ![An image showing a point cloud organized into a sparse octree.](./figures/sparse-octree.png)
+>
+> A point cloud organized into a sparse octree. Data source: Trimble.
 
 ## Implicit Root Tile
 
@@ -89,15 +88,11 @@ A *subdivision scheme* is a recursive pattern for dividing a bounding volume of 
 
 A *quadtree* divides space only on the first two dimensions. It divides each tile into 4 smaller tiles where the dimensions are halved. The third dimension remains unchanged. The resulting tree has 4 children per tile.
 
-<p align="center">
-  <img src="./figures/quadtree.png"/><br/>
-</p>
+![A diagram demonstrating quadtree subdivision.](./figures/quadtree.png)
 
 An *octree* divides space along all 3 dimensions. It divides each tile into 8 smaller tiles where each dimension is halved. The resulting tree has 8 children per tile.
 
-<p align="center">
-  <img src="./figures/octree.png"/><br/>
-</p>
+![A diagram demonstrating octree subdivision.](./figures/octree.png)
 
 ## Subdivision Rules
 
@@ -113,7 +108,7 @@ Property|Subdivision Rule
 > [!NOTE]
 > In order to maintain numerical stability during this subdivision process, the actual bounding volumes should not be computed progressively by subdividing a non-root tile volume. Instead, the exact bounding volumes should be computed directly for a given level.
 >
-> Let the extent of the root bounding volume along one dimension *d* be *(min<sub>d</sub>, max<sub>d</sub>)*. The number of bounding volumes along that dimension for a given level  is *2<sup>level</sup>*. The size of each bounding volume at this level, along dimension *d*, is *size<sub>d</sub> = (max<sub>d</sub> - min<sub>d</sub>) / 2<sup>level</sup>*. The extent of the bounding volume of a child can then be computed directly as *(min<sub>d</sub> + size<sub>d</sub> * i, min<sub>d</sub> + size<sub>d</sub> * (i + 1))*, where *i* is the index of the child in dimension *d*.
+> Let the extent of the root bounding volume along one dimension $d$ be $(min_{d}, max_{d})$. The number of bounding volumes along that dimension for a given level  is $2^{level}$. The size of each bounding volume at this level, along dimension $d$, is $size_{d} = (max_{d} - min_{d}) / 2^{level}$. The extent of the bounding volume of a child can then be computed directly as $(min_{d} + size_{d} * i, min_{d} + size_{d} * (i + 1))$, where $i$ is the index of the child in dimension $d$.
 
 The computed tile `boundingVolume` and `geometricError` can be overridden with [tile attributes](#attributes), if desired. Content bounding volumes are not computed automatically but they may be provided by [content attributes](#attributes). Tile and content bounding volumes **SHOULD** maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence).
 
@@ -141,7 +136,7 @@ For other bounding volumes see:
 
 - [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md#implicit-subdivision)
 - [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md#implicit-subdivision)
-- [3DTILES_bounding_volume_S2](../3DTILES_bounding_volume_S2/README.md#implicit-subdivision)
+- [3DTILES_shape_S2](../3DTILES_shape_S2/README.md#implicit-subdivision)
 
 Sphere bounding volumes are disallowed, as these cannot be divided into a quadtree or octree.
 
@@ -181,7 +176,7 @@ The following restrictions apply:
 - The property must not be an array property, i.e. `"array": false`
 - The property's `type` must be `SCALAR`, `STRING`, or `ENUM`
 
-For `ENUM` properties, the enum's `name` is used instead of its integer value.
+For `ENUM` properties, the enumeration's `name` is used instead of its integer value.
 
 The resolved URI must be a valid [URI](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#uris), e.g. string property values cannot have spaces or other restricted characters.
 
@@ -352,10 +347,9 @@ In binary, a tile's global Morton index is the complete path from the implicit r
 tile.globalMortonIndex = concatBits(subtreeRoot.globalMortonIndex, tile.localMortonIndex)
 ```
 
-<p align="center">
-  <img src="./figures/global-to-local-morton.png"/><br/>
-  <em>Illustration of how to compute the global Morton index of a tile, from the global Morton index of the root of the containing subtree, and the local Morton index of the tile in this subtree.</em>
-</p>
+> ![](./figures/global-to-local-morton.png)
+>
+> Illustration of how to compute the global Morton index of a tile, from the global Morton index of the root of the containing subtree, and the local Morton index of the tile in this subtree.
 
 Similarly, the global level of a tile is the length of the path from the implicit root tile to the tile. This is the sum of the subtree root tile's global level and the tile's local level relative to the subtree root tile:
 
@@ -363,10 +357,9 @@ Similarly, the global level of a tile is the length of the path from the implici
 tile.globalLevel = subtreeRoot.globalLevel + tile.localLevel
 ```
 
-<p align="center">
-  <img src="./figures/global-to-local-levels.png"/><br/>
-  <em>Illustration of how to compute the global level of a tile, from the global level of the root of the containing subtree, and the local level of the tile in this subtree.</em>
-</p>
+> ![](./figures/global-to-local-levels.png)
+>
+> Illustration of how to compute the global level of a tile, from the global level of the root of the containing subtree, and the local level of the tile in this subtree.
 
 Tile coordinate indices follow the same pattern as Morton indices. The only difference is that the concatenation of bits happens component-wise. That is:
 
@@ -378,10 +371,9 @@ tile.globalIndex1 = concatBits(subtreeRoot.globalIndex1, tile.localIndex1)
 tile.globalIndex2 = concatBits(subtreeRoot.globalIndex2, tile.localIndex2)
 ```
 
-<p align="center">
-  <img src="./figures/global-to-local.png"/><br/>
-  <em>Illustration of the computation of the global tile coordinates, from the global coordinates of the containing subtree, and the local coordinates of the tile in this subtree.</em>
-</p>
+> ![](./figures/global-to-local.png)
+>
+> Illustration of the computation of the global tile coordinates, from the global coordinates of the containing subtree, and the local coordinates of the tile in this subtree.
 
 ### Finding Parent and Child Tiles
 
@@ -402,7 +394,6 @@ Where:
 - `childIndex` is an integer in the range `[0, N)` that is the index of the child tile relative to the parent.
 - `childAxis0`, `childAxis1`, and `childAxis2` are single bits that represent which half of the parent's bounding volume the child is in in each direction.
 
-<p align="center">
-  <img src="./figures/parent-and-child-coordinates.png"/><br/>
-  <em>Illustration of the computation of the coordinates of parent- and child tiles.</em>
-</p>
+> ![](./figures/parent-and-child-coordinates.png)
+>
+> Illustration of the computation of the coordinates of parent- and child tiles.

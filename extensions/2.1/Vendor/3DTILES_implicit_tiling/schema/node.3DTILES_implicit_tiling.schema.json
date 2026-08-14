@@ -41,9 +41,7 @@
             "type": "integer",
             "minimum": 1,
             "description": "How many levels there are in each subtree."
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "contentUri",

@@ -28,7 +28,7 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 This extension adds a pre-computed horizon occlusion point to a [tile](../3DTILES_tileset/README.md#tile) or [content](../3DTILES_tileset/README.md#content) in order to perform fast horizon culling at runtime. This enables feature parity with [quantized-mesh](https://github.com/CesiumGS/quantized-mesh).
 
-`horizonOcclusionPoint` is expressed in an ellipsoid-scaled fixed frame. At runtime, if this point is below the horizon, the entire tile is below the horizon and may be culled.
+`horizonOcclusionPoint` is expressed in an ellipsoid–scaled fixed frame. At runtime, if this point is below the horizon, the entire tile is below the horizon and may be culled.
 
 This extension uses [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS_84) ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)) as the default ellipsoid. A different ellipsoid may be specified with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 

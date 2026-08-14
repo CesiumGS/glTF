@@ -121,13 +121,13 @@ A tile's transform **MUST** be identity when referencing an S2 shape in its `bou
 | **minimumHeight** | `number` | The minimum height of the shape, specified in meters above (or below) the WGS84 ellipsoid. | Yes |
 | **maximumHeight** | `number` | The maximum height of the shape, specified in meters above (or below) the WGS84 ellipsoid. | Yes |
 
-> **Implementation Note**: When mapping the sphere to the cube, S2 provides three projection methods: linear, quadratic and tangential. This extension assumes an implementation uses the quadratic projection, since it is reasonably accurate and efficient.
+> [!NOTE]
+>
+> When mapping the sphere to the cube, S2 provides three projection methods: linear, quadratic and tangential. This extension assumes an implementation uses the quadratic projection, since it is reasonably accurate and efficient.
 
 ![Volume](figures/volume.jpg)
 
-<p align="center">
-  S2 cell (<tt>"89c6c7"</tt>) covering the Philadelphia Center City area, with minimum height set to <tt>0</tt> m and maximum height set to <tt>1000</tt> m.
-</p>
+S2 cell (`"89c6c7"`) covering the Philadelphia Center City area, with minimum height set to `0` meters and maximum height set to `1000` meters.
 
 ```json
 "shapes": [

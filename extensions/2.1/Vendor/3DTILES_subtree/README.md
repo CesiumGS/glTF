@@ -45,6 +45,7 @@ Availability may be represented either as a bitstream or a constant value. `bits
 For a bitstream with `N` values, the buffer view that stores these availability values will consist of `ceil(N / 8)` bytes. When `N` is not divisible by `8`, then the unused bits of the last byte of this buffer **MUST** be set to 0.
 
 > [!NOTE]
+>
 > Example accessing availability for element `i`
 >
 > ```javascript
@@ -55,7 +56,7 @@ For a bitstream with `N` values, the buffer view that stores these availability 
 > ```
 
 > **Example:** A subtree where each tile is available, but not all tiles have content, and not all child subtrees are available:
-> 
+>
 > ```json
 > {
 >   "buffers": [
