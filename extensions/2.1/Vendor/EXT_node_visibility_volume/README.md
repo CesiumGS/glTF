@@ -93,6 +93,6 @@ _This section is non-normative._
 
 This extension's primary goal is to show a node and its hierarchy when the camera is within its bounding volume. Once the hierarchy is made visible, its contents may still be subject to other Level of Detail (LoD) methods. Implementations may add to this behavior, but should not add stricter conditions for visibility. For example, requiring the camera to be within a certain distance from the bounding volume's center is discouraged.
 
-## JSON Schema
+## Schema
 
-- [EXT_node_visibility_volume.schema.json](./schema/EXT_node_visibility_volume.schema.json)
+- [EXT_node_visibility_volume.schema.json](schema/EXT_node_visibility_volume.schema.json)

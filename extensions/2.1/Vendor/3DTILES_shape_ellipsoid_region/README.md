@@ -150,3 +150,7 @@ Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"CONTENT_BOUNDING_REGION"`|`"VEC4"`|`5130` (DOUBLE)|The bounding region of the content, in the order `(minimum longitude, minimum latitude, maximum longitude, maximum latitude)`.
 `"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.
+
+## Schema
+
+- [shape.3DTILES_shape_ellipsoid_region.schema.json](schema/shape.3DTILES_shape_ellipsoid_region.schema.json)

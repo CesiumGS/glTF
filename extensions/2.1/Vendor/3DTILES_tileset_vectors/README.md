@@ -157,4 +157,4 @@ Visual representation of vector data in 3D Tiles is left undefined by this speci
 
 ## Schema
 
-- [gltf.3DTILES_tileset_vectors.schema.json](schema/gltf.3DTILES_tileset_vectors.schema.json).
+- [gltf.3DTILES_tileset_vectors.schema.json](schema/gltf.3DTILES_tileset_vectors.schema.json)

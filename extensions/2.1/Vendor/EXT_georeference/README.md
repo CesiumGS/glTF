@@ -92,3 +92,7 @@ In this example the node has a local 20° heading that is applied before the geo
     <td><img src="./figures/plane-heading.jpg"/></td>
   </tr>
 </table>
+
+## Schema
+
+- [node.EXT_georeference.schema.json](schema/node.EXT_georeference.schema.json)

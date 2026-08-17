@@ -149,3 +149,7 @@ Coordinate|Positive Direction
 radius| From the center outwards (increasing radius)
 angle| From $-\pi$ to $\pi$ (counter-clockwise angle)
 height| From bottom to top (increasing height)
+
+## Schema
+
+- [shape.3DTILES_shape_cylinder_region.schema.json](schema/shape.3DTILES_shape_cylinder_region.schema.json)

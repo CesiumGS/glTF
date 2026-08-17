@@ -397,3 +397,7 @@ Where:
 > ![](./figures/parent-and-child-coordinates.png)
 >
 > Illustration of the computation of the coordinates of parent- and child tiles.
+
+## Schema
+
+- [node.3DTILES_implicit_tiling.schema.json](schema/node.3DTILES_implicit_tiling.schema.json)

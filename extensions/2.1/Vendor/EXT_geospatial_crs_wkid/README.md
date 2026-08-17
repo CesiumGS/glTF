@@ -99,5 +99,8 @@ An asset defined with a horizontal CRS (UTM Zone 11N) and vertical CRS (NAVD 88)
       }
     }
   }
-}
 ```
+
+## Schema
+
+- [EXT_geospatial_crs_wkid.schema.json](schema/EXT_geospatial_crs_wkid.schema.json)

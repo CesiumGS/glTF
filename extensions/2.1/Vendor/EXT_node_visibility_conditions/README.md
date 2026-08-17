@@ -102,7 +102,7 @@ The `EXT_node_visibility_conditions` object that is associated with the `KHR_nod
 
 The process for determining the value of the `visible` flag based on the `EXT_node_visibility_conditions` object is left to the application. A common implementation could be that the client allows the user to select one value of each `domain` of the top-level extension object, and checks whether the corresponding values from the `EXT_node_visibility_conditions` object are equal to the selected values. This extension only defines the _structure_ for the conditions, but not their _interpretation_, so the exact interpretation of the conditions for setting the `visible` flag are left to the implementation or may be defined by future extensions.
 
-## JSON Schema
+## Schema
 
-- [glTF.EXT_node_visibility_conditions.schema.json](schema/glTF.EXT_node_visibility_conditions.schema.json)
 - [EXT_node_visibility_conditions.schema.json](schema/EXT_node_visibility_conditions.schema.json)
+- [glTF.EXT_node_visibility_conditions.schema.json](schema/glTF.EXT_node_visibility_conditions.schema.json)

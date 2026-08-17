@@ -72,3 +72,7 @@ This extension defines the following [subtree content attribute semantics](../3D
 Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"CONTENT_HORIZON_OCCLUSION_POINT"`|`"VEC3"`|`5130` (DOUBLE)|The horizon occlusion point of the content expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire content is below the horizon.
+
+## Schema
+
+- [3DTILES_horizon_occlusion_point.schema.json](schema/3DTILES_horizon_occlusion_point.schema.json)

@@ -580,7 +580,7 @@ Attribute Semantic|Accessor Type|Component Type|Description
 
 ## Schema
 
-* [shape.3DTILES_shape_s2.schema.json](schema/shape.3DTILES_shape_s2.schema.json).
+- [shape.3DTILES_shape_s2.schema.json](schema/shape.3DTILES_shape_s2.schema.json)
 
 ## Implementation Examples
 

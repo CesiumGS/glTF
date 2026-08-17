@@ -215,3 +215,9 @@ This extension defines the following [subtree content attribute semantics](../3D
 Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5130` (DOUBLE)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level 3DTILES_layers extension.
+
+## Schema
+
+- [content.3DTILES_layers.schema.json](schema/content.3DTILES_layers.schema.json)
+- [glTF.3DTILES_layers.schema.json](schema/glTF.3DTILES_layers.schema.json)
+- [layer.schema.json](schema/layer.schema.json)

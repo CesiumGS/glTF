@@ -50,3 +50,7 @@ The following example shows an asset defined in UTM Zone 11N coordinates.
   }
 }
 ```
+
+## Schema
+
+- [EXT_geospatial_crs_wkt2.schema.json](schema/EXT_geospatial_crs_wkt2.schema.json)

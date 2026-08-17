@@ -690,3 +690,9 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 ![A image showing a tileset with overlapping grids.](./figures/grid.png)
 
 3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
+
+## Schema
+
+- [content.schema.json](schema/content.schema.json)
+- [glTF.3DTILES_tileset.schema.json](schema/glTF.3DTILES_tileset.schema.json)
+- [node.3DTILES_tileset.schema.json](schema/node.3DTILES_tileset.schema.json)

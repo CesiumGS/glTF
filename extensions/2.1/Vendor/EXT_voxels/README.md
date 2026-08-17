@@ -292,3 +292,8 @@ This extension may be paired with the `EXT_structural_metadata` extension to con
 ```
 
 `EXT_structural_metadata` may also specify a `noData` value for a property attribute property. If `EXT_voxels` contains an entry in `noData` for the same attribute, the values **SHOULD** match betwen the two extensions.
+
+## Schema
+
+- [node.EXT_voxels.schema.json](schema/node.EXT_voxels.schema.json)
+- [padding.schema.json](schema/padding.schema.json)
