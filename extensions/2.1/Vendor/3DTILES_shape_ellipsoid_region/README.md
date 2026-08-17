@@ -135,3 +135,18 @@ longitude| From west to east (increasing longitude)
 latitude| From south to north (increasing latitude)
 height| From bottom to top (increasing height)
 
+## Subtree Attributes
+
+This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
+
+Attribute Semantic|Accessor Type|Component Type|Description
+--|--|--|--
+`"TILE_BOUNDING_REGION"`|`"VEC4"`|`5130` (DOUBLE)|The bounding region of the tile, in the order `(minimum longitude, minimum latitude, maximum longitude, maximum latitude)`.
+`"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.
+
+This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
+
+Attribute Semantic|Accessor Type|Component Type|Description
+--|--|--|--
+`"CONTENT_BOUNDING_REGION"`|`"VEC4"`|`5130` (DOUBLE)|The bounding region of the content, in the order `(minimum longitude, minimum latitude, maximum longitude, maximum latitude)`.
+`"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.

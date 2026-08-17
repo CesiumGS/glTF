@@ -39,6 +39,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 - [S2 Shape](#s2-shape)
 - [Implicit Subdivision](#implicit-subdivision)
   - [Availability](#availability)
+- [Subtree Attributes](#subtree-attributes)
 - [Schema](#schema)
 - [Implementation Examples](#implementation-examples)
 
@@ -560,6 +561,22 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
   ]
 }
 ```
+
+## Subtree Attributes
+
+This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
+
+Attribute Semantic|Accessor Type|Component Type|Description
+--|--|--|--
+`"TILE_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the tile, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.
+`"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.
+
+This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
+
+Attribute Semantic|Accessor Type|Component Type|Description
+--|--|--|--
+`"CONTENT_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the content, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.
+`"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.
 
 ## Schema
 
