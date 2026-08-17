@@ -630,7 +630,7 @@ The following example shows a tileset with tileset properties, tile properties, 
 
 #### Statistics
 
-A tileset may also provide summary statistics with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata, e.g. with [declarative styling](#declarative-styling), without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
+A tileset may also provide summary statistics with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
 
 ![](./figures/statistics.png)
 
