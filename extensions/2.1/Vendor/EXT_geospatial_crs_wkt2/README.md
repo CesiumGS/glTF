@@ -21,7 +21,7 @@ Written against the glTF 2.1 spec.
 
 Depends on [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
-## Optional vs. Required
+## Optional
 
 This extension is optional, meaning it should be placed in the glTF root's `extensionsUsed` list, but not in the `extensionsRequired` list.
 

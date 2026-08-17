@@ -4,7 +4,7 @@
     "title": "glTF.3DTILES_tileset",
     "type": "object",
     "description": "glTF-level 3DTILES_tileset extension.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "geometricError": {
             "type": "number",

@@ -20,7 +20,7 @@ Written against the glTF 2.1 spec.
 
 Assets with the `3DTILES_subtree` extension are referenced by [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 

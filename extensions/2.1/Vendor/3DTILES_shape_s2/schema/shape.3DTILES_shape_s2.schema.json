@@ -3,7 +3,7 @@
     "$id": "shape.3DTILES_shape_s2.schema.json",
     "title": "3DTILES_shape_s2",
     "type": "object",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "token": {
             "type": "string",
@@ -16,9 +16,7 @@
         "maximumHeight": {
             "type": "number",
             "description": "The maximum height of the tile, specified in meters above (or below) the WGS84 ellipsoid."
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "token",

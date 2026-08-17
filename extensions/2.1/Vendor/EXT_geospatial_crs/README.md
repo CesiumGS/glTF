@@ -21,7 +21,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-## Optional vs. Required
+## Optional
 
 This extension is optional, meaning it should be placed in the glTF root's `extensionsUsed` list, but not in the `extensionsRequired` list.
 
@@ -32,10 +32,10 @@ Assets with this extension are declared to have been authored for geospecific us
 A CRS may be one of the following types:
 
 - **Geographic** - longitude, latitude, height
-- **Geocentric** - global cartesian coordinates - x, y, z
-- **Projected** - local cartesian coordinates in a 2D projected space - x, y, height
+- **Geocentric** - global Cartesian coordinates - x, y, z
+- **Projected** - local Cartesian coordinates in a 2D projected space - x, y, height
 - **Compound** - combination of a horizontal + vertical CRS
-- **Local** - local cartesian coordinates - x, y, z
+- **Local** - local Cartesian coordinates - x, y, z
 
 
 For example, an asset may declare a projected CRS that is +X east, +Y north, +Z up and U.S. Survey Feet. This overrides the default glTF coordinate system of -X right, +Y up, +Z forward, and meters.

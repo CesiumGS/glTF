@@ -22,7 +22,7 @@ Draft
 
 Written against the glTF 2.1 specification.
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsUsed` and `extensionsRequired`.
 
@@ -53,7 +53,7 @@ This extension allows nodes to represent volumetric (voxel) data via attributes.
       },
   ],
   "accessors": [
-    {    
+    {
       "bufferView": 0,
       "byteOffset": 0,
       "componentType": 5126,

@@ -4,7 +4,7 @@
     "title": "3DTILES_implicit_tiling",
     "type": "object",
     "description": "Implicit tiling defines a concise representation of quadtrees and octrees in 3D Tiles.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "contentUri": {
             "type": "string",

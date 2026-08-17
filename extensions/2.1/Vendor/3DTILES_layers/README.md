@@ -21,7 +21,7 @@ Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 
-## Optional vs. Required
+## Optional
 
 This extension is optional, meaning it should be placed in the glTF root's `extensionsUsed` list, but not in the `extensionsRequired` list.
 

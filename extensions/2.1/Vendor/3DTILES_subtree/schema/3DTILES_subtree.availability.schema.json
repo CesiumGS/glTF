@@ -1,9 +1,10 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "availability.schema.json",
+    "$id": "3DTILES_subtree.availability.schema.json",
     "title": "Availability",
     "type": "object",
     "description": "An object describing the availability of a set of elements.",
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "bitstream": {
             "$ref": "glTFid.schema.json",

@@ -3,8 +3,8 @@
     "$id": "node.3DTILES_tileset.schema.json",
     "title": "node.3DTILES_tileset",
     "type": "object",
-    "description": "node-level 3DTILES_tileset extension.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "description": "Node-level 3DTILES_tileset extension.",
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "geometricError": {
             "type": "number",

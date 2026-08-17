@@ -19,7 +19,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 
@@ -46,7 +46,7 @@ The extension is most useful when implementations use it to apply an additional 
 
 This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
 
-The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal
+The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal.
 
 This extension applies a rotation which has the following results:
 
@@ -54,10 +54,8 @@ This extension applies a rotation which has the following results:
 - The `+y` axis (local up) faces up (normal to the tangent plane)
 - The `+z` axis (local forward) faces north
 
-<p align="center">
-  <img src="./figures/enu-xyz.png"/><br/>
-  Alignment of local coordinates (right) to tangent plane of ellipsoid (left)</code>.
-</p>
+> ![](./figures/enu-xyz.png)
+> Alignment of local coordinates (right) to tangent plane of ellipsoid (left).
 
 ## Transformation Order
 

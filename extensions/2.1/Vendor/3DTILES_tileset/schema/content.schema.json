@@ -4,10 +4,10 @@
     "title": "Content",
     "type": "object",
     "description": "Content object in node-level 3DTILES_tileset extension.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "boundingVolume": {
-            "allOf": [ { "$ref": "boundingVolume.schema.json" } ],
+            "$ref": "boundingVolume.schema.json",
             "description": "The content bounding volume."
         }
     }

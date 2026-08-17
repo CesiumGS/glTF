@@ -26,7 +26,7 @@ Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 
 Optionally, this extension may be used in conjunction with [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 

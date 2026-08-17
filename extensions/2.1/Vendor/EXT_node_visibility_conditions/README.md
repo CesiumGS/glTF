@@ -22,9 +22,9 @@ Written against the glTF 2.1 specification.
 
 Depends on [KHR_node_visibility](../../../2.0/Khronos/KHR_node_visibility).
 
-## Optional vs. Required
+## Optional
 
-This extension is optional. 
+This extension is optional.
 
 Implementations that do not support this extension (but only the `KHR_node_visibility` extension) will simply use the value of the `visible` flag that is defined in the `KHR_node_visibility` extension.
 
@@ -37,7 +37,7 @@ This extension adds support for conditions for the `KHR_node_visibility` extensi
 The `KHR_node_visibility` extension is associated with a node, and defines the `visible` flag that indicates whether a node and all its descendants. The `EXT_node_visibility_conditions` extension extends this extension, and consists of two parts:
 
 - The main extension object is contained in the `KHR_node_visibility` extension object, and defines the conditions for the `visible` flag to be `true`
-- A top-level extension object defines the the condition variables that may appear in the extension object, and their possible values.
+- A top-level extension object defines the condition variables that may appear in the extension object, and their possible values.
 
 The following example is a glTF asset that uses the extension to define the condition for a node with an external asset to be visible:
 
@@ -106,4 +106,3 @@ The process for determining the value of the `visible` flag based on the `EXT_no
 
 - [glTF.EXT_node_visibility_conditions.schema.json](schema/glTF.EXT_node_visibility_conditions.schema.json)
 - [EXT_node_visibility_conditions.schema.json](schema/EXT_node_visibility_conditions.schema.json)
-

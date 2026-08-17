@@ -4,7 +4,7 @@
     "title": "node.EXT_georeference",
     "type": "object",
     "description": "This extension georeferences a node to the provided geographic coordinates.",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "longitude": {
             "type": "number",
@@ -21,9 +21,7 @@
         "height": {
             "type": "number",
             "description": "Height above (or below) the ellipsoid specified in meters."
-        },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "longitude",

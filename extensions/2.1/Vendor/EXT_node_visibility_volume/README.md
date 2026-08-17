@@ -23,7 +23,7 @@ Written against the glTF 2.1 specification.
 
 Depends on [KHR_node_visibility](../../../2.0/Khronos/KHR_node_visibility).
 
-## Optional vs. Required
+## Optional
 
 This extension is optional.
 

@@ -20,7 +20,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 

@@ -25,7 +25,7 @@ Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 Depends on [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
 Depends on [EXT_voxels](../EXT_voxels/README.md).
 
-## Optional vs. Required
+## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
 

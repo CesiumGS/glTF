@@ -25,7 +25,7 @@ Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 
-## Optional vs. Required
+## Required
 
 This extension is always optional. It should be placed in the tileset JSON `extensionsUsed` list, but not in the `extensionsRequired` list.
 
@@ -133,7 +133,7 @@ The buffer region is provided to mitigate seams and discontinuities at tile boun
 > Clipping may be implemented by pre-processing geometry, by discarding fragments in a pixel shader, or by any other means. For typical vector visual styles (involving, for example, wide lines), it is expected that most implementations will implement clipping in the fragment shader (or equivalent), in order to preserve the influence of geometry just outside the tile boundary on lines or outlines crossing the tile boundary.
 
 > [!NOTE]
-> To avoid visual artifacts, client implementations would (in the absence of "buffer" region data) need to connect geometries in each tile to their corresponding geometries in adjacent tiles. Such mapping and reconstruction at runtime, while not prohibited, is often impractical for realtime implementations. Overlapping buffers at tile boundaries are included in 3D Tiles as an alternative.
+> To avoid visual artifacts, client implementations would (in the absence of "buffer" region data) need to connect geometries in each tile to their corresponding geometries in adjacent tiles. Such mapping and reconstruction at runtime, while not prohibited, is often impractical for real-time implementations. Overlapping buffers at tile boundaries are included in 3D Tiles as an alternative.
 
 As a result, `content.boundingVolume` may extend arbitrarily outside of node (tile) `.boundingVolume`. Client implementations **SHOULD** implement LOD selection and tile visibility based on the tile bounding volume, not the (potentially larger) content bounding volume; tile visibility is unchanged as compared to non-vector data. Authoring implementations **SHOULD** include content extending _outside_ the tile bounding volume only to the extent that such content is likely to influence visualization _inside_ the tile bounding volume.
 

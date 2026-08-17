@@ -3,7 +3,7 @@
     "$id": "shape.3DTILES_shape_cylinder_region.schema.json",
     "title": "3DTILES_shape_cylinder_region",
     "type": "object",
-    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "minimumRadius": {
             "type": "number",
