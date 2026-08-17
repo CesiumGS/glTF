@@ -45,7 +45,6 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [Coordinate Reference System](#coordinate-reference-system-crs)
 - [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
-  - [Conditional Content](#conditional-content)
   - [Metadata](#metadata)
   - [Declarative Styling](#declarative-styling)
 - [Appendix A: Spatial Data Structures](#appendix-a-spatial-data-structures)
@@ -251,15 +250,6 @@ The following examples shows the root tile from before with a `content` object.
 The `content` object includes the following optional properties:
 
 - `boundingVolume` is a tightly fitting bounding volume enclosing just the tile's content. See [Bounding Volumes](#bounding-volumes).
-- `type` (not shown) is a hint about the type of content. Possible values include:
-
-`type`|Description
---|--
-`"content"`|A glTF asset without external assets.
-`"conditionalContent"`|A glTF using the [`3DTILES_node_visibility_conditions`](../3DTILES_node_visibility_conditions/README.md) extension, see [Conditional Content](#conditional-content).
-`"externalTileset`|A glTF using the `3DTILES_tileset` extension, see [External Tilesets](#external-tilesets).
-
-Additional values for "type" may be defined by extensions.
 
 Application-specific properties may be assigned to content with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
@@ -512,10 +502,6 @@ Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_imp
 
 ![A diagram demonstrating implicit tiling.](./figures/implicit-tiling-small.png)
 
-## Conditional Content
-
-TODO
-
 ### Metadata
 
 Application-specific *properties* may be provided at multiple granularities within a tileset. Properties may be associated with tilesets, tiles, and contents within a tileset file using the `EXT_structural_metadata` extension. Properties may also be associated with features or with individual vertices and texels within content files.
@@ -698,9 +684,3 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 ![A image showing a tileset with overlapping grids.](./figures/grid.png)
 
 3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
-
-## TODO
-
-- More examples of geometric error in appendix
-- Finish conditional content section https://github.com/CesiumGS/glTF/pull/117
-- Should the content "type" field by replaced by something like https://github.com/KhronosGroup/glTF/issues/2586#issuecomment-5234625074
