@@ -89,7 +89,7 @@ Voxels exist inside a bounding volume that conforms to the shape of the grid.
 
 The `boundingVolume` property **MUST** be provided when the node uses the `EXT_voxels` extension.
 
-Though voxels are commonly associated with cubic geometry on a box-based grid, this extension also allows voxels to be based on other shapes, including cylinder-based regions specified by [`EXT_implicit_cylinder_region`](../EXT_implicit_cylinder_region/README.md) and ellipsoid-based regions specified by [`EXT_implicit_ellipsoid_region`](../EXT_implicit_ellipsoid_region/README.md). The supported shapes are visualized below.
+Though voxels are commonly associated with cubic geometry on a box-based grid, this extension also allows voxels to be based on other shapes, including cylinder-based regions specified by [`3DTILES_shape_cylinder_region`](../3DTILES_shape_cylinder_region/README.md) and ellipsoid-based regions specified by [`3DTILES_shape_ellipsoid_region`](../3DTILES_shape_ellipsoid_region/README.md). The supported shapes are visualized below.
 
 |Box|Cylinder|Ellipsoid|
 | ------------- | ------------- | ------------- |

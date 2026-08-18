@@ -43,8 +43,8 @@ The cylinder does not need to be completely represented by the volume—for inst
 | **minimumRadius** | `number` | The minimum (inner) radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **maximumRadius** | `number` | The maximum (outer) radius of the cylinder region along the X and Z axes, in meters. | Yes, minimum: `0.0` |
 | **height** | `number` | The height of the cylinder in meters along the Y-axis. | Yes, minimum: `0.0` |
-| **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `-3.14159265359` |
-| **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. See [angular range limits](#angular-range-limits). | No, default: `3.14159265359` |
+| **minimumAngle** | `number` | The minimum angle of the cylinder region in radians. | No, default: `-3.14159265359` |
+| **maximumAngle** | `number` | The maximum angle of the cylinder region in radians. | No, default: `3.14159265359` |
 
 #### Radius
 

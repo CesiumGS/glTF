@@ -40,7 +40,6 @@ This extension is always optional. It should be placed in the tileset JSON `exte
 - [Feature IDs and Properties](#feature-ids-and-properties)
 - [Visualization](#visualization)
 - [Schema](#schema)
-- [Implementation Examples](#implementation-examples)
 
 ## Overview
 
