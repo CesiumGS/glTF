@@ -79,15 +79,6 @@ angle_{min} \leqslant angle_{max} \\
 
 The cylinder is centered at the origin, where the radius is measured along the `x` and `z` axes. The `height` of the cylinder is aligned with the `y` axis.
 
-<table>
-  <tr>
-    <th>
-    Example
-    </th>
-  </tr>
-  <tr>
-    <td>
-
 > **Example**
 >
 > ```json
