@@ -121,7 +121,7 @@ It is valid for the `maximumLongitude` property to be less than `minimumLongitud
 
 ## Implicit Subdivision
 
-When used with [Implicit Tiling](../../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(longitude, latitude, height)` for the ellipsoid region.
+When used with [Implicit Tiling](../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(longitude, latitude, height)` for the ellipsoid region.
 
 A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. An `OCTREE` subdivision will subdivide along the longitude, latitude, and height axes.
 

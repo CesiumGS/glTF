@@ -136,7 +136,7 @@ For other bounding volumes see:
 
 - [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md#implicit-subdivision)
 - [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md#implicit-subdivision)
-- [3DTILES_shape_S2](../3DTILES_shape_S2/README.md#implicit-subdivision)
+- [3DTILES_shape_s2](../3DTILES_shape_s2/README.md#implicit-subdivision)
 
 Sphere bounding volumes are disallowed, as these cannot be divided into a quadtree or octree.
 
