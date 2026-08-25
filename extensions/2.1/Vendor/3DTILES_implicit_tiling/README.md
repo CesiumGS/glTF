@@ -37,7 +37,7 @@ In order to support sparse datasets, *availability* data determines which tiles 
 
 The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset. The extension defines how the tile is subdivided and where to locate content resources. It may be added to multiple tiles to create more complex subdivision schemes.
 
-> ![An image showing a point cloud organized into a sparse octree.](./figures/sparse-octree.png)
+> ![](./figures/sparse-octree.png)
 >
 > A point cloud organized into a sparse octree. Data source: Trimble.
 
@@ -88,11 +88,11 @@ A *subdivision scheme* is a recursive pattern for dividing a bounding volume of 
 
 A *quadtree* divides space only on the first two dimensions. It divides each tile into 4 smaller tiles where the dimensions are halved. The third dimension remains unchanged. The resulting tree has 4 children per tile.
 
-![A diagram demonstrating quadtree subdivision.](./figures/quadtree.png)
+![](./figures/quadtree.png)
 
 An *octree* divides space along all 3 dimensions. It divides each tile into 8 smaller tiles where each dimension is halved. The resulting tree has 8 children per tile.
 
-![A diagram demonstrating octree subdivision.](./figures/octree.png)
+![](./figures/octree.png)
 
 ## Subdivision Rules
 

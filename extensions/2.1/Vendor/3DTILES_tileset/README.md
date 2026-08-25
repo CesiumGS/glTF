@@ -76,7 +76,7 @@ The content references a set of *features*, such as 3D models representing build
 
 Tiles are organized in a tree which incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. Each tile has a *bounding volume*, an object defining a spatial extent completely enclosing its content. The tree has [spatial coherence](#spatial-coherence); the content for child tiles are completely inside the parent's bounding volume.
 
-![A tree representing hierarchical level-of-detail.](./figures/tree.png)
+![](./figures/tree.png)
 
 A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, the tree can be any spatial data structure with spatial coherence, including k-d trees, quadtrees, octrees, and grids. [Implicit tiling](#implicit-tiling) defines a concise representation of quadtrees and octrees.
 
@@ -444,7 +444,7 @@ A tileset defined in a global coordinate system **MUST** specify its coordinate 
 
 A tileset defined in a global coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
-> ![Image of an Earth-centered, Earth-fixed geocentric coordinate reference system.](./figures/ecef.png)
+> ![](./figures/ecef.png)
 >
 > An illustration of [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html), an Earth-centered, Earth-fixed (ECEF) geocentric coordinate reference system. It defines 0,0,0 as the center of mass on Earth, where +Z extends through true north (i.e. the geodetic North Pole) and +X intersects the sphere of the earth at 0° latitude (the equator) and 0° longitude (the prime meridian which passes through Greenwich). As a result, no discrete "Up" vector exists relative to a ground plane.
 
@@ -491,7 +491,7 @@ The bounding volume hierarchy may be defined explicitly — as shown previou
 
 Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension.
 
-![A diagram demonstrating implicit tiling.](./figures/implicit-tiling-small.png)
+![](./figures/implicit-tiling-small.png)
 
 ### Metadata
 

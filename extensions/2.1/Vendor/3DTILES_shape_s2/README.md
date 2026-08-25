@@ -57,14 +57,14 @@ The [cell hierarchy of S2](https://s2geometry.io/devguide/s2cell_hierarchy) is r
 
 |Level 0|Level 1|
 |:-:|:-:|
-| ![Plane - Level 0](figures/plane_parent.png) S2 cell (`"1"`) on the Earth cube| ![Plane - Level 1](figures/plane_children.png) Children of S2 cell (`"1"`) on the Earth cube |
-| ![Ellipsoid - Level 0](figures/ellipsoid_parent.png)  S2 cell (`"1"`) on the WGS84 ellipsoid| ![Ellipsoid - Level 1](figures/ellipsoid_children.png) Children of S2 cell (`"1"`) on the WGS84 ellipsoid|
+| ![](figures/plane_parent.png) S2 cell (`"1"`) on the Earth cube| ![](figures/plane_children.png) Children of S2 cell (`"1"`) on the Earth cube |
+| ![](figures/ellipsoid_parent.png)  S2 cell (`"1"`) on the WGS84 ellipsoid| ![](figures/ellipsoid_children.png) Children of S2 cell (`"1"`) on the WGS84 ellipsoid|
 
 The S2 library uses a modified Hilbert curve to provide a one dimensional ordering of cells on the S2 Earth cube. This provides each cell, from level 1 to level 30, with a unique 64-bit identifier. Using S2 cell IDs, centimeter scale areas be uniquely identified.
 
 | S2 Curve on Earth cube |  S2 Curve on WGS84 ellipsoid |
 |:-:|:-:|
-| ![Math](figures/plane.png)  | ![Math](figures/ellipsoid.png)  |
+| ![](figures/plane.png)  | ![](figures/ellipsoid.png)  |
 
 ## Cell IDs
 
@@ -126,7 +126,7 @@ A tile's transform **MUST** be identity when referencing an S2 shape in its `bou
 >
 > When mapping the sphere to the cube, S2 provides three projection methods: linear, quadratic and tangential. This extension assumes an implementation uses the quadratic projection, since it is reasonably accurate and efficient.
 
-![Volume](figures/volume.jpg)
+![](figures/volume.jpg)
 
 S2 cell (`"89c6c7"`) covering the Philadelphia Center City area, with minimum height set to `0` meters and maximum height set to `1000` meters.
 
@@ -278,18 +278,18 @@ When used with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md)
 
 | Cell  | Quadtree Subdivision | Octree Subdivision |
 |---|---|---|
-| ![Parent Cell](figures/parent.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+| ![](figures/parent.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
 To ensure continuity of the Hilbert curve, the faces of the cube are rotated as shown in the diagram below. This must be carefully considered when interpreting the tile coordinates in implicit tiling, since the traversal order in the odd-numbered faces is the mirror of the order in even numbered faces.
 
-![S2 Face Order](figures/s2-face-winding.png)
+![](figures/s2-face-winding.png)
 
 
 ### Availability
 
 When using this extension with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), the availability bitstreams must be indexed in Morton order, as illustrated by the following diagram:
 
-![Availability](figures/availability.jpg)
+![](figures/availability.jpg)
 
 The following example illustrates usage of `3DTILES_shape_s2` with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md):
 
@@ -359,7 +359,7 @@ The following example illustrates usage of `3DTILES_shape_s2` with [`3DTILES_imp
 
 The following example illustrates usage of `3DTILES_shape_s2` to represent all 6 faces of S2, representing a tileset with global coverage:
 
-![Global Coverage](figures/globe.png)
+![](figures/globe.png)
 
 ```json
 {

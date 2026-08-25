@@ -133,7 +133,7 @@ A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCT
 
 | Root Cylinder  | Quadtree | Octree |
 |---|---|---|
-| ![Parent Cell](figures/root.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+| ![](figures/root.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
 Coordinate|Positive Direction
 --|--

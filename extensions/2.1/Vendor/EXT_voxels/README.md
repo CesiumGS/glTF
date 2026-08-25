@@ -93,7 +93,7 @@ Though voxels are commonly associated with cubic geometry on a box-based grid, t
 
 |Box|Cylinder|Ellipsoid|
 | ------------- | ------------- | ------------- |
-|![Box Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
+|![](figures/box.png)|![](figures/cylinder.png)|![](figures/sphere.png)|
 
 ## Dimensions
 
@@ -126,7 +126,7 @@ Elements are laid out in memory where the `right` data is contiguous in strides 
 
 A **cylinder** region shape is subdivided along the radius, angle, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
-![Cylinder subdivisions](figures/cylinder-subdivisions.png)
+![](figures/cylinder-subdivisions.png)
 
 The cylinder is aligned with the local up-axis (`y`-axis) in the node's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
@@ -166,7 +166,7 @@ Elements are laid out in memory where the longitude data is contiguous in stride
 >
 > An ellipsoid region that is non-uniformly subdivided.
 
-> ![Whole ellipsoid grid](figures/whole-ellipsoid.png)
+> ![](figures/whole-ellipsoid.png)
 >
 > A hollow ellipsoid region that covers the entire ellipsoid, subdivided into two cells along each axis.
 

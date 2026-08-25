@@ -127,7 +127,7 @@ A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. A
 
 | Root Region  | Quadtree | Octree |
 |---|---|---|
-| ![Parent Cell](figures/root.png)  | ![Quadtree Cells](figures/quadtree.png)  | ![Octree Cells](figures/octree.png)  |
+| ![](figures/root.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
 Coordinate|Positive Direction
 --|--
