@@ -63,9 +63,12 @@ The georeference transform is applied **after** the node transform.
 
 In this example the node has a local 20° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion about the local y (up) axis in the example.
 
-<table>
-  <tr>
-    <td><pre><code>{
+### Node without 20° heading
+
+![](./figures/plane.jpg)
+
+```json
+{
   "extensions": {
     "EXT_georeference": {
       "longitude": -75.15836368768382,
@@ -73,12 +76,17 @@ In this example the node has a local 20° heading that is applied before the geo
       "height": -21.668226434267066
     }
   },
-  "mesh": 0,
-}</code></pre></td>
-    <td><img src="./figures/plane.jpg"/></td>
-  </tr>
-  <tr>
-    <td><pre><code>{
+  "mesh": 0
+}
+```
+
+
+### Node with 20° heading
+
+![](./figures/plane-heading.jpg)
+
+```json
+{
   "extensions": {
     "EXT_georeference": {
       "longitude": -75.15836368768382,
@@ -88,10 +96,8 @@ In this example the node has a local 20° heading that is applied before the geo
   },
   "rotation": [0, -0.173648, 0, 0.984807],
   "mesh": 0,
-}</code></pre></td>
-    <td><img src="./figures/plane-heading.jpg"/></td>
-  </tr>
-</table>
+}
+```
 
 ## Schema
 

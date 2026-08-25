@@ -114,11 +114,13 @@ Axis|Coordinate|Positive Direction
 
 Elements are laid out in memory where the `right` data is contiguous in strides along the `forward` axis, and each group of `forward` strides represents a `up` slice.
 
-![Uniform box grid](figures/uniform-box.png)
-<p align="center"><i>A uniform box grid that is subdivided into two cells along each axis.</i></p>
+> ![](figures/uniform-box.png)
+>
+> A uniform box grid that is subdivided into two cells along each axis.
 
-![Non-uniform box grid](figures/non-uniform-box.png)
-<p align="center"><i>A box grid that is non-uniformly scaled and also non-uniformly subdivided.</i></p>
+> ![](figures/non-uniform-box.png)
+>
+> A box grid that is non-uniformly scaled and also non-uniformly subdivided.
 
 ### Cylinder Region Shape
 
@@ -136,11 +138,13 @@ Axis|Coordinate|Positive Direction
 
 Elements are laid out in memory where the radial data is contiguous in strides along the cylinder angle. Each group of angle strides represents a height slice on the cylinder.
 
-![Whole cylinder grid](figures/whole-cylinder.png)
-<p align="center"><i>A cylinder that is subdivided into two cells along each axis.</i></p>
+> ![](figures/whole-cylinder.png)
+>
+> A cylinder that is subdivided into two cells along each axis.
 
-![Non-uniform cylinder grid](figures/non-uniform-cylinder.png)
-<p align="center"><i>A smaller cylinder region with radial and angular bounds that is non-uniformly subdivided.</i></p>
+> ![](figures/non-uniform-cylinder.png)
+>
+> A smaller cylinder region with radial and angular bounds that is non-uniformly subdivided.
 
 ### Ellipsoid Region Shape
 
@@ -154,15 +158,17 @@ Axis|Coordinate|Positive Direction
 
 Elements are laid out in memory where the longitude data is contiguous in strides along the region's latitude. Each group of latitude strides represents a height slice on the region.
 
-![Region grid](figures/part-ellipsoid.png)
-<p align="center"><i>An ellipsoid region that is subdivided into two cells along each axis.</i></p>
+> ![](figures/part-ellipsoid.png)
+>
+> An ellipsoid region that is subdivided into two cells along each axis.
 
-![Non-uniform region grid](figures/non-uniform-part-ellipsoid.png)
+> ![](figures/non-uniform-part-ellipsoid.png)
+>
+> An ellipsoid region that is non-uniformly subdivided.
 
-<p align="center"><i>An ellipsoid region that is non-uniformly subdivided.</i></p>
-
-![Whole ellipsoid grid](figures/whole-ellipsoid.png)
-<p align="center"><i>A hollow ellipsoid region that covers the entire ellipsoid, subdivided into two cells along each axis.</i></p>
+> ![Whole ellipsoid grid](figures/whole-ellipsoid.png)
+>
+> A hollow ellipsoid region that covers the entire ellipsoid, subdivided into two cells along each axis.
 
 ## Padding
 
