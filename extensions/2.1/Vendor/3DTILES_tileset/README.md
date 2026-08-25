@@ -76,7 +76,9 @@ The content references a set of *features*, such as 3D models representing build
 
 Tiles are organized in a tree which incorporates the concept of Hierarchical Level of Detail (HLOD) for optimal rendering of spatial data. Each tile has a *bounding volume*, an object defining a spatial extent completely enclosing its content. The tree has [spatial coherence](#spatial-coherence); the content for child tiles are completely inside the parent's bounding volume.
 
-![](./figures/tree.png)
+> ![](./figures/tree.png)
+>
+> A tree of tiles.
 
 A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling schemes (like a Web Map Tile Service (WMTS) or XYZ scheme) that serve predefined tiles at several levels of detail (or zoom levels). However since the content of a tileset is often non-uniform or may not easily be organized in only two dimensions, the tree can be any spatial data structure with spatial coherence, including k-d trees, quadtrees, octrees, and grids. [Implicit tiling](#implicit-tiling) defines a concise representation of quadtrees and octrees.
 
@@ -183,7 +185,9 @@ Application-specific properties may be assigned to a tileset with [`EXT_structur
 
 Tiles are represented as nodes in the glTF node hierarchy. A tile consist of metadata used to determine if a tile is rendered, a reference to the renderable content, and an array of any children tiles.
 
-![](./figures/tile.png)
+> ![](./figures/tile.png)
+>
+> Elements of a tile JSON object
 
 The following example shows the root tile from before:
 
@@ -257,7 +261,9 @@ Application-specific properties may be assigned to content with [`EXT_structural
 
 To create a tree of trees, a tile can point to an external tileset (a glTF using the `3DTILES_tileset` extension). This enables, for example, storing each city in a tileset and then having a global tileset of tilesets.
 
-![](./figures/tilesets.png)
+> ![](./figures/tilesets.png)
+>
+> A tileset that refers to other tilesets
 
 ```json
 {
@@ -289,7 +295,9 @@ Tiles are structured into a tree incorporating *Hierarchical Level of Detail* (H
 
 A tile's geometric error defines the selection metric for that tile. Its value is a nonnegative number that defines the error, in meters, introduced if this tile is rendered and its children are not.
 
-![](./figures/3d-tiles-overview-page0005-GE-drawing.png)
+> ![](./figures/3d-tiles-overview-page0005-GE-drawing.png)
+>
+> Geometric Error and Screen Space Error (SSE)
 
 Generally, the root tile will have the largest geometric error, and each successive level of children will have a smaller geometric error than its parent, with leaf tiles having a geometric error of or close to 0. If a child tile's geometric error is greater than or equal to its parent's geometric error, that child tile is considered [unconditionally refinable](#unconditional-refinement).
 
@@ -309,17 +317,21 @@ A refinement type is required for the root tile of a tileset; it is optional for
 
 If a tile uses replacement refinement, when refined it renders its children in place of itself.
 
-Parent Tile|Refined
---|--
-![](./figures/replacement_1.jpg)|![](./figures/replacement_2.jpg)
+> |Parent Tile|Refined|
+> |--|--|
+> |![](./figures/replacement_1.jpg)|![](./figures/replacement_2.jpg)|
+>
+> A tile and a refined tile using replacement refinement
 
 #### Additive
 
 If a tile uses additive refinement, when refined it renders itself and its children simultaneously.
 
-Parent Tile|Refined
---|--
-![](./figures/additive_1.jpg)|![](./figures/additive_2.jpg)
+> |Parent Tile|Refined|
+> |--|--|
+> |![](./figures/additive_1.jpg)|![](./figures/additive_2.jpg)|
+>
+> A tile and a refined tile using additive refinement
 
 ### Unconditional Refinement
 
@@ -491,7 +503,9 @@ The bounding volume hierarchy may be defined explicitly — as shown previou
 
 Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension.
 
-![](./figures/implicit-tiling-small.png)
+> ![](./figures/implicit-tiling-small.png)
+>
+> Quadtree with tile coordinates
 
 ### Metadata
 
@@ -609,7 +623,9 @@ The following example shows a tileset with tileset properties, tile properties, 
 
 A tileset may also provide summary statistics with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
 
-![](./figures/statistics.png)
+> ![](./figures/statistics.png)
+>
+> Metadata statistics using _EXT_structural_metadata_
 
 ### Declarative Styling
 
@@ -647,7 +663,10 @@ For example, here is the root tile and its children for Canary Wharf. Note the b
 
 Below, the green buildings are in the left child and the purple buildings are in the right child. Note that the tiles overlap so the two green and one purple building in the center are not split.
 
-![](./figures/looseQuadtree.png)
+> ![](./figures/looseQuadtree.png)
+>
+> Building data from [CyberCity3D](http://www.cybercity3d.com/). Imagery data from [Bing Maps](https://www.microsoft.com/maps/).
+
 
 #### K-d trees
 
@@ -678,7 +697,10 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 3D Tiles enables uniform, non-uniform, and overlapping grids by supporting an arbitrary number of child tiles. For example, here is a top-down view of a non-uniform overlapping grid of Cambridge:
 
 
-![](./figures/grid.png)
+> ![](./figures/grid.png)
+>
+> Building data from [CyberCity3D](http://www.cybercity3d.com/). Imagery data from [Bing Maps](https://www.microsoft.com/maps/).
+
 
 3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
 
