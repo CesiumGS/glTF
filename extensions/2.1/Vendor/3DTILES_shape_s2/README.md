@@ -128,7 +128,9 @@ An S2 cell describes 4 positions on the surface of the ellipsoid forming the cor
 >
 > When mapping the sphere to the cube, S2 provides three projection methods: linear, quadratic and tangential. This extension assumes an implementation uses the quadratic projection, since it is reasonably accurate and efficient.
 
-![](figures/volume.jpg)
+> ![](figures/volume.jpg)
+>
+> S2 cell of the Philadelphia City Center area
 
 S2 cell (`"89c6c7"`) covering the Philadelphia Center City area, with minimum height set to `0` meters and maximum height set to `1000` meters.
 
@@ -150,7 +152,9 @@ S2 cell (`"89c6c7"`) covering the Philadelphia Center City area, with minimum he
 
 The following example illustrates usage of `3DTILES_shape_s2` to represent all 6 faces of S2, representing a tileset with global coverage:
 
-![](figures/globe.png)
+> ![](figures/globe.png)
+>
+> The 6 faces of S2 provide global coverage
 
 ```json
 {
@@ -368,13 +372,17 @@ A `QUADTREE` subdivision scheme will follow the rules for subdivision as defined
 
 To ensure continuity of the Hilbert curve, the faces of the cube are rotated as shown in the diagram below. This must be carefully considered when interpreting the tile coordinates in implicit tiling, since the traversal order in the odd-numbered faces is the mirror of the order in even numbered faces.
 
-![](figures/s2-face-winding.png)
+> ![](figures/s2-face-winding.png)
+>
+> S2 winding directions
 
 ### Availability
 
 When using this extension with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), the availability bitstreams must be indexed in Morton order, as illustrated by the following diagram:
 
-![](figures/availability.jpg)
+> ![](figures/availability.jpg)
+>
+> Comparison of S2, Hilbert order, and Morton order indexing. Implicit tiling requires Morton order.
 
 The following example illustrates usage of `3DTILES_shape_s2` with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md):
 

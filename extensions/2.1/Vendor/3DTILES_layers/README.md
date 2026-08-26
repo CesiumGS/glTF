@@ -206,7 +206,9 @@ This allows applications to perform styling or filtering based on the layer that
 }
 ```
 
-![](./figures/filtering-groups.jpg)
+> ![](./figures/filtering-groups.jpg)
+>
+> Illustration of rendering options based on content groups
 
 ## Subtree Attributes
 

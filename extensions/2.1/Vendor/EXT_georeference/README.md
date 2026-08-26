@@ -65,7 +65,9 @@ In this example the node has a local 20° heading that is applied before the geo
 
 ### Node without 20° heading
 
-![](./figures/plane.jpg)
+> ![](./figures/plane.jpg)
+>
+> The node of the aircraft heading 0°
 
 ```json
 {
@@ -83,7 +85,10 @@ In this example the node has a local 20° heading that is applied before the geo
 
 ### Node with 20° heading
 
-![](./figures/plane-heading.jpg)
+> ![](./figures/plane-heading.jpg)
+>
+> The node of the aircraft rotated left to heading 20°
+
 
 ```json
 {

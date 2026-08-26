@@ -84,51 +84,55 @@ $$\begin{align}
 
 The cylinder is centered at the origin, where the radius is measured along the `x` and `z` axes. The `height` of the cylinder is aligned with the `y` axis.
 
-> **Example**
->
-> ```json
-> "shapes": [
->   {
->     "name": "Cylindrical Shell Region",
->     "type": "cylinder region",
->     "extensions": {
->       "3DTILES_shape_cylinder_region": {
->         "minimumRadius": 0.5,
->         "maximumRadius": 1.0,
->         "height": 2.0
->       }
->     }
->   }
-> ]
-> ```
->
+```json
+"shapes": [
+  {
+    "name": "Cylindrical Shell Region",
+    "type": "cylinder region",
+    "extensions": {
+      "3DTILES_shape_cylinder_region": {
+        "minimumRadius": 0.5,
+        "maximumRadius": 1.0,
+        "height": 2.0
+      }
+    }
+  }
+]
+```
+
 > ![](figures/hollow-cylinder.png)
+>
+> Using a `minimumRadius` and `maximumRadius` allows creating a hollow cylinder.
 
 A cylinder region may also be confined to a certain angular range. The `minimumAngle` and `maximumAngle` properties define the angles at which the region starts and stops on the cylinder.
 
 Angles are given in radians within the range `[-pi, pi]` and open counter-clockwise around the cylinder. The bounds are aligned such that an angle of `0` aligns with the glTF right axis, i.e., the `-x` axis (see figure below.)
 
-![](figures/cylinder-angle.png)
-
-> ```json
-> "shapes": [
->   {
->     "name": "Cylindrical Sector Region",
->     "type": "cylinder region",
->     "extensions": {
->       "3DTILES_shape_cylinder_region": {
->         "minimumRadius": 0.5,
->         "maximumRadius": 1.0,
->         "height": 2.0,
->         "minimumAngle": -1.570796,
->         "maximumAngle": 1.570796
->       }
->     }
->   }
-> ]
-> ```
+> ![](figures/cylinder-angle.png)
 >
+> Angles open counter-clockwise around the cylinder.
+
+```json
+"shapes": [
+  {
+    "name": "Cylindrical Sector Region",
+    "type": "cylinder region",
+    "extensions": {
+      "3DTILES_shape_cylinder_region": {
+        "minimumRadius": 0.5,
+        "maximumRadius": 1.0,
+        "height": 2.0,
+        "minimumAngle": -1.570796,
+        "maximumAngle": 1.570796
+      }
+    }
+  }
+]
+```
+
 > ![](figures/half-cylinder.png)
+>
+> Using `minimumAngle` and `maximumAngle` we can create a semicylinder. With the addition of `minimumRadius` and `maximumRadius` our semicylinder can become a semicylindrical shell.
 
 ## Implicit Subdivision
 
@@ -140,11 +144,11 @@ A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCT
 |---|---|---|
 | ![](figures/root.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`radius`| From the center outwards (increasing radius)
-1|`angle`| From $-\pi$ to $\pi$ (counter-clockwise angle)
-2|`height`| From bottom to top (increasing height)
+|Axis|Coordinate|Positive Direction|
+|---|---|---|
+|0|`radius`| From the center outwards (increasing radius)|
+|1|`angle`| From $-\pi$ to $\pi$ (counter-clockwise angle)|
+|2|`height`| From bottom to top (increasing height)|
 
 ## Schema
 

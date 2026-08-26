@@ -126,7 +126,9 @@ Elements are laid out in memory where the `right` data is contiguous in strides 
 
 A **cylinder** region shape is subdivided along the radius, angle, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
-![](figures/cylinder-subdivisions.png)
+> ![](figures/cylinder-subdivisions.png)
+>
+> Cylinder region shapes are subdivided along radius, angle, and height ranges of the region.
 
 The cylinder is aligned with the local up-axis (`y`-axis) in the node's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 

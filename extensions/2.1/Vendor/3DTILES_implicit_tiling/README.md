@@ -88,11 +88,15 @@ A *subdivision scheme* is a recursive pattern for dividing a bounding volume of 
 
 A *quadtree* divides space only on the first two dimensions. It divides each tile into 4 smaller tiles where the dimensions are halved. The third dimension remains unchanged. The resulting tree has 4 children per tile.
 
-![](./figures/quadtree.png)
+> ![](./figures/quadtree.png)
+>
+> Subdivision in a quadtree
 
 An *octree* divides space along all 3 dimensions. It divides each tile into 8 smaller tiles where each dimension is halved. The resulting tree has 8 children per tile.
 
-![](./figures/octree.png)
+> ![](./figures/octree.png)
+>
+> Subdivision in an octree
 
 ## Subdivision Rules
 
@@ -130,7 +134,9 @@ For `box` bounding volumes:
 
 So together the tile coordinates for `box` are `(level, right, forward, up)`
 
-![](./figures/box-coordinates.png)
+> ![](./figures/box-coordinates.png)
+>
+> Coordinates of an octree node with a bounding box and it's child nodes
 
 For other bounding volumes see:
 
@@ -146,7 +152,9 @@ A *Template URI* is a URI pattern used to refer to tiles by their tile coordinat
 
 Template URIs, when given as relative paths, are resolved relative to the current glTF asset.
 
-![](./figures/template-uri.png)
+> ![](./figures/template-uri.png)
+>
+> Examples of template URIs to identify the content for implicit tiles
 
 Tile and content [properties](#properties) may also be used as template variables, e.g.
 
@@ -186,11 +194,15 @@ In order to support sparse datasets, additional information is needed to indicat
 
 *Subtrees* are fixed size sections of the tileset tree used for storing availability. The tileset is partitioned into subtrees to bound the size of each availability buffer for optimal network transfer and caching. The `subtreeLevels` property defines the number of levels in each subtree. The subdivision scheme determines the number of children per tile.
 
-![](./figures/subtree-anatomy.png)
+> ![](./figures/subtree-anatomy.png)
+>
+> The structure of a subtree for implicit tiling
 
 After partitioning a tileset into subtrees, the result is a tree of subtrees.
 
-![](./figures/subtree-tree.png)
+> ![](./figures/subtree-tree.png)
+>
+> A tree of subtrees representing an implicit tileset
 
 ### Availability
 
@@ -207,7 +219,9 @@ To form the 1D bitstream, the tiles are ordered with the following rules:
 - Within each level of the subtree, the tiles are ordered using the [Morton Z-order curve](https://en.wikipedia.org/wiki/Z-order_curve)
 - The bits for each level are concatenated into a single bitstream
 
-![](./figures/tile-availability.png)
+> ![](./figures/tile-availability.png)
+>
+> Illustration of a tile availability bitstream. Tiles that are available are represented with a `1` in the bitstream.
 
 In the diagram above, colored cells represent 1 bits, grey cells represent 0 bits.
 
@@ -229,7 +243,9 @@ Tile availability has the following restrictions:
 - If a non-root tile's availability is 1, its parent tile's availability **MUST** also be 1.
 - A subtree **MUST** have at least one available tile.
 
-![](./figures/tile-availability.png)
+> ![](./figures/tile-availability.png)
+>
+> Illustration of a tile availability bitstream. Tiles that are available are represented with a `1` in the bitstream.
 
 #### Content Availability
 
@@ -240,7 +256,9 @@ Content availability has the following restrictions:
 - If content availability is 1 its corresponding tile availability **MUST** also be 1. Otherwise, it would be possible to specify content files that are not reachable by the tiles of the tileset.
 - If content availability is 0 and its corresponding tile availability is 1 then the tile is considered to be an empty tile.
 
-![](./figures/content-availability.png)
+> ![](./figures/content-availability.png)
+>
+> Illustration of a content availability bitstream. Tiles that have associated content are represented with a `1` in the bitstream.
 
 #### Child Subtree Availability
 
@@ -248,7 +266,9 @@ Child subtree availability determines which subtrees are reachable from the deep
 
 Unlike tile and content availability, which store bits for every level in the subtree, child subtree availability stores bits for nodes one level deeper than the deepest level of the subtree, and represent the root nodes of child subtrees. This is used to determine which other subtrees are reachable before requesting tiles. If availability is 0 for all child subtrees, then the tileset does not subdivide further.
 
-![](./figures/child-subtree-availability.png)
+> ![](./figures/child-subtree-availability.png)
+>
+> Illustration of a child subtree availability bitstream. Tiles that are the roots of available subtrees are represented by a `1` in the bitstream.
 
 ### Attributes
 
@@ -298,7 +318,9 @@ interleaveBits(0b001, 0b010, 0b100) = 0b100010001
 interleaveBits(0b111, 0b000, 0b111) = 0b101101101
 ```
 
-![](./figures/morton-indexing.png)
+> ![](./figures/morton-indexing.png)
+>
+> Morton indexing for 3 levels
 
 ### Availability Bitstream Lengths
 

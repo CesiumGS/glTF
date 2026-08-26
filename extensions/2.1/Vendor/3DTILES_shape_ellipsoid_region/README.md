@@ -96,7 +96,9 @@ This example corresponds to the image below it:
 ]
 ```
 
-![](figures/hollow-ellipsoid.png)
+> ![](figures/hollow-ellipsoid.png)
+>
+> The `minimumHeight` set at `0` starts this ellipsoid region on the surface. The `maximumHeight` set at `0.5` ends the ellipsoid region a half-meter above the surface.
 
 An ellipsoid region may also be confined to a specific latitude and/or longitude range. The `minimumLatitude` and `maximumLatitude` properties represent the latitude values at which the region starts and stops, defined in the range `[-pi/2, pi/2]`. Similarly, the `minimumLongitude` and `maximumLongitude` properties represent the longitude bounds within the range `[-pi, pi]`.
 
@@ -119,7 +121,9 @@ An ellipsoid region may also be confined to a specific latitude and/or longitude
 ]
 ```
 
-![](figures/half-ellipsoid.png)
+> ![](figures/half-ellipsoid.png)
+>
+> The latitude and longitude properties are used to set the bounds of the region.
 
 It is valid for the `maximumLongitude` property to be less than `minimumLongitude`. This would define a region that crosses over the line at `-pi` or `pi`, equivalent to the International Date Line on Earth.
 
