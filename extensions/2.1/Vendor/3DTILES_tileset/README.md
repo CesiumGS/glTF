@@ -37,7 +37,6 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
   - [External Tilesets](#external-tilesets)
   - [Geometric Error](#geometric-error)
   - [Refinement](#refinement)
-  - [Unconditional Refinement](#unconditional-refinement)
   - [Bounding Volumes](#bounding-volumes)
   - [Transforms](#transforms)
   - [Spatial Coherence](#spatial-coherence)
@@ -329,7 +328,7 @@ If a tile uses additive refinement, when refined it renders itself and its child
 >
 > A tile and a refined tile using additive refinement
 
-### Unconditional Refinement
+#### Unconditional Refinement
 
 A tile that is "unconditionally refined" will always be REFINED, it will never be RENDERED. Such tiles are identified by having a geometric error greater than or equal to its parent's geometric error.
 
@@ -416,9 +415,9 @@ The transform applies to the tile's bounding volume, content (if present), and c
 
 The transform does not apply to `geometricError`—i.e., the scale defined by `transform` does not scale the geometric error—the geometric error is always defined in meters.
 
-Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. In such cases, the transform does not apply to these bounding volumes.
+Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. In such cases, the transform does not apply to these bounding volumes. Additionally, the transform does not apply to `3DTILES_horizon_occlusion_point`.
 
-Additionally, [EXT_georeference](../EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
+[EXT_georeference](../EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
 
 ### Spatial Coherence
 
@@ -446,7 +445,7 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 A tileset may be defined in either a **global** or **local** coordinate system. A tileset's global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn't have to be, e.g., a power plant may be defined fully in its local coordinate system.
 
-A tileset defined in a local coordinate system follows the standard glTF coordinate system conventions: right-handed, +Y up, and linear units in meters.
+A tileset defined in a local coordinate system follows the standard glTF coordinate system conventions: right-handed, +Y up, and linear units in meters. It **MUST NOT** use the [EXT_geospatial_crs](../EXT_geospatial_crs/README.md) extension.
 
 A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
@@ -489,7 +488,49 @@ The following rules apply for CRS transitions:
 
 A [tile transform](#transforms) may be applied to transform a tile's local coordinate system to the parent tile's geocentric coordinate system.
 
+The example below shows a tileset using [EXT_georeference](../EXT_georeference/README.md). Note that when `EXT_georeference` is used the tileset is in a global coordinate system and `EXT_geospatial_crs` must also be used.
+
+```json
+{
+  "asset": {
+    "version": "2.1"
+  },
+  "extensions": {
+    "EXT_geospatial_crs": {
+      "format": "wkid",
+      "extensions": {
+        "EXT_geospatial_crs_wkid": {
+          "authority": "EPSG",
+          "wkid": 4978
+        }
+      }
+    }
+  },
+  "nodes": [
+    {
+      "extensions": {
+        "3DTILES_tileset": {
+          "geometricError": 240.0,
+          "refine": "ADD"
+        },
+        "EXT_georeference": {
+          "longitude": -75.15836368768382,
+          "latitude": 39.95090650840344,
+          "height": -21.668226434267066
+        }
+      },
+      "boundingVolume": {
+        "shape": 0
+      },
+      "externalAsset": 0
+    }
+  ]
+}
+```
+
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and **CANNOT** be used by tiles defined in a local coordinate system.
+
+Additionally, `3DTILES_horizon_occlusion_point` **CANNOT** be used by tiles defined in a local coordinate system.
 
 ## Supporting Extensions
 
