@@ -541,7 +541,7 @@ Additionally, `3DTILES_horizon_occlusion_point` **CANNOT** be used by tiles defi
 
 The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
 
-Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension.
+Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension. In order to support sparse datasets, the tree is partitioned into fixed-size *subtrees*. See [3DTILES_subtree](../3DTILES_subtree/README.md).
 
 > ![](./figures/implicit-tiling-small.png)
 >
