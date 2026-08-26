@@ -144,7 +144,7 @@ Sphere bounding volumes are disallowed, as these cannot be divided into a quadtr
 
 A *Template URI* is a URI pattern used to refer to tiles by their tile coordinates. When referring to a specific tile, the tile's coordinates are substituted for these variables. Tile coordinates may appear in any order in the template URI.
 
-Template URIs, when given as relative paths, are resolved relative to the tileset JSON file.
+Template URIs, when given as relative paths, are resolved relative to the current glTF asset.
 
 ![](./figures/template-uri.png)
 
@@ -260,9 +260,9 @@ For the full list of attribute semantics, see [tile attributes](../3DTILES_subtr
 
 ### Properties
 
-Each subtree may store application-specific properties for available tiles and contents. Property values are stored in [property tables](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
+Each subtree may store application-specific properties for available tiles and contents. Property values are stored in [property tables](../../../2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](../../../2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
 
-Property values are tightly packed by an increasing tile index according to the [Availability Ordering](#availability). Each available tile **MUST** have a value — representation of missing values within a tile is possible only with the `noData` indicator defined by the [schema](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#schema).
+Property values are tightly packed by an increasing tile index according to the [Availability Ordering](#availability). Each available tile **MUST** have a value — representation of missing values within a tile is possible only with the `noData` indicator defined by the [schema](../../../2.0/Vendor/EXT_structural_metadata#schema).
 
 > [!NOTE]
 >

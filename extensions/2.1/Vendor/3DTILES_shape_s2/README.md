@@ -22,7 +22,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
+Depends on [3DTILES_tileset](../3DTILES_tileset/README.md) and [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
 Optionally, this extension may be used in conjunction with [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
 
@@ -51,6 +51,10 @@ Typically, traditional GIS libraries rely on projecting map data from an ellipso
 
 This extension defines S2 cells as an additional shape type for glTF 2.1 shapes. Due to the properties of S2 described above, this shape is well suited for tilesets that span the whole globe.
 
+This extension **MAY** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+
+Tile transforms do not apply to bounding volumes referencing S2 shapes. Tiles using this extension must maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence). This extension may be applied to tile or content bounding volumes. See [`3DTILES_tileset`](../3DTILES_tileset/README.md#transforms) for more details.
+
 ## Hierarchy
 
 The [cell hierarchy of S2](https://s2geometry.io/devguide/s2cell_hierarchy) is rooted in the 6 faces of a cube, which are projected onto the unit sphere. In S2, each face of the unit cube can be subdivided into 30 levels using a quadtree structure, in which each cell on the grid subdivides into 4 equal cells at the subsequent level.
@@ -58,11 +62,11 @@ The [cell hierarchy of S2](https://s2geometry.io/devguide/s2cell_hierarchy) is r
 |Level 0|Level 1|
 |:---:|:---:|
 | ![](figures/plane_parent.png) S2 cell (`"1"`) on the Earth cube| ![](figures/plane_children.png) Children of S2 cell (`"1"`) on the Earth cube |
-| ![](figures/ellipsoid_parent.png)  S2 cell (`"1"`) on the WGS84 ellipsoid| ![](figures/ellipsoid_children.png) Children of S2 cell (`"1"`) on the WGS84 ellipsoid|
+| ![](figures/ellipsoid_parent.png)  S2 cell (`"1"`) on the ellipsoid| ![](figures/ellipsoid_children.png) Children of S2 cell (`"1"`) on the ellipsoid|
 
 The S2 library uses a modified Hilbert curve to provide a one dimensional ordering of cells on the S2 Earth cube. This provides each cell, from level 1 to level 30, with a unique 64-bit identifier. Using S2 cell IDs, centimeter scale areas be uniquely identified.
 
-| S2 Curve on Earth cube |  S2 Curve on WGS84 ellipsoid |
+| S2 Curve on Earth cube |  S2 Curve on ellipsoid |
 |:---:|:---:|
 | ![](figures/plane.png)  | ![](figures/ellipsoid.png)  |
 
@@ -110,17 +114,15 @@ For the cell IDs in the example above, the tokens are:
 
 An S2 cell shape is defined by adding the `3DTILES_shape_s2` extension to a `shape` object of type `"s2"`.
 
-An S2 cell describes 4 positions on the surface of the WGS84 ellipsoid forming the corners of a geodesic quadrilateral. To form a shape, the quadrilateral is extruded along normals to the ellipsoid. `minimumHeight` determines the height of the bottom surface of the shape, while `maximumHeight` determines the height of the top surface. Both `minimumHeight` and `maximumHeight` are expressed in meters above (or below) the ellipsoid.
-
-A tile's transform **MUST** be identity when referencing an S2 shape in its `boundingVolume`. Additionally, the `EXT_georeference` extension **MUST NOT** be defined. Tiles using this extension must maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence). This extension may be applied to tile or content bounding volumes. See [`3DTILES_tileset`](../3DTILES_tileset/README.md#transforms) for more details.
+An S2 cell describes 4 positions on the surface of the ellipsoid forming the corners of a geodesic quadrilateral. To form a shape, the quadrilateral is extruded along normals to the ellipsoid. `minimumHeight` determines the height of the bottom surface of the shape, while `maximumHeight` determines the height of the top surface. Both `minimumHeight` and `maximumHeight` are expressed in meters above (or below) the ellipsoid.
 
 ### Properties
 
 | Property | Type | Description | Required |
 |---|---|---|---|
 | **token** | `string` | A hexadecimal representation of the S2CellId. Tokens shall be lower-case, shall not contain whitespace and shall have trailing zeros stripped. | Yes |
-| **minimumHeight** | `number` | The minimum height of the shape, specified in meters above (or below) the WGS84 ellipsoid. | Yes |
-| **maximumHeight** | `number` | The maximum height of the shape, specified in meters above (or below) the WGS84 ellipsoid. | Yes |
+| **minimumHeight** | `number` | The minimum height of the shape, specified in meters above (or below) the ellipsoid. | Yes |
+| **maximumHeight** | `number` | The maximum height of the shape, specified in meters above (or below) the ellipsoid. | Yes |
 
 > [!NOTE]
 >
@@ -146,217 +148,6 @@ S2 cell (`"89c6c7"`) covering the Philadelphia Center City area, with minimum he
 ]
 ```
 
-The following example illustrates usage of `3DTILES_shape_s2`:
-
-```json
-{
-  "asset": {
-    "version": "2.1"
-  },
-  "extensionsUsed": [
-    "3DTILES_tileset",
-    "3DTILES_shape_s2"
-  ],
-  "extensionsRequired": [
-    "3DTILES_tileset",
-    "3DTILES_shape_s2"
-  ],
-  "scenes": [
-    {
-      "name": "S2 Hierarchical Tileset Scene",
-      "nodes": [0]
-    }
-  ],
-  "scene": 0,
-  "shapes": [
-    {
-      "name": "Root Cell Shape - Level 0 (Token: 3)",
-      "type": "s2",
-      "extensions": {
-        "3DTILES_shape_s2": {
-          "token": "3",
-          "minimumHeight": 0,
-          "maximumHeight": 1000000
-        }
-      }
-    },
-    {
-      "name": "Subdivided Cell Shape - Level 1 (Token: 2c)",
-      "type": "s2",
-      "extensions": {
-        "3DTILES_shape_s2": {
-          "token": "2c",
-          "minimumHeight": 0,
-          "maximumHeight": 500000
-        }
-      }
-    },
-    {
-      "name": "Subdivided Cell Shape - Level 2 (Token: 2f)",
-      "type": "s2",
-      "extensions": {
-        "3DTILES_shape_s2": {
-          "token": "2f",
-          "minimumHeight": 0,
-          "maximumHeight": 250000
-        }
-      }
-    },
-    {
-      "name": "Leaf Cell Shape - Level 3 (Token: 2ec)",
-      "type": "s2",
-      "extensions": {
-        "3DTILES_shape_s2": {
-          "token": "2ec",
-          "minimumHeight": 0,
-          "maximumHeight": 125000
-        }
-      }
-    }
-  ],
-  "extensions": {
-    "3DTILES_tileset": {
-      "geometricError": 1000000
-    }
-  },
-  "nodes": [
-    {
-      "name": "Root Tile Node (S2 Level 0)",
-      "extensions": {
-        "3DTILES_tileset": {
-          "geometricError": 500000,
-          "refine": "REPLACE"
-        }
-      },
-      "boundingVolume": {
-        "shape": 0
-      },
-      "children": [1]
-    },
-    {
-      "name": "Level 1 Child Node (S2 Level 1)",
-      "extensions": {
-        "3DTILES_tileset": {
-          "geometricError": 250000
-        }
-      },
-      "boundingVolume": {
-        "shape": 1
-      },
-      "children": [2]
-    },
-    {
-      "name": "Level 2 Child Node (S2 Level 2)",
-      "extensions": {
-        "3DTILES_tileset": {
-          "geometricError": 125000
-        }
-      },
-      "boundingVolume": {
-        "shape": 2
-      },
-      "children": [3]
-    },
-    {
-      "name": "Level 3 Leaf Node (S2 Level 3)",
-      "extensions": {
-        "3DTILES_tileset": {
-          "geometricError": 62500
-        }
-      },
-      "boundingVolume": {
-        "shape": 3
-      }
-    }
-  ]
-}
-```
-
-## Implicit Subdivision
-
-When used with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), a `QUADTREE` subdivision scheme will follow the rules for subdivision as defined by the S2 cell hierarchy. When an `OCTREE` subdivision scheme is used, the split in the vertical dimension occurs at the midpoint of the `minimumHeight` and `maximumHeight` of the parent tile.
-
-| Cell  | Quadtree Subdivision | Octree Subdivision |
-|---|---|---|
-| ![](figures/parent.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
-
-To ensure continuity of the Hilbert curve, the faces of the cube are rotated as shown in the diagram below. This must be carefully considered when interpreting the tile coordinates in implicit tiling, since the traversal order in the odd-numbered faces is the mirror of the order in even numbered faces.
-
-![](figures/s2-face-winding.png)
-
-
-### Availability
-
-When using this extension with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), the availability bitstreams must be indexed in Morton order, as illustrated by the following diagram:
-
-![](figures/availability.jpg)
-
-The following example illustrates usage of `3DTILES_shape_s2` with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md):
-
-```json
-{
-  "asset": {
-    "version": "2.1"
-  },
-  "extensionsUsed": [
-    "3DTILES_tileset",
-    "3DTILES_implicit_tiling",
-    "3DTILES_shape_s2"
-  ],
-  "extensionsRequired": [
-    "3DTILES_tileset",
-    "3DTILES_implicit_tiling",
-    "3DTILES_shape_s2"
-  ],
-  "scenes": [
-    {
-      "name": "Implicitly Tiled Scene",
-      "nodes": [0]
-    }
-  ],
-  "scene": 0,
-  "shapes": [
-    {
-      "name": "Implicit Root Cell Volume - Level 0 (Token: 04)",
-      "type": "s2",
-      "extensions": {
-        "3DTILES_shape_s2": {
-          "token": "04",
-          "minimumHeight": 0,
-          "maximumHeight": 500000
-        }
-      }
-    }
-  ],
-  "extensions": {
-    "3DTILES_tileset": {
-      "geometricError": 10000
-    }
-  },
-  "nodes": [
-    {
-      "name": "S2 Implicit Root Tile Node",
-      "boundingVolume": {
-        "shape": 0
-      },
-      "extensions": {
-        "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
-        },
-        "3DTILES_implicit_tiling": {
-          "subdivisionScheme": "QUADTREE",
-          "subtreeLevels": 4,
-          "availableLevels": 8,
-          "contentUri": "content/{level}/{x}/{y}.glb",
-          "subtreeUri": "subtrees/{level}/{x}/{y}.subtree"
-        }
-      }
-    }
-  ]
-}
-```
-
 The following example illustrates usage of `3DTILES_shape_s2` to represent all 6 faces of S2, representing a tileset with global coverage:
 
 ![](figures/globe.png)
@@ -369,7 +160,9 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
   "extensionsUsed": [
     "3DTILES_tileset",
     "3DTILES_shape_s2",
-    "3DTILES_shape_ellipsoid_region"
+    "3DTILES_shape_ellipsoid_region",
+    "EXT_geospatial_crs",
+    "EXT_geospatial_crs_wkid"
   ],
   "extensionsRequired": [
     "3DTILES_tileset",
@@ -389,8 +182,6 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       "type": "ellipsoid region",
       "extensions": {
         "3DTILES_shape_ellipsoid_region": {
-          "semiMajorAxisRadius": 6378137.0,
-          "semiMinorAxisRadius": 6356752.314245179,
           "minimumHeight": 0.0,
           "maximumHeight": 250000.0,
           "minimumLongitude": -3.141592653589793,
@@ -470,6 +261,15 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 10000
+    },
+    "EXT_geospatial_crs": {
+      "format": "wkid",
+      "extensions": {
+        "EXT_geospatial_crs_wkid": {
+          "authority": "EPSG",
+          "wkid": 4978
+        }
+      }
     }
   },
   "nodes": [
@@ -493,8 +293,7 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
+          "geometricError": 5000
         }
       }
     },
@@ -505,8 +304,7 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
+          "geometricError": 5000
         }
       }
     },
@@ -517,8 +315,7 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
+          "geometricError": 5000
         }
       }
     },
@@ -529,8 +326,7 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
+          "geometricError": 5000
         }
       }
     },
@@ -541,8 +337,7 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 5000,
-          "refine": "REPLACE"
+          "geometricError": 5000
         }
       }
     },
@@ -553,8 +348,104 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
       },
       "extensions": {
         "3DTILES_tileset": {
+          "geometricError": 5000
+        }
+      }
+    }
+  ]
+}
+```
+
+## Implicit Subdivision
+
+When used with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), the implicit tile coordinates are interpreted as `(x, y, height)`.
+
+A `QUADTREE` subdivision scheme will follow the rules for subdivision as defined by the S2 cell hierarchy. When an `OCTREE` subdivision scheme is used, the split in the vertical dimension occurs at the midpoint of the `minimumHeight` and `maximumHeight` of the parent tile.
+
+| Cell  | Quadtree Subdivision | Octree Subdivision |
+|---|---|---|
+| ![](figures/parent.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
+
+To ensure continuity of the Hilbert curve, the faces of the cube are rotated as shown in the diagram below. This must be carefully considered when interpreting the tile coordinates in implicit tiling, since the traversal order in the odd-numbered faces is the mirror of the order in even numbered faces.
+
+![](figures/s2-face-winding.png)
+
+### Availability
+
+When using this extension with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md), the availability bitstreams must be indexed in Morton order, as illustrated by the following diagram:
+
+![](figures/availability.jpg)
+
+The following example illustrates usage of `3DTILES_shape_s2` with [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md):
+
+```json
+{
+  "asset": {
+    "version": "2.1"
+  },
+  "extensionsUsed": [
+    "3DTILES_tileset",
+    "3DTILES_implicit_tiling",
+    "3DTILES_shape_s2",
+    "EXT_geospatial_crs",
+    "EXT_geospatial_crs_wkid"
+  ],
+  "extensionsRequired": [
+    "3DTILES_tileset",
+    "3DTILES_implicit_tiling",
+    "3DTILES_shape_s2"
+  ],
+  "scenes": [
+    {
+      "name": "Implicitly Tiled Scene",
+      "nodes": [0]
+    }
+  ],
+  "scene": 0,
+  "shapes": [
+    {
+      "name": "Implicit Root Cell Volume - Level 0 (Token: 04)",
+      "type": "s2",
+      "extensions": {
+        "3DTILES_shape_s2": {
+          "token": "04",
+          "minimumHeight": 0,
+          "maximumHeight": 500000
+        }
+      }
+    }
+  ],
+  "extensions": {
+    "3DTILES_tileset": {
+      "geometricError": 10000
+    },
+    "EXT_geospatial_crs": {
+      "format": "wkid",
+      "extensions": {
+        "EXT_geospatial_crs_wkid": {
+          "authority": "EPSG",
+          "wkid": 4978
+        }
+      }
+    }
+  },
+  "nodes": [
+    {
+      "name": "S2 Implicit Root Tile Node",
+      "boundingVolume": {
+        "shape": 0
+      },
+      "extensions": {
+        "3DTILES_tileset": {
           "geometricError": 5000,
           "refine": "REPLACE"
+        },
+        "3DTILES_implicit_tiling": {
+          "subdivisionScheme": "QUADTREE",
+          "subtreeLevels": 4,
+          "availableLevels": 8,
+          "contentUri": "content/{level}/{x}/{y}.glb",
+          "subtreeUri": "subtrees/{level}/{x}/{y}.subtree"
         }
       }
     }
@@ -570,6 +461,7 @@ This extension defines the following [subtree tile attribute semantics](../3DTIL
 |---|---|---|---|
 |`"TILE_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the tile, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.|
 |`"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.|
+|`"TILE_MAXIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The maximum height of the tile above (or below) the ellipsoid.|
 
 This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
 
@@ -577,6 +469,7 @@ This extension defines the following [subtree content attribute semantics](../3D
 |---|---|---|---|
 |`"CONTENT_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the content, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.|
 |`"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.|
+|`"CONTENT_MAXIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The maximum height of the content above (or below) the ellipsoid.|
 
 ## Schema
 

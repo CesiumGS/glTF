@@ -9,10 +9,10 @@ SPDX-License-Identifier: CC-BY-4.0
 ## Contributors
 
 - Janine Liu, Cesium
-- Daniel Krupka, Cesium
+- Jeshurun Hembd, Cesium
 - Ian Lilley, Cesium
 - Sean Lilley, Cesium
-- Jeshurun Hembd, Cesium
+- Daniel Krupka, Cesium
 
 ## Status
 
