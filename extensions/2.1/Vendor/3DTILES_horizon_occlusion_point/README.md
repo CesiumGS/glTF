@@ -63,15 +63,15 @@ For more information about horizon culling see [Horizon Culling](https://cesium.
 
 This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"TILE_HORIZON_OCCLUSION_POINT"`|`"VEC3"`|`5130` (DOUBLE)|The horizon occlusion point of the tile expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire tile is below the horizon.
+| Attribute Semantic | Accessor Type | Component Type | Description |
+|---|---|---|---|
+|`"TILE_HORIZON_OCCLUSION_POINT"`|`"VEC3"`|`5130` (DOUBLE)|The horizon occlusion point of the tile expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire tile is below the horizon.|
 
 This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"CONTENT_HORIZON_OCCLUSION_POINT"`|`"VEC3"`|`5130` (DOUBLE)|The horizon occlusion point of the content expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire content is below the horizon.
+| Attribute Semantic | Accessor Type | Component Type | Description |
+|---|---|---|---|
+|`"CONTENT_HORIZON_OCCLUSION_POINT"`|`"VEC3"`|`5130` (DOUBLE)|The horizon occlusion point of the content expressed in an ellipsoid-scaled fixed frame. If this point is below the horizon, the entire content is below the horizon.|
 
 ## Schema
 

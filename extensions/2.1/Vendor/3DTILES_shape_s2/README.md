@@ -56,14 +56,14 @@ This extension defines S2 cells as an additional shape type for glTF 2.1 shapes.
 The [cell hierarchy of S2](https://s2geometry.io/devguide/s2cell_hierarchy) is rooted in the 6 faces of a cube, which are projected onto the unit sphere. In S2, each face of the unit cube can be subdivided into 30 levels using a quadtree structure, in which each cell on the grid subdivides into 4 equal cells at the subsequent level.
 
 |Level 0|Level 1|
-|:-:|:-:|
+|:---:|:---:|
 | ![](figures/plane_parent.png) S2 cell (`"1"`) on the Earth cube| ![](figures/plane_children.png) Children of S2 cell (`"1"`) on the Earth cube |
 | ![](figures/ellipsoid_parent.png)  S2 cell (`"1"`) on the WGS84 ellipsoid| ![](figures/ellipsoid_children.png) Children of S2 cell (`"1"`) on the WGS84 ellipsoid|
 
 The S2 library uses a modified Hilbert curve to provide a one dimensional ordering of cells on the S2 Earth cube. This provides each cell, from level 1 to level 30, with a unique 64-bit identifier. Using S2 cell IDs, centimeter scale areas be uniquely identified.
 
 | S2 Curve on Earth cube |  S2 Curve on WGS84 ellipsoid |
-|:-:|:-:|
+|:---:|:---:|
 | ![](figures/plane.png)  | ![](figures/ellipsoid.png)  |
 
 ## Cell IDs
@@ -566,17 +566,17 @@ The following example illustrates usage of `3DTILES_shape_s2` to represent all 6
 
 This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"TILE_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the tile, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.
-`"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.
+|Attribute Semantic|Accessor Type|Component Type|Description|
+|---|---|---|---|
+|`"TILE_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the tile, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.|
+|`"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.|
 
 This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"CONTENT_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the content, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.
-`"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.
+|Attribute Semantic|Accessor Type|Component Type|Description|
+|---|---|---|---|
+|`"CONTENT_BOUNDING_S2_CELL"`|`"SCALAR"`|`5135` (UNSIGNED INT64)|The bounding volume of the content, expressed as an [S2 Cell ID](#cell-ids) using the 64-bit representation instead of the hexadecimal representation.|
+|`"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.|
 
 ## Schema
 

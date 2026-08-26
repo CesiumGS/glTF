@@ -318,7 +318,7 @@ A refinement type is required for the root tile of a tileset; it is optional for
 If a tile uses replacement refinement, when refined it renders its children in place of itself.
 
 > |Parent Tile|Refined|
-> |--|--|
+> |---|---|
 > |![](./figures/replacement_1.jpg)|![](./figures/replacement_2.jpg)|
 >
 > A tile and a refined tile using replacement refinement
@@ -328,7 +328,7 @@ If a tile uses replacement refinement, when refined it renders its children in p
 If a tile uses additive refinement, when refined it renders itself and its children simultaneously.
 
 > |Parent Tile|Refined|
-> |--|--|
+> |---|---|
 > |![](./figures/additive_1.jpg)|![](./figures/additive_2.jpg)|
 >
 > A tile and a refined tile using additive refinement

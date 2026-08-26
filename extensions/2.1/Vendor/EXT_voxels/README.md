@@ -106,11 +106,11 @@ The `dimensions` property refers to the number of subdivisions within the boundi
 
 A **box** shape is divided into a Cartesian grid defined by `right`, `forward`, and `up` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `right`, `forward`, and `up` axes respectively.
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`right`|Along the right axis of the bounding box ($+x$ to $-x$)
-1|`forward`|Along the forward axis of the bounding box ($-z$ to $+z$)
-2|`up`|Along the up axis of the bounding box ($-y$ to $+y$)
+|Axis|Coordinate|Positive Direction|
+|---|---|---|
+|0|`right`|Along the right axis of the bounding box ($+x$ to $-x$)|
+|1|`forward`|Along the forward axis of the bounding box ($-z$ to $+z$)|
+|2|`up`|Along the up axis of the bounding box ($-y$ to $+y$)|
 
 Elements are laid out in memory where the `right` data is contiguous in strides along the `forward` axis, and each group of `forward` strides represents a `up` slice.
 
@@ -130,11 +130,11 @@ A **cylinder** region shape is subdivided along the radius, angle, and height ra
 
 The cylinder is aligned with the local up-axis (`y`-axis) in the node's local space. Its height is subdivided along that local `y`-axis from bottom to top. Subdivisions along the radius are concentric, centered around the `y`-axis and extending outwards. Finally, the angular bounds are subdivided counter-clockwise around the circumference of the cylinder.
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`radius`|From center (increasing radius)
-1|`angle`|From $-\pi$ to $\pi$ counter-clockwise (see figure below)
-2|`height`|From bottom to top (increasing height)
+|Axis|Coordinate|Positive Direction|
+|---|---|---|
+|0|`radius`|From center (increasing radius)|
+|1|`angle`|From $-\pi$ to $\pi$ counter-clockwise (see figure below)|
+|2|`height`|From bottom to top (increasing height)|
 
 Elements are laid out in memory where the radial data is contiguous in strides along the cylinder angle. Each group of angle strides represents a height slice on the cylinder.
 
@@ -150,11 +150,11 @@ Elements are laid out in memory where the radial data is contiguous in strides a
 
 An **ellipsoid** region shape is subdivided along the longitude, latitude, and height ranges of the region. The `dimensions` correspond to the subdivisions of those ranges, respectively.
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`longitude`|From west to east (increasing longitude)
-1|`latitude`|From south to north (increasing latitude)
-2|`height`|From bottom to top (increasing height)
+|Axis|Coordinate|Positive Direction|
+|---|---|---|
+|0|`longitude`|From west to east (increasing longitude)|
+|1|`latitude`|From south to north (increasing latitude)|
+|2|`height`|From bottom to top (increasing height)|
 
 Elements are laid out in memory where the longitude data is contiguous in strides along the region's latitude. Each group of latitude strides represents a height slice on the region.
 

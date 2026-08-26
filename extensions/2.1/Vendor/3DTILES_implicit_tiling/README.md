@@ -68,13 +68,13 @@ The `3DTILES_implicit_tiling` extension may be added to any tile in the tileset.
 
 The `3DTILES_implicit_tiling` extension has the following properties:
 
-Property | Description
---|--
-`contentUri`|[Template URI](#template-uris) for locating content files.
-`subtreeUri`|[Template URI](#template-uris) for locating subtree files.
-`subdivisionScheme`|Either `QUADTREE` or `OCTREE`. See [Subdivision scheme](#subdivision-scheme).
-`availableLevels`|How many levels there are in the tree with available tiles.
-`subtreeLevels`|How many levels there are in each subtree.
+|Property | Description|
+|---|---|
+|`contentUri`|[Template URI](#template-uris) for locating content files.|
+|`subtreeUri`|[Template URI](#template-uris) for locating subtree files.|
+|`subdivisionScheme`|Either `QUADTREE` or `OCTREE`. See [Subdivision scheme](#subdivision-scheme).|
+|`availableLevels`|How many levels there are in the tree with available tiles.|
+|`subtreeLevels`|How many levels there are in each subtree.|
 
 The following constraints apply to implicit root tiles:
 
@@ -98,12 +98,12 @@ An *octree* divides space along all 3 dimensions. It divides each tile into 8 sm
 
 Implicit tiling only requires defining the subdivision scheme, refinement strategy, bounding volume, and geometric error at the implicit root tile. For descendant tiles, these properties are computed automatically, based on the following rules:
 
-Property|Subdivision Rule
---|--
-`subdivisionScheme`|Constant for all descendant tiles.
-`refine`|Constant for all descendant tiles.
-`boundingVolume`|Divided into four or eight parts depending on the `subdivisionScheme`.
-`geometricError`|Each child's `geometricError` is half of its parent's `geometricError`.
+|Property|Subdivision Rule|
+|---|---|
+|`subdivisionScheme`|Constant for all descendant tiles.|
+|`refine`|Constant for all descendant tiles.|
+|`boundingVolume`|Divided into four or eight parts depending on the `subdivisionScheme`.|
+|`geometricError`|Each child's `geometricError` is half of its parent's `geometricError`.|
 
 > [!NOTE]
 > In order to maintain numerical stability during this subdivision process, the actual bounding volumes should not be computed progressively by subdividing a non-root tile volume. Instead, the exact bounding volumes should be computed directly for a given level.
@@ -122,11 +122,11 @@ Additional tile coordinates define the indices of the tile within the level.
 
 For `box` bounding volumes:
 
-Axis|Coordinate|Positive Direction
---|--|--
-0|`right`|Along the right axis of the bounding box (`+x` to `-x`)
-1|`forward`|Along the forward axis of the bounding box (`-z` to `+z`)
-2|`up`|Along the up axis of the bounding box (`-y` to `+y`)
+|Axis|Coordinate|Positive Direction|
+|---|---|---|
+|0|`right`|Along the right axis of the bounding box (`+x` to `-x`)|
+|1|`forward`|Along the forward axis of the bounding box (`-z` to `+z`)|
+|2|`up`|Along the up axis of the bounding box (`-y` to `+y`)|
 
 So together the tile coordinates for `box` are `(level, right, forward, up)`
 
@@ -160,11 +160,11 @@ This is useful for resolving tile content through mechanisms other than just its
 
 In case of name collisions, the following precedence order is used (from highest priority to lowest priority):
 
-Precedence|Source
---|--
-1|Content property
-2|Tile property
-3|Implicit tile coordinates
+|Precedence|Source|
+|---|---|
+|1|Content property|
+|2|Tile property|
+|3|Implicit tile coordinates|
 
 For example, if the content and tile both have a `level` property, the content property value is used. The implicit tile coordinate level is not used.
 
@@ -302,11 +302,11 @@ interleaveBits(0b111, 0b000, 0b111) = 0b101101101
 
 ### Availability Bitstream Lengths
 
-Availability Type | Length (bits) | Description
---|--|--
-Tile availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Total number of nodes in the subtree
-Content availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Since there is at most one content per tile, this is the same length as tile availability
-Child subtree availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Number of nodes one level deeper than the deepest level of the subtree
+|Availability Type | Length (bits) | Description|
+|---|---|---|
+|Tile availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Total number of nodes in the subtree|
+|Content availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Since there is at most one content per tile, this is the same length as tile availability|
+|Child subtree availability|`+(N^subtreeLevels - 1)/(N - 1)+`|Number of nodes one level deeper than the deepest level of the subtree|
 
 Where `N` is 4 for quadtrees and 8 for octrees.
 
@@ -322,10 +322,10 @@ For tile availability and content availability, the Morton index only determines
 
 Given the `(level, mortonIndex)` of a tile relative to the subtree root, the index of the corresponding bit can be computed with the following formulas:
 
-Quantity | Formula | Description
---|--|--
-`levelOffset`|`+(N^level - 1) / (N - 1)+`|This is the number of nodes at levels `+1, 2, ... (level - 1)+`
-`tileAvailabilityIndex`|`levelOffset + mortonIndex`|The index into the buffer view is the offset for the tile's level plus the morton index for the tile
+|Quantity | Formula | Description|
+|---|---|---|
+|`levelOffset`|`+(N^level - 1) / (N - 1)+`|This is the number of nodes at levels `+1, 2, ... (level - 1)+`|
+|`tileAvailabilityIndex`|`levelOffset + mortonIndex`|The index into the buffer view is the offset for the tile's level plus the morton index for the tile|
 
 Where `N` is 4 for quadtrees and 8 for octrees.
 

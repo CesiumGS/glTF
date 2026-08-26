@@ -212,9 +212,9 @@ This allows applications to perform styling or filtering based on the layer that
 
 This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5130` (DOUBLE)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level 3DTILES_layers extension.
+|Attribute Semantic|Accessor Type|Component Type|Description|
+|---|---|---|---|
+|`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5130` (DOUBLE)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level 3DTILES_layers extension.|
 
 ## Schema
 

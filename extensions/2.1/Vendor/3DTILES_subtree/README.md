@@ -176,22 +176,22 @@ If more than one bounding volume attribute is provided, clients may select the m
 
 Below is the list of tile attribute semantics. Additional semantics may be defined by extensions.
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"TILE_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).
-`"TILE_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
-`"TILE_GEOMETRIC_ERROR"`|`"SCALAR"`|`5130` (DOUBLE)|The geometric error of the tile. See [Geometric Error](../3DTILES_tileset/README.md#geometric-error).
-`"TILE_REFINE"`|`"SCALAR"`|`5121` (UNSIGNED_BYTE)|The tile refinement. Elements in the accessor **MUST** be either `0` (`"ADD"`) or `1` (`"REPLACE"`). See [Refinement](../3DTILES_tileset/README.md#refinement).
-`"TILE_TRANSFORM"`|`"MAT4"`|`5130` (DOUBLE)|The tile transform. See [Transforms](../3DTILES_tileset/README.md#transforms).
+|Attribute Semantic|Accessor Type|Component Type|Description|
+|---|---|---|---|
+|`"TILE_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the tile, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).|
+|`"TILE_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the tile, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).|
+|`"TILE_GEOMETRIC_ERROR"`|`"SCALAR"`|`5130` (DOUBLE)|The geometric error of the tile. See [Geometric Error](../3DTILES_tileset/README.md#geometric-error).|
+|`"TILE_REFINE"`|`"SCALAR"`|`5121` (UNSIGNED_BYTE)|The tile refinement. Elements in the accessor **MUST** be either `0` (`"ADD"`) or `1` (`"REPLACE"`). See [Refinement](../3DTILES_tileset/README.md#refinement).|
+|`"TILE_TRANSFORM"`|`"MAT4"`|`5130` (DOUBLE)|The tile transform. See [Transforms](../3DTILES_tileset/README.md#transforms).|
 
 ### Content Attributes
 
 Below is the list of content attribute semantics. Additional semantics may be defined by extensions.
 
-Attribute Semantic|Accessor Type|Component Type|Description
---|--|--|--
-`"CONTENT_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the content, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).
-`"CONTENT_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).
+|Attribute Semantic|Accessor Type|Component Type|Description|
+|---|---|---|---|
+|`"CONTENT_BOUNDING_BOX"`|`"MAT4"`|`5130` (DOUBLE)|The bounding box of the content, expressed as a column-major transformation matrix applied to a unit cube where the top-left 3x3 matrix encodes the box's rotation and scale and the first three elements of the fourth column encodes the box's translation. See [Bounding Box](../3DTILES_tileset/README.md#bounding-box).|
+|`"CONTENT_BOUNDING_SPHERE"`|`"VEC4"`|`5130` (DOUBLE)|The bounding sphere of the content, where the first three elements encode the x, y, and z values for the center of the sphere and the the last element encodes the radius. See [Bounding Sphere](../3DTILES_tileset/README.md#bounding-sphere).|
 
 ## Properties
 
