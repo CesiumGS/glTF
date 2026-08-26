@@ -45,6 +45,9 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 - [Supporting Extensions](#supporting-extensions)
   - [Implicit Tiling](#implicit-tiling)
   - [Metadata](#metadata)
+  - [Layers](#layers)
+  - [Horizon Occlusion Point](#horizon-occlusion-point)
+  - [Visibility Bounding Volumes](#visibility-bounding-volumes)
   - [Declarative Styling](#declarative-styling)
 - [Appendix A: Spatial Data Structures](#appendix-a-spatial-data-structures)
 
@@ -663,6 +666,18 @@ A tileset may also provide summary statistics with [`EXT_structural_metadata`](.
 > ![](./figures/statistics.png)
 >
 > Metadata statistics using _EXT_structural_metadata_
+
+### Layers
+
+Layers are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. The [3DTILES_layers](../3DTILES_layers/README.md) extension adds support for layers. This can be useful for a variety of applications including vector data. See the [3DTILES_layers](../3DTILES_layers/README.md) extension specification for further details.
+
+### Horizon Occlusion Point
+
+To allow for fast horizon culling at runtime, the [3DTILES_horizon_occlusion_point](../3DTILES_horizon_occlusion_point/README.md) extension can be used to set a precomputed horizon occlusion point to a tile or contents. See the [3DTILES_horizon_occlusion_point](../3DTILES_horizon_occlusion_point/README.md) extension specification for further details.
+
+### Visibility Bounding Volumes
+
+Visibility bounding volumes allow specifying a space where specialized geometry is only visible when a camera is present. The [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension allows specifying a bounding volume where an associated node containing a [EXT_node_visibility](../../../2.0/Khronos/EXT_node_visibility/README.md) definition is set to become visible. See the [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension specification for further details.
 
 ### Declarative Styling
 
