@@ -677,7 +677,7 @@ To allow for fast horizon culling at runtime, the [3DTILES_horizon_occlusion_poi
 
 ### Visibility Bounding Volumes
 
-Visibility bounding volumes allow specifying a space where specialized geometry is only visible when a camera is present. The [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension allows specifying a bounding volume where an associated node containing a [EXT_node_visibility](../../../2.0/Khronos/EXT_node_visibility/README.md) definition is set to become visible. See the [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension specification for further details.
+Visibility bounding volumes allow specifying a space where specialized geometry is only visible when a camera is present. The [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension allows specifying a bounding volume where an associated node containing a [KHR_node_visibility](../../../2.0/Khronos/KHR_node_visibility/README.md) definition is set to become visible. See the [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension specification for further details.
 
 ### Declarative Styling
 
