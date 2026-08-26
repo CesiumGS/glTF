@@ -20,6 +20,10 @@ Draft
 
 Written against the glTF 2.1 spec.
 
+Depends on [3DTILES_tileset](../3DTILES_tileset/README.md) and [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+
+Optionally, this extension may be used in conjunction with [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
+
 ## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
@@ -28,11 +32,11 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension defines an ellipsoid-conforming region as an additional shape type for glTF 2.1 shapes. These regions are commonly used in geospatial applications to describe volumes that conform to the curvature of the Earth, or other bodies.
 
-`3DTILES_shape_ellipsoid_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"ellipsoid region"`. The properties define the region following the surface of the ellipsoid between two different height values.
-
-The ellipsoid shape **MUST** conform to a global-geocentric coordinate reference system. The default coordinate reference system used is [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS_84) ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)). The coordinate reference system in use **MAY** be configured by adding a [EXT_geospatial_crs](../EXT_geospatial_crs/README.md) extension to the glTF asset. If defined, implementations **MUST** use the coordinate reference system defined by `EXT_geospatial_crs`.
-
 The volume does not necessarily contain the full ellipsoid—and for many geospatial use cases, it will not. Rather, the ellipsoid is used as a reference from which the actual region is extruded. However, a region may extend beneath the surface of the ellipsoid. Given the right height values, the region could contain the entire ellipsoid if desired.
+
+This extension **MAY** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+
+Tile transforms do not apply to bounding volumes referencing ellipsoid region shapes. Tiles using this extension must maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence). This extension may be applied to tile or content bounding volumes. See [`3DTILES_tileset`](../3DTILES_tileset/README.md#transforms) for more details.
 
 ## Ellipsoid Region Shape
 
@@ -129,11 +133,11 @@ A `QUADTREE` subdivision will subdivide along the longitude and latitude axes. A
 |---|---|---|
 | ![](figures/root.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
-Coordinate|Positive Direction
---|--
-longitude| From west to east (increasing longitude)
-latitude| From south to north (increasing latitude)
-height| From bottom to top (increasing height)
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`longitude`| From west to east (increasing longitude)
+1|`latitude`| From south to north (increasing latitude)
+2|`height`| From bottom to top (increasing height)
 
 ## Subtree Attributes
 
@@ -143,6 +147,7 @@ Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"TILE_BOUNDING_REGION"`|`"VEC4"`|`5130` (DOUBLE)|The bounding region of the tile, in the order `(minimum longitude, minimum latitude, maximum longitude, maximum latitude)`.
 `"TILE_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the tile above (or below) the ellipsoid.
+`"TILE_MAXIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The maximum height of the tile above (or below) the ellipsoid.
 
 This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
 
@@ -150,6 +155,7 @@ Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
 `"CONTENT_BOUNDING_REGION"`|`"VEC4"`|`5130` (DOUBLE)|The bounding region of the content, in the order `(minimum longitude, minimum latitude, maximum longitude, maximum latitude)`.
 `"CONTENT_MINIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The minimum height of the content above (or below) the ellipsoid.
+`"CONTENT_MAXIMUM_HEIGHT"`|`"SCALAR"`|`5130` (DOUBLE)|The maximum height of the content above (or below) the ellipsoid.
 
 ## Schema
 

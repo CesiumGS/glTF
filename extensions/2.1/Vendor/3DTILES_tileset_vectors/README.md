@@ -8,12 +8,12 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ## Contributors
 
-- Björn Blissing, [@bjornblissing](https://github.com/bjornblissing)
-- Xuan Huang, [@xuanhuang1](https://github.com/xuanhuang1)
-- Sean Lilley, [@lilleyse](https://github.com/lilleyse)
-- Don McCurdy, [@donmccurdy](https://github.com/donmccurdy)
-- Adam Morris, [@weegeekps](https://github.com/weegeekps)
-- Daniel Zhong, [@danielzhong](https://github.com/danielzhong)
+- Don McCurdy, Cesium
+- Xuan Huang, Cesium
+- Sean Lilley, Cesium
+- Adam Morris, Cesium
+- Daniel Zhong, Cesium
+- Björn Blissing, Vantor
 
 ## Status
 
@@ -25,7 +25,7 @@ Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
 
-## Required
+## Optional
 
 This extension is always optional. It should be placed in the tileset JSON `extensionsUsed` list, but not in the `extensionsRequired` list.
 
@@ -54,7 +54,7 @@ Working from the definition above, this extension proposes a mechanism for encod
 
 ## Extending 3D Tiles content
 
-A glTF tileset may be extended with `3DTILES_tileset_vectors`. This asset **MUST** also declare the [3DTILES_tileset](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_tileset) extension. Including this extension in a tileset's top-level `extensions` object indicates that all geometry in the asset ****SHOULD**** be interpreted as vector data. The tileset must not contain non-vector geometry, with the exception of referenced [external tilesets](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_tileset#external-tileset).
+A glTF tileset may be extended with `3DTILES_tileset_vectors`. This asset **MUST** also declare the [3DTILES_tileset](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_tileset) extension. Including this extension in a tileset's top-level `extensions` object indicates that all geometry in the asset ****SHOULD**** be interpreted as vector data. The tileset **MUST** not contain non-vector geometry, with the exception of referenced [external tilesets](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_tileset#external-tileset).
 
 > [!NOTE]
 > Referenced external tilesets do not inherit this vector data designation.

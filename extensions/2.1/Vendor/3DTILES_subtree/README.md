@@ -195,7 +195,7 @@ Attribute Semantic|Accessor Type|Component Type|Description
 
 ## Properties
 
-Subtrees may store application-specific properties for available tiles and contents. Property values are stored in [property tables](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
+Subtrees may store application-specific properties for available tiles and contents. Property values are stored in [property tables](../../../2.0/Vendor/EXT_structural_metadata#property-tables) with [EXT_structural_metadata](../../../2.0/Vendor/EXT_structural_metadata). The binary representation is particularly efficient for larger datasets with many tiles.
 
 `tileProperties` is the index of a property table containing property values for available tiles.
 

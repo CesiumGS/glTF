@@ -18,7 +18,7 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
+Depends on [3DTILES_tileset](../3DTILES_tileset/README.md) and [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
 ## Optional
 
@@ -30,7 +30,9 @@ This extension adds a pre-computed horizon occlusion point to a [tile](../3DTILE
 
 `horizonOcclusionPoint` is expressed in an ellipsoid–scaled fixed frame. At runtime, if this point is below the horizon, the entire tile is below the horizon and may be culled.
 
-This extension uses [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS_84) ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)) as the default ellipsoid. A different ellipsoid may be specified with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+This extension **MAY** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+
+[Tile transforms](../3DTILES_tileset/README.md#transforms) do not apply to horizon occlusion points.
 
 ```json
 {
@@ -45,6 +47,15 @@ This extension uses [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System
         -0.39265595843176665,
         1.02261928332819
       ]
+    },
+    "EXT_geospatial_crs": {
+      "format": "wkid",
+      "extensions": {
+        "EXT_geospatial_crs_wkid": {
+          "authority": "EPSG",
+          "wkid": 4978
+        }
+      }
     }
   },
   "boundingVolume": {

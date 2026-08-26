@@ -20,6 +20,10 @@ Draft
 
 Written against the glTF 2.1 spec.
 
+Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
+
+Optionally, this extension may be used in conjunction with [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md).
+
 ## Required
 
 This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
@@ -28,7 +32,9 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension defines a cylinder-conforming region as an additional shape type for glTF 2.1 shapes. These regions are useful for visualizing real-world data that has been captured by cylindrical sensors.
 
-`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`. The `minimumRadius`, `maximumRadius`, and `height` properties are required. These properties define a region following the surface of a cylinder between two different radius values. Two optional properties, `minimumAngle` and `maximumAngle`, define the maximum angle of the cylinder region in radians.
+`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`.
+
+The `minimumRadius`, `maximumRadius`, and `height` properties are required. These properties define a region following the surface of a cylinder between two different radius values. Two optional properties, `minimumAngle` and `maximumAngle`, define the maximum angle of the cylinder region in radians.
 
 The cylinder does not need to be completely represented by the volume—for instance, the region may be hollow inside like a tube. However, an inner radius of `0.0` results in a completely solid cylinder.
 
@@ -50,11 +56,11 @@ The cylinder does not need to be completely represented by the volume—for inst
 
 The inner and outer radii are defined using the `minimumRadius` and `maximumRadius` properties. The outer radius of the cylinder is defined by the value stored in `maximumRadius`, and the inner radius of the cylinder is defined by the value stored in `minimumRadius`. The inner radius allows the creation of a hole in the middle of the cylinder. These properties are required.
 
-The property values are stored as float point values and **MUST** satisfy the conditions:
+The property values are stored as floating point values and **MUST** satisfy the conditions:
 
 $$\begin{align}
-radius_{min} &\leqslant 0.0 \\
-radius_{max} &\leqslant 0.0 \\
+0.0 &\leqslant radius_{min} \\
+0.0 &\leqslant radius_{max} \\
 radius_{min} &\leqslant radius_{max}
 \end{align}$$
 
@@ -66,12 +72,11 @@ $$0.0 \leqslant height$$
 
 #### Angle
 
-The `minimumAngle` and `maximumAngle` represent optional properties that allow defining an arc for the cylinder region, oriented along `x` and `y` axes of the cylinder. The value of `minimumAngle` defaults to $-\pi$ and the value of `maximumAngle` defaults to $\pi$ when these properties are omitted, representing a full cylinder.
+The `minimumAngle` and `maximumAngle` represent optional properties that allow defining an arc for the cylinder region, oriented along `x` and `z` axes of the cylinder. The value of `minimumAngle` defaults to $-\pi$ and the value of `maximumAngle` defaults to $\pi$ when these properties are omitted, representing a full cylinder.
 
 To preserve sampling at the antemeridian, the minimum and maximum angles **MUST** satisfy the conditions:
 
 $$\begin{align}
-angle_{min} \leqslant angle_{max} \\
 0 \leqslant | angle_{max} - angle_{min} | \leqslant 2 \cdot pi
 \end{align}$$
 
@@ -135,11 +140,11 @@ A `QUADTREE` subdivision will subdivide along the radius and angle axes. An `OCT
 |---|---|---|
 | ![](figures/root.png)  | ![](figures/quadtree.png)  | ![](figures/octree.png)  |
 
-Coordinate|Positive Direction
---|--
-radius| From the center outwards (increasing radius)
-angle| From $-\pi$ to $\pi$ (counter-clockwise angle)
-height| From bottom to top (increasing height)
+Axis|Coordinate|Positive Direction
+--|--|--
+0|`radius`| From the center outwards (increasing radius)
+1|`angle`| From $-\pi$ to $\pi$ (counter-clockwise angle)
+2|`height`| From bottom to top (increasing height)
 
 ## Schema
 

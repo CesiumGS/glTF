@@ -141,7 +141,7 @@ The following example shows a tree with a root tile and a child tile.
   ],
   "extensions": {
     "3DTILES_tileset": {
-      "geometricError": 240
+      "geometricError": 240.0
     }
   },
   "nodes": [
@@ -179,7 +179,7 @@ The top-level `3DTILES_tileset` extension has the following properties:
 
 > **Note:** Tileset geometric error is different than tile geometric error. The former (which only appears once in the tileset) is used to determine whether the root tile is considered for rendering whereas the latter is used to determine whether a tile's children are considered for rendering.
 
-Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### Tile
 
@@ -222,13 +222,13 @@ The `3DTILES_tileset` node extension has the following properties that further c
 
 The `mesh` property **MUST** be omitted.
 
-Application-specific properties may be assigned to a tile with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to a tile with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### Content
 
 A tile can be associated with renderable content, typically an external glTF asset that includes geometry and texture information, and may be extended to include metadata, model instancing, and compression.
 
-The following examples shows the root tile from before with a `content` object.
+The following example shows the root tile from before with a `content` object.
 
 ```json
 {
@@ -255,7 +255,7 @@ The `content` object includes the following optional properties:
 
 - `boundingVolume` is a tightly fitting bounding volume enclosing just the tile's content. See [Bounding Volumes](#bounding-volumes).
 
-Application-specific properties may be assigned to content with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to content with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### External Tilesets
 
@@ -270,10 +270,7 @@ To create a tree of trees, a tile can point to an external tileset (a glTF using
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 70.0,
-      "refine": "ADD",
-      "content": {
-        "type": "externalTileset"
-      }
+      "refine": "ADD"
     }
   },
   "boundingVolume": {
@@ -286,7 +283,6 @@ To create a tree of trees, a tile can point to an external tileset (a glTF using
 When a tile points to an external tileset, the tile:
 
 - Cannot have any children; `node.children` **MUST** be omitted.
-- **MUST** set its content type to `"externalTileset"`.
 - Is [unconditionally refinable](#unconditional-refinement) regardless of its geometric error.
 
 ### Geometric Error
@@ -373,13 +369,13 @@ The following example shows an oriented bounding box that is created by transfor
   ],
   "nodes": [
     {
-    "boundingVolume": {
-      "shape": 0,
-      "translation": [-3923021.73, -931070.70, 4925458.17],
-      "rotation": [0.26262, -0.20758, -0.58433, 0.73925],
-      "scale": [100.0, 100.0, 100.0]
-    },
-    ...
+      "boundingVolume": {
+        "shape": 0,
+        "translation": [-3923021.73, -931070.70, 4925458.17],
+        "rotation": [0.26262, -0.20758, -0.58433, 0.73925],
+        "scale": [100.0, 100.0, 100.0]
+      },
+      ...
     }
   ]
 }
@@ -401,10 +397,10 @@ The following example shows a bounding sphere.
   ],
   "nodes": [
     {
-    "boundingVolume": {
-      "shape": 0
-    },
-    ...
+      "boundingVolume": {
+        "shape": 0
+      },
+      ...
     }
   ]
 }
@@ -450,11 +446,11 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 A tileset may be defined in either a **global** or **local** coordinate system. A tileset's global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn't have to be, e.g., a power plant may be defined fully in its local coordinate system.
 
-A tileset defined in a local coordinate system follows the standard glTF conventions: right-handed, +Y up, and linear units in meters.
+A tileset defined in a local coordinate system follows the standard glTF coordinate system conventions: right-handed, +Y up, and linear units in meters.
 
 A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
 
-A tileset defined in a global coordinate system differs from the default conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
+A tileset defined in a global coordinate system differs from the standard glTF coordinate system conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
 > ![](./figures/ecef.png)
 >
@@ -621,7 +617,7 @@ The following example shows a tileset with tileset properties, tile properties, 
 
 #### Statistics
 
-A tileset may also provide summary statistics with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
+A tileset may also provide summary statistics with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
 
 > ![](./figures/statistics.png)
 >
@@ -702,7 +698,7 @@ An octree extends a quadtree by using three orthogonal splitting planes to subdi
 > Building data from [CyberCity3D](http://www.cybercity3d.com/). Imagery data from [Bing Maps](https://www.microsoft.com/maps/).
 
 
-3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `content` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
+3D Tiles takes advantage of empty tiles: those tiles that have a bounding volume, but no content. Since a tile's `externalAsset` property does not need to be defined, empty non-leaf tiles can be used to accelerate non-uniform grids with hierarchical culling. This essentially creates a quadtree or octree without hierarchical levels of detail (HLOD).
 
 ## Schema
 

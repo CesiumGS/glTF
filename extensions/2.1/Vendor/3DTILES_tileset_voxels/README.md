@@ -22,7 +22,7 @@ Draft
 Written against the glTF 2.1 spec.
 
 Depends on [3DTILES_tileset](../3DTILES_tileset/README.md).
-Depends on [EXT_structural_metadata](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+Depends on [EXT_structural_metadata](../../../2.0/Vendor/EXT_structural_metadata).
 Depends on [EXT_voxels](../EXT_voxels/README.md).
 
 ## Required
@@ -33,28 +33,26 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension defines a structure for volumetric data (voxels) in 3D Tiles.
 
-- Each tile content **MUST** have a single node with the [`EXT_voxels extension`](../EXT_voxels/README.md).
 - The tileset's root tile **MUST** use [`3DTILES_implicit_tiling`](../3DTILES_implicit_tiling/README.md).
+- Each tile content **MUST** have a single node with the [`EXT_voxels`](../EXT_voxels/README.md) extension.
 - The shape defined in each tile's `EXT_voxels` extension **MUST** be equivalent to the implicitly derived bounding volume.
-- Each tile's `EXT_voxels` extension **MUST** associate its attribute data with metadata definitions using [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+- Each tile's `EXT_voxels` extension **MUST** associate its attribute data with metadata definitions using [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata).
 
 ### Dimensions
 
-The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. The allowed values, their order, and meaning are as defined in [EXT_voxels](../EXT_voxels/README.md#dimensions)
+The `dimensions` property of the extension specifies the voxel grid's dimensions along each axis. The allowed values, their order, and meaning are as defined in [EXT_voxels](../EXT_voxels/README.md#dimensions).
 
 The value of the `dimensions` property **MUST** match the value of `dimensions` defined in the `EXT_voxels` extension for each tile.
 
 ### Padding
 
-The `padding` property specifies how many rows of voxel data in each dimension are copied from neighboring tiles. This is useful in situations where the content represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects, e.g., trilinear interpolation, blurring, or anti-aliasing.
+The `padding` property specifies how many rows of voxel data in each dimension are copied from neighboring tiles. The allowed values, their order, and meaning are as defined in [EXT_voxels](../EXT_voxels/README.md#padding).
 
-`padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g., a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
-
-The `padding` property is optional; when omitted, `padding.before` and `padding.after` are both `[0, 0, 0]`. However, it **MUST** match the `padding` property specified in `EXT_voxels` for each tile.
+The value of the `padding` property **MUST** match the value of `padding` defined in the `EXT_voxels` extension for each tile.
 
 ### Class
 
-The `class` property refers to a class ID in the metadata schema associated with the tileset, as defined in the [`EXT_structural_metadata` extension](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata). The class describes which properties exist in the voxel grid. In the example below, each voxel may have a `temperature` value and/or a `salinity` value. When a property value equals the `noData` value it indicates that no data exists for that voxel.
+The `class` property refers to a class ID in the metadata schema associated with the tileset, as defined in the [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata) extension. The class describes which properties exist in the voxel grid. In the example below, each voxel may have a `temperature` value and/or a `salinity` value. When a property value equals the `noData` value it indicates that no data exists for that voxel.
 
 The `class` **MUST** match the `class` used to classify the voxels in the `EXT_structural_metadata` extension, inside `EXT_voxels` for each tile.
 
@@ -134,6 +132,7 @@ The following example describes a voxel tileset containing two metadata values i
       }
     }
   ]
+}
 ```
 
 ## Schema

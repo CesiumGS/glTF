@@ -27,7 +27,7 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 ## Overview
 
-“Layers” are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
+"Layers" are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
 
 The document-level `3DTILES_layers` extension defines the layers in the tileset. Each layer has a `"name"` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
 
@@ -149,7 +149,7 @@ Below is an example of an empty root tile with two child tiles, each assigned to
 
 ## Properties
 
-Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata).
+Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata).
 
 This allows applications to perform styling or filtering based on the layer that the content belongs to.
 
@@ -214,7 +214,7 @@ This extension defines the following [subtree content attribute semantics](../3D
 
 Attribute Semantic|Accessor Type|Component Type|Description
 --|--|--|--
-`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5130` (DOUBLE)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level 3DTILES_layers extension.
+`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5124` (INT)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
 
 ## Schema
 
