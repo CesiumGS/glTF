@@ -535,8 +535,6 @@ Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DT
 
 Additionally, `3DTILES_horizon_occlusion_point` **CANNOT** be used by tiles defined in a local coordinate system.
 
-## Supporting Extensions
-
 ### Implicit Tiling
 
 The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
@@ -546,6 +544,8 @@ Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_imp
 > ![](./figures/implicit-tiling-small.png)
 >
 > Quadtree with tile coordinates
+
+## Supporting Extensions
 
 ### Metadata
 
