@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Bentley Systems, Incorporated
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# EXT\_crs
+# EXT\_geospatial\_crs
 
 ## Contributors
 
