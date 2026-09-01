@@ -53,18 +53,19 @@ The document-level `3DTILES_layers` extension defines the layers in the tileset.
 }
 ```
 
-3D Tiles [content](../3DTILES_tileset/README.md#content) may be assigned to layers. The content extension has a single property `"layer"` which is the index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
+Nodes may be assigned to layers. The node extension has a single property `"layer"` which is the index of the layer that this node belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
+
+If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.
 
 ```json
 {
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 0.0,
-      "content": {
-        "3DTILES_layers": {
-          "layer": 0
-        }
-      }
+      "refine": "REPLACE"
+    },
+    "3DTILES_layers": {
+      "layer": 0
     }
   },
   "boundingVolume": {
@@ -114,12 +115,10 @@ Below is an example of an empty root tile with two child tiles, each assigned to
     {
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 0.0,
-          "content": {
-            "3DTILES_layers": {
-              "layer": 0
-            }
-          }
+          "geometricError": 0.0
+        },
+        "3DTILES_layers": {
+          "layer": 0
         }
       },
       "boundingVolume": {
@@ -130,12 +129,10 @@ Below is an example of an empty root tile with two child tiles, each assigned to
     {
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 0.0,
-          "content": {
-            "3DTILES_layers": {
-              "layer": 1
-            }
-          }
+          "geometricError": 0.0
+        },
+        "3DTILES_layers": {
+          "layer": 1
         }
       },
       "boundingVolume": {
@@ -151,7 +148,7 @@ Below is an example of an empty root tile with two child tiles, each assigned to
 
 Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata).
 
-This allows applications to perform styling or filtering based on the layer that the content belongs to.
+This allows applications to perform styling or filtering based on the layer that the node belongs to.
 
 ```json
 {
@@ -208,18 +205,18 @@ This allows applications to perform styling or filtering based on the layer that
 
 > ![](./figures/filtering-groups.jpg)
 >
-> Illustration of rendering options based on content groups
+> Illustration of rendering options based on layers
 
 ## Subtree Attributes
 
-This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
+This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
 
 |Attribute Semantic|Accessor Type|Component Type|Description|
 |---|---|---|---|
-|`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5124` (INT)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.|
+|`"TILE_LAYER_INDEX"`|`"SCALAR"`|`5124` (INT)|The index of the layer that this tile belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension. If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.|
 
 ## Schema
 
-- [content.3DTILES_layers.schema.json](schema/content.3DTILES_layers.schema.json)
+- [node.3DTILES_layers.schema.json](schema/node.3DTILES_layers.schema.json)
 - [glTF.3DTILES_layers.schema.json](schema/glTF.3DTILES_layers.schema.json)
 - [layer.schema.json](schema/layer.schema.json)
