@@ -84,7 +84,14 @@ During traversal, the `EXT_geospatial_crs_source` transform may be used instead 
 
 | Property | Type | Description |
 | --- | --- | --- |
-|format| string| The coordinate system format.<br><br> There are several standard formats used to define coordinate reference systems. This extension doesn't adhere to a specific format, instead defines a `"format"` property whose value **MUST** be defined by additional extensions:<br><br><ul><li>[EXT_geospatial_crs_wkid](../EXT_geospatial_crs_wkid/README.md) - Well-Known ID, commonly used to represent EPSG codes. Defines format `"wkid"`</li><li>[EXT_geospatial_crs_wkt2](../EXT_geospatial_crs_wkt2/README.md) - Well-Known Text version 2. Defines format `"wkt2"`</li></ul><br>Additional extensions may define additional formats.|
+|format| string| The coordinate system format.|
+
+There are several standard formats used to define coordinate reference systems. This extension doesn't adhere to a specific format, instead defines a `"format"` property whose value **MUST** be defined by additional extensions:
+
+- [EXT_geospatial_crs_wkid](../EXT_geospatial_crs_wkid/README.md) - Well-Known ID, commonly used to represent EPSG codes. Defines format `"wkid"`
+- [EXT_geospatial_crs_wkt2](../EXT_geospatial_crs_wkt2/README.md) - Well-Known Text version 2. Defines format `"wkt2"
+
+Additional extensions may define additional formats.
 
 ### Node extension
 
