@@ -33,7 +33,7 @@ This extension allows an asset to specify its source coordinate reference system
 
 The content remains compatible with the coordinate reference system specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md). For example, an asset may specify a projected coordinate system with `EXT_geospatial_crs_source` and a fallback geocentric coordinate system with `EXT_geospatial_crs`, as shown in the example below:
 
-``` json
+``` jsonc
 {
   "asset": {
     "version": "2.1"
