@@ -63,7 +63,7 @@ The content remains compatible with the coordinate reference system specified by
 ```
 
 
-```json
+```jsonc
 { // a node
   "boundingVolume": {...}, // ECEF bounding box (ignored in PCS mode)
   "matrix": [...], // ECEF transformation matrix (ignored in PCS mode)
