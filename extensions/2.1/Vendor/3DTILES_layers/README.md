@@ -57,7 +57,7 @@ Nodes may be assigned to layers. The node extension has a single property `layer
 
 If there is no document-level `3DTILES_layers` extension and this asset is referenced as an external asset, it uses the `layers` property of the parent asset, recursively, until `layers` is found.
 
-When `3DTILES_layers` is omitted, nodes inherit the layer of their parent nodes. If this asset is referenced as an external asset, it inherits the layer of the referencing node in the parent asset.
+When `3DTILES_layers` is omitted, the node inherits the layer of its parent node. If the node is a root node and the asset is referenced as an external asset, the node inherits the layer of the referencing node in the parent asset.
 
 Below is an example of a node, assigned to layer 0.
 
