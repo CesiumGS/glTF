@@ -29,7 +29,7 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 "Layers" are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
 
-The document-level `3DTILES_layers` extension defines the layers in the tileset. Each layer has a `"name"` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
+The document-level `3DTILES_layers` extension defines the layers in the asset. Each layer has a `"name"` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
 
 ```json
 {
@@ -55,7 +55,9 @@ The document-level `3DTILES_layers` extension defines the layers in the tileset.
 
 Nodes may be assigned to layers. The node extension has a single property `layer` which is the index of the layer that this node belongs to. The value is an index into the array of the `layers` property that is defined in the document-level `3DTILES_layers` extension.
 
-If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.
+If there is no document-level `3DTILES_layers` extension and this asset is referenced as an external asset, it uses the `layers` property of the parent asset, recursively, until `layers` is found.
+
+When `3DTILES_layers` is omitted, nodes inherit the layer of their parent nodes. If this asset is referenced as an external asset, it inherits the layer of the referencing node in the parent asset.
 
 Below is an example of a node, assigned to layer 0.
 
@@ -215,7 +217,7 @@ This extension defines the following [subtree tile attribute semantics](../3DTIL
 
 |Attribute Semantic|Accessor Type|Component Type|Description|
 |---|---|---|---|
-|`"TILE_LAYER_INDEX"`|`"SCALAR"`|`5124` (INT)|The index of the layer that this tile belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension. If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.|
+|`"TILE_LAYER_INDEX"`|`"SCALAR"`|`5125` (UNSIGNED_INT)|The index of the layer that this tile belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension. If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found. The maximum unsigned integer value `4294967295` may be used to indicate that the tile doesn't belong to a layer.|
 
 ## Schema
 
