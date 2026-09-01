@@ -53,7 +53,7 @@ The document-level `3DTILES_layers` extension defines the layers in the tileset.
 }
 ```
 
-Nodes may be assigned to layers. The node extension has a single property `"layer"` which is the index of the layer that this node belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
+Nodes may be assigned to layers. The node extension has a single property `layer` which is the index of the layer that this node belongs to. The value is an index into the array of the `layers` property that is defined in the document-level `3DTILES_layers` extension.
 
 If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.
 
