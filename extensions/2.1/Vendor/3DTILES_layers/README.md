@@ -57,6 +57,8 @@ Nodes may be assigned to layers. The node extension has a single property `layer
 
 If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found.
 
+Below is an example of a node, assigned to layer 0.
+
 ```json
 {
   "extensions": {
