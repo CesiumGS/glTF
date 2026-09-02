@@ -93,7 +93,7 @@ An asset defined with a horizontal CRS (UTM Zone 11N) and vertical CRS (NAVD 88)
       "extensions": {
         "EXT_geospatial_crs_wkid": {
           "authority": "EPSG",
-          "wkid": 32611,
+          "wkid": 26911,
           "vcsWkid": 5703
         }
       }
