@@ -181,7 +181,7 @@ The top-level `3DTILES_tileset` extension has the following properties:
 
 > **Note:** Tileset geometric error is different than tile geometric error. The former (which only appears once in the tileset) is used to determine whether the root tile is considered for rendering whereas the latter is used to determine whether a tile's children are considered for rendering.
 
-Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to a tileset with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### Tile
 
@@ -224,7 +224,7 @@ The `3DTILES_tileset` node extension has the following properties that further c
 
 The `mesh` property **MUST** be omitted.
 
-Application-specific properties may be assigned to a tile with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to a tile with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### Content
 
@@ -257,7 +257,7 @@ The `content` object includes the following optional properties:
 
 - `boundingVolume` is a tightly fitting bounding volume enclosing just the tile's content. See [Bounding Volumes](#bounding-volumes).
 
-Application-specific properties may be assigned to content with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
+Application-specific properties may be assigned to content with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.0/Vendor/EXT_structural_metadata). See [Metadata](#metadata).
 
 ### External Tilesets
 
@@ -343,9 +343,9 @@ A bounding volume defines the spatial extent enclosing a tile or a tile's conten
 
 A list of extensions that enable additional shape types:
 
-- [3DTILES_shape_ellipsoid_region](../3DTILES_shape_ellipsoid_region/README.md)
-- [3DTILES_shape_cylinder_region](../3DTILES_shape_cylinder_region/README.md)
-- [3DTILES_shape_s2](../3DTILES_shape_s2/README.md)
+- [3DTILES_shape_ellipsoid_region](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_shape_ellipsoid_region/README.md)
+- [3DTILES_shape_cylinder_region](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_shape_cylinder_region/README.md)
+- [3DTILES_shape_s2](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_shape_s2/README.md)
 
 The content may have an optional `boundingVolume`, the content bounding volume. Unlike the tile bounding volume, the content bounding volume is a tightly fitting bounding volume enclosing just the tile's content. This enables tight view frustum culling, excluding from rendering any content not in the volume of what is potentially in view. When it is not defined, the tile's bounding volume is still used for culling.
 
@@ -420,7 +420,7 @@ The transform does not apply to `geometricError`—i.e., the scale defined by `t
 
 Certain bounding volume types, such as `3DTILES_shape_ellipsoid_region` and `3DTILES_shape_s2`, are defined in a geospatial coordinate system and cannot be reasonably transformed. In such cases, the transform does not apply to these bounding volumes. Additionally, the transform does not apply to `3DTILES_horizon_occlusion_point`.
 
-[EXT_georeference](../EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
+[EXT_georeference](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_georeference/README.md) may be used to transform a tile from its local coordinate system to a geocentric coordinate system by placing it at a specific longitude, latitude, height. The georeference transform is applied after the node transform (pre-multiplied).
 
 ### Spatial Coherence
 
@@ -448,9 +448,9 @@ A tileset may use a 2D spatial tiling scheme similar to raster and vector tiling
 
 A tileset may be defined in either a **global** or **local** coordinate system. A tileset's global coordinate system will often be in a [WGS 84](https://epsg.org/ellipsoid_7030/WGS-84.html) Earth-centered, Earth-fixed (ECEF) reference frame ([EPSG 4978](https://epsg.org/crs_4978/WGS-84.html)), but it doesn't have to be, e.g., a power plant may be defined fully in its local coordinate system.
 
-A tileset defined in a local coordinate system follows the standard glTF coordinate system conventions: right-handed, +Y up, and linear units in meters. It **MUST NOT** use the [EXT_geospatial_crs](../EXT_geospatial_crs/README.md) extension.
+A tileset defined in a local coordinate system follows the standard glTF coordinate system conventions: right-handed, +Y up, and linear units in meters. It **MUST NOT** use the [EXT_geospatial_crs](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_geospatial_crs/README.md) extension.
 
-A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+A tileset defined in a global coordinate system **MUST** specify its coordinate reference system (CRS) with [EXT_geospatial_crs](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_geospatial_crs/README.md).
 
 A tileset defined in a global coordinate system differs from the standard glTF coordinate system conventions – there is no single "up" vector on the surface of a globe. Instead, the tileset uses a **geocentric (planetocentric)** coordinate reference system such as [EPSG 4978](https://epsg.org/crs_4978/WGS-84.html).
 
@@ -491,7 +491,7 @@ The following rules apply for CRS transitions:
 
 A [tile transform](#transforms) may be applied to transform a tile's local coordinate system to the parent tile's geocentric coordinate system.
 
-The example below shows a tileset using [EXT_georeference](../EXT_georeference/README.md). Note that when `EXT_georeference` is used the tileset is in a global coordinate system and `EXT_geospatial_crs` must also be used.
+The example below shows a tileset using [EXT_georeference](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_georeference/README.md). Note that when `EXT_georeference` is used the tileset is in a global coordinate system and `EXT_geospatial_crs` must also be used.
 
 ```json
 {
@@ -539,7 +539,7 @@ Additionally, `3DTILES_horizon_occlusion_point` **CANNOT** be used by tiles defi
 
 The bounding volume hierarchy may be defined explicitly — as shown previously — which enables a wide variety of spatial data structures. Certain common data structures such as quadtrees and octrees may be defined implicitly without providing bounding volumes for every tile. This regular pattern allows for random access of tiles based on their tile coordinates which enables accelerated spatial queries, new traversal algorithms, and efficient updates of tile content, among other use cases.
 
-Implicit tiling is enabled by using the [3DTILES_implicit_tiling](../3DTILES_implicit_tiling/README.md) extension. In order to support sparse datasets, the tree is partitioned into fixed-size *subtrees*. See [3DTILES_subtree](../3DTILES_subtree/README.md).
+Implicit tiling is enabled by using the [3DTILES_implicit_tiling](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_implicit_tiling/README.md) extension. In order to support sparse datasets, the tree is partitioned into fixed-size *subtrees*. See [3DTILES_subtree](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_subtree/README.md).
 
 > ![](./figures/implicit-tiling-small.png)
 >
@@ -661,7 +661,7 @@ The following example shows a tileset with tileset properties, tile properties, 
 
 #### Statistics
 
-A tileset may also provide summary statistics with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
+A tileset may also provide summary statistics with [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.0/Vendor/EXT_structural_metadata#statistics) that allow applications to analyze or display metadata—e.g. with [declarative styling](#declarative-styling)—without first having to process the complete dataset to identify bounds for color ramps and histograms. Statistics are provided on a per-class basis, so that applications can provide styling or context based on the tileset as a whole, while only needing to download and process a subset of its tiles.
 
 > ![](./figures/statistics.png)
 >
@@ -669,15 +669,15 @@ A tileset may also provide summary statistics with [`EXT_structural_metadata`](.
 
 ### Layers
 
-Layers are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. The [3DTILES_layers](../3DTILES_layers/README.md) extension adds support for layers. This can be useful for a variety of applications including vector data. See the [3DTILES_layers](../3DTILES_layers/README.md) extension specification for further details.
+Layers are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. The [3DTILES_layers](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_layers/README.md) extension adds support for layers. This can be useful for a variety of applications including vector data. See the [3DTILES_layers](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_layers/README.md) extension specification for further details.
 
 ### Horizon Occlusion Point
 
-To allow for fast horizon culling at runtime, the [3DTILES_horizon_occlusion_point](../3DTILES_horizon_occlusion_point/README.md) extension can be used to set a precomputed horizon occlusion point to a tile or contents. See the [3DTILES_horizon_occlusion_point](../3DTILES_horizon_occlusion_point/README.md) extension specification for further details.
+To allow for fast horizon culling at runtime, the [3DTILES_horizon_occlusion_point](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_horizon_occlusion_point/README.md) extension can be used to set a precomputed horizon occlusion point to a tile or contents. See the [3DTILES_horizon_occlusion_point](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/3DTILES_horizon_occlusion_point/README.md) extension specification for further details.
 
 ### Visibility Bounding Volumes
 
-Visibility bounding volumes allow specifying a space where specialized geometry is only visible when a camera is present. The [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension allows specifying a bounding volume where an associated node containing a [KHR_node_visibility](../../../2.0/Khronos/KHR_node_visibility/README.md) definition is set to become visible. See the [EXT_node_visibility_volume](../EXT_node_visibility_volume) extension specification for further details.
+Visibility bounding volumes allow specifying a space where specialized geometry is only visible when a camera is present. The [EXT_node_visibility_volume](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_node_visibility_volume) extension allows specifying a bounding volume where an associated node containing a [KHR_node_visibility](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.0/Khronos/KHR_node_visibility/README.md) definition is set to become visible. See the [EXT_node_visibility_volume](https://github.com/CesiumGS/glTF/tree/3d-tiles-2.0/extensions/2.1/Vendor/EXT_node_visibility_volume) extension specification for further details.
 
 ### Declarative Styling
 
