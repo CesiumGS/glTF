@@ -32,7 +32,7 @@ This extension is required, meaning it **MUST** be placed in both `extensionsReq
 
 This extension defines a cylinder-conforming region as an additional shape type for glTF 2.1 shapes. These regions are useful for visualizing real-world data that has been captured by cylindrical sensors.
 
-`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`.
+`3DTILES_shape_cylinder_region` extends the `shape` object in glTF 2.1. The `shape.type` **MUST** be set to `"cylinder region"`. This shape **MAY** be used as an additional shape type for bounding volumes or by extensions.
 
 The `minimumRadius`, `maximumRadius`, and `height` properties are required. These properties define a region following the surface of a cylinder between two different radius values. Two optional properties, `minimumAngle` and `maximumAngle`, define the maximum angle of the cylinder region in radians.
 

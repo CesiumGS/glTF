@@ -51,7 +51,7 @@ Typically, traditional GIS libraries rely on projecting map data from an ellipso
 
 This extension defines S2 cells as an additional shape type for glTF 2.1 shapes. Due to the properties of S2 described above, this shape is well suited for tilesets that span the whole globe.
 
-This extension **MAY** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+This extension **SHOULD** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md). This shape **MAY** be used as an additional shape type for bounding volumes or by extensions.
 
 Tile transforms do not apply to bounding volumes referencing S2 shapes. Tiles using this extension must maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence). This extension may be applied to tile or content bounding volumes. See [`3DTILES_tileset`](../3DTILES_tileset/README.md#transforms) for more details.
 
