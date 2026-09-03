@@ -85,6 +85,7 @@ The following example shows an asset defined in UTM Zone 11N coordinates using `
       }
     }
   }
+}
 ```
 
 ## Schema
