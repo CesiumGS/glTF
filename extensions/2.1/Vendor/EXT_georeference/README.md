@@ -19,9 +19,9 @@ Draft
 
 Written against the glTF 2.1 spec.
 
-## Required
+## Optional
 
-This extension is required, meaning it **MUST** be placed in both `extensionsRequired` and `extensionsUsed`.
+This extension is optional, meaning it should be placed in the glTF root's `extensionsUsed` list, but not in the `extensionsRequired` list.
 
 ## Overview
 
