@@ -3,12 +3,12 @@
     "$id": "glTF.3DTILES_layers.schema.json",
     "title": "3DTILES_layers glTF Document extension",
     "type": "object",
-    "description": "glTF extension that defines layers that content may belong to.",
+    "description": "glTF extension that defines layers that nodes may belong to.",
     "$ref": "glTFProperty.schema.json",
     "properties": {
         "layers": {
             "type": "array",
-            "description": "An array of layers that content may belong to.",
+            "description": "An array of layers that nodes may belong to.",
             "items": {
                 "$ref": "layer.schema.json"
             },

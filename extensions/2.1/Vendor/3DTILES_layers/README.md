@@ -29,7 +29,7 @@ This extension is optional, meaning it should be placed in the glTF root's `exte
 
 "Layers" are a common concept when working with geospatial data, representing semantic or functional groups of geometries requiring common handling by the application. For example, in a vector basemap, land and water boundaries are typically rendered behind geometries like roads and buildings, and will have different styling rules applied. In this case, semantic layers such as "water", "land", "roads", and "buildings" may be appropriate.
 
-The document-level `3DTILES_layers` extension defines the layers in the tileset. Each layer has a `"name"` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
+The document-level `3DTILES_layers` extension defines the layers in the asset. Each layer has a `name` property. A layer may also have application-specific [properties](#properties) used for filtering and styling.
 
 ```json
 {
@@ -53,18 +53,23 @@ The document-level `3DTILES_layers` extension defines the layers in the tileset.
 }
 ```
 
-3D Tiles [content](../3DTILES_tileset/README.md#content) may be assigned to layers. The content extension has a single property `"layer"` which is the index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.
+Nodes may be assigned to layers. The node extension has a single property `layer` which is the index of the layer that this node belongs to. The value is an index into the array of the `layers` property that is defined in the document-level `3DTILES_layers` extension.
+
+If there is no document-level `3DTILES_layers` extension and this asset is referenced as an external asset, it uses the `layers` property of the parent asset, recursively, until `layers` is found.
+
+When `3DTILES_layers` is omitted, the node inherits the layer of its parent node. If the node is a root node and the asset is referenced as an external asset, the node inherits the layer of the referencing node in the parent asset.
+
+Below is an example of a node, assigned to layer 0.
 
 ```json
 {
   "extensions": {
     "3DTILES_tileset": {
       "geometricError": 0.0,
-      "content": {
-        "3DTILES_layers": {
-          "layer": 0
-        }
-      }
+      "refine": "REPLACE"
+    },
+    "3DTILES_layers": {
+      "layer": 0
     }
   },
   "boundingVolume": {
@@ -114,12 +119,10 @@ Below is an example of an empty root tile with two child tiles, each assigned to
     {
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 0.0,
-          "content": {
-            "3DTILES_layers": {
-              "layer": 0
-            }
-          }
+          "geometricError": 0.0
+        },
+        "3DTILES_layers": {
+          "layer": 0
         }
       },
       "boundingVolume": {
@@ -130,12 +133,10 @@ Below is an example of an empty root tile with two child tiles, each assigned to
     {
       "extensions": {
         "3DTILES_tileset": {
-          "geometricError": 0.0,
-          "content": {
-            "3DTILES_layers": {
-              "layer": 1
-            }
-          }
+          "geometricError": 0.0
+        },
+        "3DTILES_layers": {
+          "layer": 1
         }
       },
       "boundingVolume": {
@@ -151,7 +152,7 @@ Below is an example of an empty root tile with two child tiles, each assigned to
 
 Application-specific properties may be assigned to a layer with [`EXT_structural_metadata`](../../../2.0/Vendor/EXT_structural_metadata).
 
-This allows applications to perform styling or filtering based on the layer that the content belongs to.
+This allows applications to perform styling or filtering based on the layer that the node belongs to.
 
 ```json
 {
@@ -208,18 +209,18 @@ This allows applications to perform styling or filtering based on the layer that
 
 > ![](./figures/filtering-groups.jpg)
 >
-> Illustration of rendering options based on content groups
+> Illustration of rendering options based on layers
 
 ## Subtree Attributes
 
-This extension defines the following [subtree content attribute semantics](../3DTILES_subtree/README.md#content-attributes):
+This extension defines the following [subtree tile attribute semantics](../3DTILES_subtree/README.md#tile-attributes):
 
 |Attribute Semantic|Accessor Type|Component Type|Description|
 |---|---|---|---|
-|`"CONTENT_LAYER_INDEX"`|`"SCALAR"`|`5124` (INT)|The index of the layer that this content belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension.|
+|`"TILE_LAYER_INDEX"`|`"SCALAR"`|`5125` (UNSIGNED_INT)|The index of the layer that this tile belongs to. The value is an index into the array of `layers` that is defined in the document-level `3DTILES_layers` extension. If there is no document-level `3DTILES_layers` extension and this asset is referenced by an external asset, it uses the `layers` of the referencing asset, recursively, until `layers` is found. The maximum unsigned integer value `4294967295` may be used to indicate that the tile doesn't belong to a layer.|
 
 ## Schema
 
-- [content.3DTILES_layers.schema.json](schema/content.3DTILES_layers.schema.json)
+- [node.3DTILES_layers.schema.json](schema/node.3DTILES_layers.schema.json)
 - [glTF.3DTILES_layers.schema.json](schema/glTF.3DTILES_layers.schema.json)
 - [layer.schema.json](schema/layer.schema.json)
