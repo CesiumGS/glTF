@@ -34,7 +34,7 @@ This extension defines an ellipsoid-conforming region as an additional shape typ
 
 The volume does not necessarily contain the full ellipsoid—and for many geospatial use cases, it will not. Rather, the ellipsoid is used as a reference from which the actual region is extruded. However, a region may extend beneath the surface of the ellipsoid. Given the right height values, the region could contain the entire ellipsoid if desired.
 
-This extension **MAY** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md).
+This extension **SHOULD** only be used by tilesets in a [global coordinate system](../3DTILES_tileset/README.md#coordinate-reference-system-crs). This extension uses the ellipsoid specified by [EXT_geospatial_crs](../EXT_geospatial_crs/README.md). This shape **MAY** be used as an additional shape type for bounding volumes or by extensions.
 
 Tile transforms do not apply to bounding volumes referencing ellipsoid region shapes. Tiles using this extension must maintain [spatial coherence](../3DTILES_tileset/README.md#spatial-coherence). This extension may be applied to tile or content bounding volumes. See [`3DTILES_tileset`](../3DTILES_tileset/README.md#transforms) for more details.
 
