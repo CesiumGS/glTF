@@ -81,12 +81,10 @@ For a bitstream with `N` values, the buffer view that stores these availability 
 >       "tileAvailability": {
 >         "constant": 1
 >       },
->       "contentAvailability": [
->         {
->           "bitstream": 0,
->           "availableCount": 60
->         }
->       ],
+>       "contentAvailability": {
+>         "bitstream": 0,
+>         "availableCount": 60
+>       },
 >       "childSubtreeAvailability": {
 >         "bitstream": 1
 >       }
@@ -153,10 +151,10 @@ If more than one bounding volume attribute is provided, clients may select the m
 >       "tileAvailability": {
 >         "constant": 1
 >       },
->       "contentAvailability": [{
+>       "contentAvailability": {
 >         "bitstream": 0,
 >         "availableCount": 60
->       }],
+>       },
 >       "childSubtreeAvailability": {
 >         "bitstream": 1
 >       },
@@ -235,12 +233,10 @@ Subtrees may store application-specific properties for available tiles and conte
 >       "tileAvailability": {
 >         "constant": 1
 >       },
->       "contentAvailability": [
->         {
->           "bitstream": 0,
->           "availableCount": 60
->         }
->       ],
+>       "contentAvailability": {
+>         "bitstream": 0,
+>         "availableCount": 60
+>       },
 >       "childSubtreeAvailability": {
 >         "bitstream": 1
 >       },
