@@ -4,11 +4,7 @@
     "title": "Class in EXT_structural_metadata",
     "type": "object",
     "description": "A class containing a set of properties.",
-    "allOf": [
-        {
-            "$ref": "glTFProperty.schema.json"
-        }
-    ],
+    "$ref": "glTFProperty.schema.json",
     "properties": {
         "name": {
             "type": "string",
@@ -32,8 +28,6 @@
             "type": "string",
             "minLength": 1,
             "description": "Experimental. The parent class ID."
-        },
-        "extensions": {},
-        "extras": {}
+        }
     }
 }
