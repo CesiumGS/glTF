@@ -4,7 +4,7 @@
 
 // :regtitle: is explained in
 // https://discuss.asciidoctor.org/How-to-add-markup-to-author-information-in-document-title-td6488.html
-= glTF{tmtitle} 2.0 Specification
+= glTF{tmtitle} 2.1 Specification
 :tmtitle: pass:q,r[^™^]
 :regtitle: pass:q,r[^®^]
 The Khronos{regtitle} 3D Formats Working Group
@@ -384,7 +384,7 @@ https://www.iana.org/assignments/media-types/image/png
 [[motivation]]
 == Motivation and Design Goals (Informative)
 
-glTF is an open interoperable 3D asset ‘transmission’ format that is compact, and efficient to process and render at runtime. glTF 2.0 is designed to be vendor- and runtime-neutral, usable by a wide variety of native and web-based engines and applications regardless of underlying platforms and 3D graphics APIs.
+glTF is an open interoperable 3D asset ‘transmission’ format that is compact, and efficient to process and render at runtime. glTF 2.1 is designed to be vendor- and runtime-neutral, usable by a wide variety of native and web-based engines and applications regardless of underlying platforms and 3D graphics APIs.
 
 glTF’s focus on run-time efficiency is a different design goal than typical 3D ‘authoring’ formats. Authoring formats are typically more verbose, with higher processing overheads, to carry authoring data that is no longer needed after iterative design is complete. glTF is complementary to authoring formats, providing a common, interoperable distillation target for publishing 3D assets to a wide audience of end users.
 
@@ -402,9 +402,9 @@ glTF has been designed to meet the following goals:
 
 * **Extensibility.** glTF is fully extensible, enabling the addition of both general-purpose and vendor-specific extensions, including geometry and texture compression. Widely adopted extensions may be considered for integration into future versions of the glTF specification.
 
-The following are outside the scope of glTF 2.0:
+The following are outside the scope of glTF 2.1:
 
-* **glTF is not a streaming format.** The binary data in glTF is inherently streamable, and the buffer design allows for fetching data incrementally, but there are no other streaming constructs in glTF 2.0.
+* **glTF is not a streaming format.** The binary data in glTF is inherently streamable, and the buffer design allows for fetching data incrementally, but there are no other streaming constructs in glTF 2.1.
 
 * **glTF is not an authoring format.** glTF deliberately does not retain 3D authoring information, in order to preserve runtime efficiency, however glTF files may be ingested by 3D authoring tools for remixing.
 
@@ -484,7 +484,7 @@ These two examples represent the same glTF JSON data.
 -----
 {
     "asset": {
-        "version": "2.0"
+        "version": "2.1"
     },
     "nodes": [
         {
@@ -501,7 +501,7 @@ These two examples represent the same glTF JSON data.
 -----
 {
     "asset": {
-        "version": "2.0"
+        "version": "2.1"
     },
     "nodes": [
         {
@@ -537,7 +537,7 @@ This is typically achieved with algorithms like Grisu2 used by common JSON libra
 [[uris]]
 == URIs
 
-glTF assets use <<uri,URIs>> or <<iri,IRIs>> to reference buffers and image resources. Assets **MAY** contain at least these two URI types:
+glTF assets use <<uri,URIs>> or <<iri,IRIs>> to reference buffers, files, and image resources. Assets **MAY** contain at least these two URI types:
 
 - **Data URIs** that embed binary resources in the glTF JSON as defined by the <<data-uri,RFC 2397>>. The Data URI's `mediatype` field **MUST** match the encoded content.
 +
@@ -600,15 +600,18 @@ image::figures/objects.svg[pdfwidth=6in,align=left]
 [[asset]]
 == Asset
 
-Each glTF asset **MUST** have an `asset` property. The `asset` object **MUST** contain a `version` property that specifies the target glTF version of the asset. Additionally, an optional `minVersion` property **MAY** be used to specify the minimum glTF version support required to load the asset. The `minVersion` property allows asset creators to specify a minimum version that a client implementation **MUST** support in order to load the asset. This is very similar to the `extensionsRequired` concept described in <<specifying-extensions>>, where an asset **SHOULD NOT** be loaded if the client does not support the specified extension. Additional metadata **MAY** be stored in optional properties such as `generator` or `copyright`.  For example,
+Each glTF asset **MUST** have an `asset` property. The `asset` object **MUST** contain a `version` property that specifies the target glTF version of the asset. Additionally, an optional `minVersion` property **MAY** be used to specify the minimum glTF version support required to load the asset. The `minVersion` property allows asset creators to specify a minimum version that a client implementation **MUST** support in order to load the asset. This is very similar to the `extensionsRequired` concept described in <<specifying-extensions>>, where an asset **SHOULD NOT** be loaded if the client does not support the specified extension.
+
+Additional metadata **MAY** be stored in optional properties such as `generator`, `copyright`, and/or `thumbnail`. For example:
 
 [source,json]
 ----
 {
     "asset": {
-        "version": "2.0",
+        "version": "2.1",
         "generator": "collada2gltf@f356b99aef8868f74877c7ca545f2cd206b9d3b7",
-        "copyright": "2017 (c) Khronos Group"
+        "copyright": "2026 (c) Khronos Group",
+        "thumbnail": 0
     }
 }
 ----
@@ -684,9 +687,11 @@ Chromaticity coordinates define the interpretation of each primary color channel
 [[scenes-overview]]
 === Overview
 
-glTF 2.0 assets **MAY** contain zero or more _scenes_, the set of visual objects to render. Scenes are defined in a `scenes` array. All nodes listed in `scene.nodes` array **MUST** be root nodes, i.e., they **MUST NOT** be listed in a `node.children` array of any node. The same root node **MAY** appear in multiple scenes.
+glTF 2.1 assets **MAY** contain zero or more _scenes_, the set of visual objects to render. Scenes are defined in a `scenes` array. All nodes listed in `scene.nodes` array **MUST** be root nodes, i.e., they **MUST NOT** be listed in a `node.children` array of any node. The same root node **MAY** appear in multiple scenes.
 
 An additional root-level property, `scene` (note singular), identifies which of the scenes in the array **SHOULD** be displayed at load time. When `scene` is undefined, client implementations **MAY** delay rendering until a particular scene is requested.
+
+As of glTF 2.1, the ability to define more than one scene is deprecated. The `scenes` array **SHOULD** contain at most one scene, and if the `scene` property is defined, it **SHOULD** be set to `0`. When importing glTF 2.x assets, client implementations **SHOULD** use the `scene` property. When exporting glTF 2.x assets, client implementations **SHOULD NOT** include more than one scene in the `scenes` array or set the `scene` property to a value other than `0`.
 
 A glTF asset that does not contain any scenes **SHOULD** be treated as a library of individual entities such as materials or meshes.
 
@@ -752,6 +757,7 @@ The node hierarchy is defined using a node's `children` property, as in the foll
 
 The node named `Car` has four children. Each of those nodes could in turn have its own children, creating a hierarchy of nodes.
 
+Nodes **MAY** reference external assets. After loading the external asset file, the root nodes in the external asset's default scene are treated as children of the referencing node. See the section on <<external-assets,referencing External Assets>> for further details.
 
 [[transformations]]
 === Transformations
@@ -845,6 +851,41 @@ The next example defines the transform for a node with attached camera using the
 ----
 
 
+[[bounding-volumes]]
+=== Bounding Volumes
+
+Any glTF node **MAY** define a local space bounding volume using a node's `boundingVolume` property. A bounding volume is a simple geometric shape, optionally transformed, that **SHOULD** completely enclose the node's geometry.
+
+Bounding volumes contain the following properties:
+
+[options="header"]
+|====
+| Property      | Description
+| `shape`       | The index of the shape in the top-level `shapes` array. Required.
+| `rotation`    | The bounding volume's unit quaternion rotation relative to the node's local coordinate system.
+| `scale`       | The bounding volume's scale along the rotated local X, Y, and Z axes.
+| `translation` | The bounding volume's translation along the node's local X, Y, and Z axes.
+|====
+
+Multiple bounding volumes defined in a node hierarchy form a bounding volume hierarchy (BVH), which can be used to accelerate frustum culling, occlusion culling, ray tracing, and so on. Bounding volume hierarchies **SHOULD** have spatial coherence, meaning that a node's bounding volume completely encloses the geometry of its descendants.
+
+Bounding volumes may be used to defer loading of content based on application-specific criteria, such as the angular size on a player's camera, or any other metric. Bounding volumes may be used to restrict rendering, interactions, or anything else to a specific volume of space. Implementations may choose to use bounding volumes for any purpose.
+
+The tightness or looseness of the bounding volume may be customized by the asset author depending on the use case. For example, a bounding volume used for a skinned mesh is **RECOMMENDED** to be large enough to contain the mesh in all reasonable deformation states, such as the possible poses of a character. Similarly, a bounding volume placed on a parent with multiple animated children is **RECOMMENDED** to be large enough to contain all of the children in all reasonable animation states. Alternatively, such a parent could simply not define a bounding volume, and dynamically rely on the bounding volumes of its children, if any.
+
+Skinned mesh nodes with bounding volumes **SHOULD** be placed as children of the skeleton root node (if the skin defines a skeleton root node), or as a sibling of a root of its joint hierarchy. This allows the bounding volume to be transformed together with the skeletal hierarchy, such that root motion is applied to the bounding volume. This keeps the skinned mesh's bounding volume consistent with its skin-joint-node-determined visual representation.
+
+`"box"`` and `"sphere"` are the supported shape types for bounding volumes due to their simplicity and efficiency. Additional shape types **MAY** be allowed via extensions.
+
+Additionally, changing the shape parameters **SHOULD** be preferred over changing the bounding volume's `scale`.
+
+[NOTE]
+.Implementation Note
+====
+Many engines use axis-aligned bounding boxes (AABBs) for mesh culling. When converting from bounding volumes to AABBs programmatically, the resulting AABB should include all extents of the original bounding volume, including any transformations. Note that the transformations may be non-conformal (e.g. a transformation with a skew or a non-uniform scale).
+====
+
+
 [[binary-data-storage]]
 == Binary Data Storage
 
@@ -930,11 +971,13 @@ Buffers and buffer views do not contain type information. They simply define the
 
 The glTF asset **MAY** use the GLB file container to pack glTF JSON and one glTF buffer into one file. Data for such a buffer is provided via the GLB-stored `BIN` chunk.
 
-A buffer with data provided by the GLB-stored `BIN` chunk, **MUST** be the first element of `buffers` array and it **MUST** have its `buffer.uri` property undefined. When such a buffer exists, a `BIN` chunk **MUST** be present.
+A buffer **MAY** have its data provided by a GLB-stored chunk. This is done explicitly by specifying the `buffer.chunk` property in the buffer object. When a buffer references a chunk by index, that chunk **MUST** be present in the GLB.
 
-Any glTF buffer with undefined `buffer.uri` property that is not the first element of `buffers` array does not refer to the GLB-stored BIN chunk, and the behavior of such buffers is left undefined to accommodate future extensions and specification versions.
+Alternatively, for backwards compatibility with glTF 2.0, the first buffer in the `buffers` array **MAY** have its data implicitly provided by a GLB-stored `BIN` chunk when neither the `buffer.chunk` nor `buffer.uri` properties are defined. When such a buffer exists at buffer index 0, a `BIN` chunk **MUST** be present at chunk index 1 in the GLB file, immediately following the JSON chunk at chunk index 0. Other buffers do not have this implicit behavior, and **MUST** have one of its `buffer.chunk` or `buffer.uri` properties defined to explicitly reference its data.
 
-The byte length of the `BIN` chunk **MAY** be up to 3 bytes bigger than JSON-defined `buffer.byteLength` value to satisfy GLB padding requirements.
+Any glTF buffer with undefined `buffer.chunk` and `buffer.uri` properties that is not the first element of `buffers` array does not refer to the GLB-stored BIN chunk, and the behavior of such buffers is left undefined to accommodate future extensions and specification versions.
+
+The byte length of the `BIN` chunk **MAY** be up to 7 bytes bigger than JSON-defined `buffer.byteLength` value to satisfy GLB padding requirements.
 
 [NOTE]
 .Implementation Note
@@ -949,7 +992,8 @@ In the following example, the first buffer object refers to GLB-stored data, whi
 {
     "buffers": [
         {
-            "byteLength": 35884
+            "byteLength": 35884,
+            "chunk": 1
         },
         {
             "byteLength": 504,
@@ -1083,7 +1127,7 @@ On top of that, a sparse accessor includes a `sparse` JSON object describing the
 
 - `count`: number of displaced elements. This number **MUST NOT** be greater than the number of the base accessor elements.
 
-- `indices`: object describing the location and the component type of indices of values to be replaced. The indices **MUST** form a strictly increasing sequence. The indices **MUST NOT** be greater than or equal to the number of the base accessor elements. 
+- `indices`: object describing the location and the component type of indices of values to be replaced. The indices **MUST** form a strictly increasing sequence. The indices **MUST NOT** be greater than or equal to the number of the base accessor elements.
 
 - `values`: object describing the location of displaced elements corresponding to the indices referred from the `indices`.
 
@@ -1500,7 +1544,7 @@ For assets that contain a higher number of morphed attributes, client implementa
 [NOTE]
 .Implementation Note
 ====
-A significant number of authoring and client implementations associate names with morph targets. While the glTF 2.0 specification currently does not provide a way to specify names, most tools use an array of strings, `mesh.extras.targetNames`, for this purpose. The `targetNames` array and all primitive `targets` arrays must have the same length.
+A significant number of authoring and client implementations associate names with morph targets. While the glTF 2.1 specification currently does not provide a way to specify names, most tools use an array of strings, `mesh.extras.targetNames`, for this purpose. The `targetNames` array and all primitive `targets` arrays must have the same length.
 ====
 
 
@@ -1510,7 +1554,7 @@ A significant number of authoring and client implementations associate names wit
 [[skins-overview]]
 ==== Overview
 
-glTF 2.0 meshes support Linear Blend Skinning via skin objects, joint hierarchies, and designated vertex attributes.
+glTF 2.1 meshes support Linear Blend Skinning via skin objects, joint hierarchies, and designated vertex attributes.
 
 Skins are stored in the `skins` array of the asset. Each skin is defined by a **REQUIRED** `joints` property that lists the indices of nodes used as joints to pose the skin and an **OPTIONAL** `inverseBindMatrices` property that points to an accessor with inverse bind matrices data used to bring coordinates being skinned into the same space as each joint.
 
@@ -1762,7 +1806,7 @@ The following example shows a skinned mesh instance: a skin object, a node with 
 [[texture-data-overview]]
 === Overview
 
-glTF 2.0 separates texture access into three distinct types of objects: Textures, Images, and Samplers.
+glTF 2.1 separates texture access into three distinct types of objects: Textures, Images, and Samplers.
 
 
 [[textures]]
@@ -1782,7 +1826,7 @@ Textures are stored in the asset's `textures` array. A texture is defined by an 
 }
 ----
 
-glTF 2.0 supports only static 2D textures.
+glTF 2.1 supports only static 2D textures.
 
 When `texture.source` is undefined, the image **SHOULD** be provided by an extension or application-specific means, otherwise the texture object is undefined.
 
@@ -2266,7 +2310,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#infinite-perspective-projection[infinite perspective projection].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#infinite-perspective-projection[infinite perspective projection].
 ====
 endif::[]
 
@@ -2299,7 +2343,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#finite-perspective-projection[finite perspective projection].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#finite-perspective-projection[finite perspective projection].
 ====
 endif::[]
 
@@ -2332,7 +2376,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#orthographic-projection[orthographic projection].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#orthographic-projection[orthographic projection].
 ====
 endif::[]
 
@@ -2353,24 +2397,24 @@ When `r / t` does not match the aspect ratio of the viewport, client implementat
 
 glTF supports articulated and skinned animation via key frame animations of nodes' transforms. Key frame data is stored in buffers and referenced in animations using accessors.
 
-glTF 2.0 also supports animation of instantiated morph targets in a similar fashion.
+glTF 2.1 also supports animation of instantiated morph targets in a similar fashion.
 
 [NOTE]
 .Note
 ====
-glTF 2.0 only supports animating node transforms and morph target weights. Extensions or a future version of the specification may support animating arbitrary properties, such as material colors and texture transformation matrices.
+glTF 2.1 only supports animating node transforms and morph target weights. Extensions or a future version of the specification may support animating arbitrary properties, such as material colors and texture transformation matrices.
 ====
 
 [NOTE]
 .Note
 ====
-glTF 2.0 defines only storage of animation keyframes, so this specification doesn't define any runtime behavior, such as: order of playing, auto-start, loops, mapping of timelines, etc. When loading a glTF 2.0 asset, client implementations may select an animation entry and pause it on the first frame, play it automatically, or ignore all animations until further user requests. When a playing animation is stopped, client implementations may reset the scene to the initial state or freeze it at the current frame.
+glTF 2.1 defines only storage of animation keyframes, so this specification doesn't define any runtime behavior, such as: order of playing, auto-start, loops, mapping of timelines, etc. When loading a glTF 2.1 asset, client implementations may select an animation entry and pause it on the first frame, play it automatically, or ignore all animations until further user requests. When a playing animation is stopped, client implementations may reset the scene to the initial state or freeze it at the current frame.
 ====
 
 [NOTE]
 .Implementation Note
 ====
-glTF 2.0 does not specifically define how an animation will be used when imported but, as a best practice, it is recommended that each animation is self-contained as an action. For example, "`Walk`" and "`Run`" animations might each contain multiple channels targeting a model's various bones. The client implementation may choose when to play any of the available animations.
+glTF 2.1 does not specifically define how an animation will be used when imported but, as a best practice, it is recommended that each animation is self-contained as an action. For example, "`Walk`" and "`Run`" animations might each contain multiple channels targeting a model's various bones. The client implementation may choose when to play any of the available animations.
 ====
 
 All animations are stored in the `animations` array of the asset. An animation is defined as a set of channels (the `channels` property) and a set of samplers that specify accessors with key frame data and interpolation method (the `samplers` property).
@@ -2588,6 +2632,187 @@ See <<appendix-c-interpolation,Appendix C>> for additional information about int
 
 Skinned animation is achieved by animating the joints in the skin's joint hierarchy.
 
+[[file-references]]
+== File references
+
+Files references **MAY** be added to a top-level `files` array. The file's data **MAY** be stored externally and referenced by a `uri` or stored as binary in a buffer and referenced by `bufferView` index.
+
+Each file object **MUST** define a `mimeType` property, which may be any media type that matches the file's contents. 
+
+Files with a `mimeType` of `model/gltf+json` or `model/gltf-binary` **MAY** define a list of `aliases` that can be used to match and redirect a `uri` inside of the referred file. Any `uri` in the referenced file that matches the value `alias` exactly **SHOULD** use the associated `file` instead. This allows for efficient packing of resources shared across several referenced files, or overriding inner data. Aliases are not inherited from the parent asset. Extensions may add additional mime types that can define `aliases`.
+
+[NOTE]
+.Implementation Note
+====
+If the same `uri` is used within multiple file references, implementations should not assume that the files are identical without validation.
+====
+
+[source,json]
+----
+{
+    "files": [
+        {
+            "uri": "path-to-a.gltf",
+            "mimeType": "model/gltf+json",
+            "aliases": [
+                {
+                    "alias": "path-to-a.bin",
+                    "file": 1
+                }
+            ]
+        },
+        {
+            "uri": "path-to-a.bin",
+            "mimeType": "application/gltf-buffer"
+        },
+        {
+            "uri": "https://example.org/path-to-a.glb",
+            "mimeType": "model/gltf-binary"
+        },
+        {
+            "bufferView": 0,
+            "mimeType": "model/gltf-binary"
+        }
+    ]
+}
+----
+
+[[external-assets]]
+== Referencing external assets
+
+glTF 2.1 defines the ability to compose complex scenes. A complex scene is one or more glTF assets including a scene from another glTF asset by referencing that glTF as an external asset. Complex scenes are defined using multiple components: file references to define where the data is stored and external asset definitions that define the scene from the referenced glTF asset to include.
+
+External glTF assets **MAY** be added to a top-level `externalAssets` array. The external asset **MUST** contain a `file` property that refers to an object in the `files` array by index. Multiple objects in the `externalAssets` array may refer to the same `file`. All external assets **MUST** refer to files with the `"model/gltf-binary"` or `"model/gltf+json"` media types. Cyclical references between external assets are strictly prohibited. 
+
+[source,json]
+----
+{
+    "files": [
+        {
+            "uri": "path-to-a.gltf",
+            "mimeType": "model/gltf+json"
+        },
+        {
+            "uri": "path-to-a.bin",
+            "mimeType": "application/gltf-buffer"
+        },
+        {
+            "uri": "path-to-b.glb",
+            "mimeType": "model/gltf-binary"
+        },
+        {
+            "bufferView": 0,
+            "mimeType": "model/gltf-binary"
+        }
+    ],
+    "externalAssets": [
+        {
+            "file": 0
+        },
+        {
+            "file": 2
+        },
+        {
+            "file": 3
+        }
+    ],
+}
+----
+
+[NOTE]
+.Implementation Note
+====
+When an embedded external asset is embedded via a <<data-uri,Data URI>> or a `bufferView`, any relative URIs it contains should resolve against the same filesystem root as the parent asset, unless the URI is remapped by an alias. _E.g._, If asset `A` embeds external asset `B`, and `B` references textures at the relative path `./textures/**`, those textures resolve relative to the location of `A`, making them accessible to both `A` and `B`.
+====
+
+Nodes *MAY* contain an `externalAsset` property that refers to an external glTF asset in the `externalAssets` array by index.
+
+[NOTE]
+.Implementation Note
+====
+When the same external asset is referenced by multiple nodes, it is recommended that all related JSON objects except for `buffer` objects are cloned. The `buffer` reference may be retained to allow sharing binary data between external asset instances. This maximizes compatibility with existing extensions while also minimizing the amount of duplicated binary data. Future specification versions or extensions may introduce mechanisms to allow better sharing of object definitions across external asset instances.
+====
+
+Once loaded, the root nodes defined by the external asset's default scene and their node hierarchies are treated as being attached as children to the node containing the `externalAsset` reference.
+
+[source,json]
+----
+{
+    "nodes": [
+        {
+            "name": "RootNode",
+            "translation": [0, 0, 0],
+            "children": [1, 2]
+        },
+        {
+            "translation": [2, 0, 20],
+            "externalAsset": 0
+        },
+        {
+            "translation": [0, 0, 0],
+            "children": [3],
+            "externalAsset": 1
+        },
+        {
+            "translation": [0, 1, 1],
+            "externalAsset": 2
+        }
+    ]
+}
+----
+
+This instantiates the external asset as this node in the scene hierarchy. The root nodes in the default `scene` of the nested glTF become children of this external asset node. Assets that have no `scenes` array or lack a default `scene` are valid but have nothing to attach to the node hierarchy and should be treated as such. Extensions or future spec versions **MAY** alter this behavior.
+
+[NOTE]
+.Implementation Note
+====
+Nodes may contain both an `externalAsset` and other `children`. For consistency between implementations, it is recommended that the root node(s) of the external asset are attached after the other children of the node.
+====
+
+See <<appendix-d-external-asset-diagrams, Appendix D>> for detailed diagrams outlining a sample structure and the expected scene graph.
+
+[[shapes]]
+== Shapes
+
+glTF defines an array of shapes. All built-in shape types are "implicit" shapes, meaning that they have a surface defined by a mathematical function, and they have a distinct inside and outside.
+
+Similar to other glTF objects, shapes in this array do not automatically have behavior. Other objects in the glTF document may use these shapes to instance them in the scene, providing the geometry data required for the behavior of that object, such as bounding volumes, or extension-defined physics colliders.
+
+Each shape is specified with a mandatory `type` property, and an additional structure with various size parameters depending on the type of shape. The following example defines a sphere shape with a radius of 0.1 meters.
+
+[source,json]
+----
+{
+    "shapes": [
+        {
+            "sphere": { "radius": 0.1 },
+            "type": "sphere"
+        }
+    ]
+}
+----
+
+
+The core glTF 2.1 specification includes the following shape types:
+
+[options="header"]
+|====
+| `"box"`      | An axis-aligned box with a size per-axis, centered at the origin in local space, with normals facing outwards along each axis.
+| `"capsule"`  | A capsule, centered at the origin in local space with potentially different radii at each end, equivalent to the convex hull of two spheres located along the Y axis (in local space) at a specified distance, with normals facing outwards.
+| `"cylinder"` | A cylinder, centered at the origin in local space with potentially different radii at each end, equivalent to the convex hull of two circles in the X/Z plane positioned along the Y axis at a specified distance, with the top cap normal facing along the +Y axis, the bottom cap normal facing along the -Y axis, and the side normals facing outwards along the X/Z plane.
+| `"plane"`    | A plane centered at the origin in local space, optionally with finite extents, with normal along the +Y axis in local space. The plane is one-sided.
+| `"sphere"`   | A sphere, centered at the origin in local space with a radius equal in all directions, with normals facing outwards.
+|====
+
+
+A sub-object with a key matching the shape type **MAY** be used to specify the size parameters of the shape. When the `type` of a shape refers to a built-in shape type, the shape must not supply a sub-object for a different shape type: for example, a shape whose `type` is "box" must not have a `sphere` property defined.
+
+By default, planes have infinite extents along their tangent and bitangent vectors, specified as +X and +Z in local space, respectively. A plane may optionally provide `sizeX` and `sizeZ` properties to specify a finite total size along these axes. The center of the plane's surface is at the origin in local space. The entirety of the space behind the plane, in its local -Y direction, is considered inside of the plane.
+
+Degenerate shapes are prohibited. A sphere must have a positive, non-zero radius. A box shape must have positive non-zero values for each component of `size`. The cylinder and capsule shapes must have a positive, non-zero `height`, both `radiusTop` and `radiusBottom` must be non-negative, and at least one of `radiusTop` and `radiusBottom` must be non-zero. A plane must have positive non-zero `sizeX` and `sizeZ` extents, if provided.
+
+Extensions **MAY** define additional shape types, in which case the `type` **MAY** be set to a custom value, or set to one of the built-in shape types to provide a fallback.
+
 
 [[specifying-extensions]]
 == Specifying Extensions
@@ -2665,7 +2890,7 @@ A Binary glTF asset can still refer to external resources. For example, an appli
 
 A Binary glTF (which can be a file, for example) has the following structure:
 
-* A 12-byte preamble, called the _header_.
+* A 12-byte (binary format version 2) or 16-byte (binary format version 3) preamble, called the _header_.
 * One or more _chunks_ that contain JSON content and binary data.
 
 The _chunk_ containing JSON **MAY** refer to external resources as usual, and **MAY** also reference resources stored within other _chunks_.
@@ -2683,10 +2908,15 @@ The registered media type is `model/gltf-binary`.
 [[binary-gltf-layout-overview]]
 === Overview
 
-Binary glTF is little endian. The figure below shows an example of a Binary glTF asset.
+Binary glTF is little endian. The figure below shows an example of the binary format version 2 layout:
 
-.Binary glTF Layout
+.Binary glTF Version 2 Layout
 image::figures/glb2.svg[pdfwidth=6in,align=left]
+
+The figure below shows an example of the binary format version 3 layout:
+
+.Binary glTF Version 3 Layout
+image::figures/glb3.svg[pdfwidth=7in,align=left]
 
 The following sections describe the structure more in detail.
 
@@ -2694,7 +2924,9 @@ The following sections describe the structure more in detail.
 [[binary-header]]
 === Header
 
-The 12-byte header consists of three 4-byte entries:
+The file header consists of three entries, of different sizes depending on the binary format version.
+
+For binary format version 2, the 12-byte header consists of three 4-byte entries:
 
 [source,c]
 ----
@@ -2703,11 +2935,22 @@ uint32 version
 uint32 length
 ----
 
+For binary format version 3, the 16-byte header consists of two 4-byte entries and one 8-byte entry:
+
+[source,c]
+----
+uint32 magic
+uint32 version
+uint64 length
+----
+
 * `magic` **MUST** be equal to equal `0x46546C67`. It is ASCII string `glTF` and can be used to identify data as Binary glTF.
-* `version` indicates the version of the Binary glTF container format. This specification defines version 2.
+* `version` indicates the version of the Binary glTF container format. The glTF 2.1 specification defines version 2 and version 3.
 +
 Client implementations that load GLB format **MUST** also check for the <<asset,asset version properties>> in the JSON chunk, as the version specified in the GLB header only refers to the GLB container version.
 * `length` is the total length of the Binary glTF, including _header_ and all _chunks_, in bytes.
++
+In binary format version 3, the most significant bit **MUST** be 0, which limits file sizes to 8 EiB (exbibytes).
 
 
 [[chunks]]
@@ -2716,7 +2959,9 @@ Client implementations that load GLB format **MUST** also check for the <<asset,
 [[chunks-overview]]
 ==== Overview
 
-Each chunk has the following structure:
+Each chunk has a header followed by a variable-length payload, with the header structure depending on the binary format version.
+
+For binary format version 2, each chunk has an 8-byte header followed by a variable-length payload:
 
 [source,c]
 ----
@@ -2725,19 +2970,30 @@ uint32 chunkType
 ubyte[] chunkData
 ----
 
-* `chunkLength` is the length of `chunkData`, in bytes.
+For binary format version 3, each chunk has a 16-byte header followed by a variable-length payload:
+
+[source,c]
+----
+uint32 chunkType
+uint32 chunkEncoding
+uint64 chunkLength
+ubyte[] chunkData
+----
+
 * `chunkType` indicates the type of chunk. See <<table-chunktypes>> for details.
+* `chunkEncoding` indicates the encoding method used for the chunk data. See <<chunk-encoding>> for details.
+* `chunkLength` is the length of `chunkData`, in bytes. In binary format version 3, the most significant bit **MUST** be 0, which limits chunk sizes to 8 EiB (exbibytes).
 * `chunkData` is the binary payload of the chunk.
 
-The start and the end of each chunk **MUST** be aligned to a 4-byte boundary. See chunks definitions for padding schemes. Chunks **MUST** appear in exactly the order given in <<table-chunktypes>>.
+In binary format version 2, the start and the end of each chunk **MUST** be aligned to a 4-byte boundary. In binary format version 3, the start of each chunk **MUST** be aligned to an 8-byte boundary. The start of each chunk is the next 4-byte (v2) or 8-byte (v3) aligned boundary after the end of the previous chunk. See chunk definitions for padding schemes. Chunks **MUST** (v2) or **SHOULD** (v3) appear in exactly the order given in <<table-chunktypes>>.
 
 [[table-chunktypes]]
 .Chunk types
 [options="header"]
 |====
 |    | Chunk Type | ASCII | Description             | Occurrences
-| 1. | 0x4E4F534A | JSON  | Structured JSON content | 1
-| 2. | 0x004E4942 | BIN   | Binary buffer           | 0 or 1
+| 1. | 0x4E4F534A | JSON  | Structured JSON content | 1 (v2), 1 or more (v3)
+| 2. | 0x004E4942 | BIN\0 | Binary buffer           | 0 or 1 (v2), 0 or more (v3)
 |====
 
 Client implementations **MUST** ignore chunks with unknown types to enable glTF extensions to reference additional chunks with new types following the first two chunks.
@@ -2754,9 +3010,9 @@ This chunk holds the glTF JSON, as it would be provided within a .gltf file.
 In a JavaScript implementation, the `TextDecoder` API can be used to extract the glTF content from the ArrayBuffer, and then the JSON can be parsed with `JSON.parse` as usual.
 ====
 
-This chunk **MUST** be the very first chunk of a Binary glTF asset. By reading this chunk first, an implementation is able to progressively retrieve resources from subsequent chunks. This way, it is also possible to read only a selected subset of resources from a Binary glTF asset.
+In binary format version 2, this chunk **MUST** be the very first chunk of a Binary glTF asset. In binary format version 3, the first chunk that is a JSON chunk is the glTF JSON chunk, allowing for non-JSON chunks to precede the glTF JSON chunk. By reading this chunk first, an implementation is able to progressively retrieve resources from subsequent chunks. This way, it is also possible to read only a selected subset of resources from a Binary glTF asset.
 
-This chunk **MUST** be padded with trailing `Space` chars (`0x20`) to satisfy alignment requirements.
+If the chunk content is padded, the padding **MUST** use trailing `Space` chars (`0x20`). If the chunk has padding after the end of the content, the padding **MUST** use trailing zeros (`0x00`).
 
 
 [[binary-buffer]]
@@ -2764,11 +3020,28 @@ This chunk **MUST** be padded with trailing `Space` chars (`0x20`) to satisfy al
 
 This chunk contains the binary payload for geometry, animation key frames, skins, and images. See <<glb-stored-buffer,GLB-stored Buffer>> for details on referencing this chunk from JSON.
 
-This chunk **MUST** be the second chunk of the Binary glTF asset.
+In binary format version 2, this chunk **MUST** be the second chunk of the Binary glTF asset. In binary format version 3, binary buffer chunks are explicitly referenced by index from the JSON chunk's buffers array, allowing for multiple binary buffer chunks to be present in a Binary glTF asset.
 
-This chunk **MUST** be padded with trailing zeros (`0x00`) to satisfy alignment requirements.
+If the chunk is padded after the end of the content, the padding **MUST** be trailing zeros (`0x00`).
 
 When the binary buffer is empty or when it is stored by other means, this chunk **SHOULD** be omitted.
+
+
+[[chunk-encoding]]
+==== Chunk Encoding
+
+In binary format version 3 only, between each chunk's type and size, the `chunkEncoding` field indicates the encoding method used for the chunk data, such as compression or encryption.
+
+The value `0x00000000` indicates that the chunk data is plainly encoded, meaning the chunk data does not need to be decoded (such as decompressed or decrypted) before use. Other values indicate that the chunk data requires decoding before use. Alternate encoding schemes **SHOULD** be defined in glTF extensions, however such extensions are not required to be marked as used in the JSON chunk.
+
+Chunk-level encoding is distinct from any encoding that may be applied to data within chunks (such as storing a `.zip` file within a buffer in a `BIN` chunk).
+
+Each chunk specifies its own encoding, which allows chunks within the same Binary glTF asset to use different encoding methods. This allows applications to read enough of the file to determine its overall layout even when the chunk contents cannot be read, ensuring that file identification utilities can still recognize the file as a Binary glTF asset.
+
+Client implementations **MUST** refuse to load chunks with unknown encoding methods, and **MUST** refuse to load binary glTF files whose JSON chunk is encoded with an unknown method.
+
+In binary format version 2, the `chunkEncoding` field is not present. All binary format version 2 chunks are plainly encoded, equivalent to `0x00000000` in binary format version 3.
+
 
 [[properties-reference]]
 = Properties Reference
@@ -2777,8 +3050,8 @@ ifndef::revdate[]
 .Note
 ====
 This section is auto-generated, and will be a broken link when previewing.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#properties-reference[Properties Reference Section].
-To suggest changes, open a Pull Request to edit the https://github.com/KhronosGroup/glTF/tree/main/specification/2.0/schema[JSON Schema Files].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#properties-reference[Properties Reference Section].
+To suggest changes, open a Pull Request to edit the https://github.com/KhronosGroup/glTF/tree/main/specification/2.1/schema[JSON Schema Files].
 ====
 endif::[]
 
@@ -2854,8 +3127,8 @@ ifndef::revdate[]
 .Note
 ====
 This section is auto-generated, and will be a broken link when previewing.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#appendix-a-json-schema-reference[JSON Schema Reference].
-To suggest changes, open a Pull Request to edit the https://github.com/KhronosGroup/glTF/tree/main/specification/2.0/schema[JSON Schema Files].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#appendix-a-json-schema-reference[JSON Schema Reference].
+To suggest changes, open a Pull Request to edit the https://github.com/KhronosGroup/glTF/tree/main/specification/2.1/schema[JSON Schema Files].
 ====
 endif::[]
 
@@ -2869,7 +3142,7 @@ include::JsonSchemaReference.adoc[]
 [[appendix-b-brdf-implementation-general]]
 == General
 
-This chapter presents the bidirectional reflectance distribution function (BRDF) of the glTF 2.0 metallic-roughness material. The BRDF describes the reflective properties of the surface of a physically based material. For a pair of directions, the BRDF returns how much light from the incoming direction is reflected from the surface in the outgoing direction.
+This chapter presents the bidirectional reflectance distribution function (BRDF) of the glTF 2.1 metallic-roughness material. The BRDF describes the reflective properties of the surface of a physically based material. For a pair of directions, the BRDF returns how much light from the incoming direction is reflected from the surface in the outgoing direction.
 
 [NOTE]
 .Note
@@ -3031,7 +3304,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#specular-brdf[Specular BRDF Section].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#specular-brdf[Specular BRDF Section].
 ====
 endif::[]
 
@@ -3102,7 +3375,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#diffuse-brdf[Diffuse BRDF Section].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#diffuse-brdf[Diffuse BRDF Section].
 ====
 endif::[]
 
@@ -3131,7 +3404,7 @@ ifndef::revdate[]
 .Note
 ====
 This section contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#fresnel[Fresnel Section].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#fresnel[Fresnel Section].
 ====
 endif::[]
 
@@ -3267,7 +3540,7 @@ ifndef::revdate[]
 .Note
 ====
 This appendix contains formulas that may not display correctly in all preview tools.
-View the full https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#appendix-c-interpolation[Appendix C: Animation Sampler Interpolation Modes].
+View the full https://www.khronos.org/registry/glTF/specs/2.1/glTF-2.1.html#appendix-c-interpolation[Appendix C: Animation Sampler Interpolation Modes].
 ====
 endif::[]
 
@@ -3374,3 +3647,132 @@ This can be achieved by ensuring that stem:[v_k != -v_{k+1}] for all keyframes.
 ====
 
 The first in-tangent stem:[a_1] and last out-tangent stem:[b_n] **SHOULD** be zeros as they are not used in the spline calculations.
+
+[appendix]
+[[appendix-d-external-asset-diagrams]]
+= External Asset Scene Graph Diagrams
+
+== Overview
+
+This section provides informative example JSON and diagrams of External Assets to demonstrate the expected node hierarchy from implementations. For full normative details, see the sections on <<nodes-and-hierarchy>>, <<file-references>>, and <<external-assets>>.
+
+The following three sections represent the same asset and structure. The first two sections are diagrams to visually demonstrate hierarchy, and the third section is the equivalent glTF JSON for the assets represented within the diagrams.
+
+== Expected Scene Graph
+
+.Expected Scene Graph
+image::figures/external-assets-expected-scene-graph.svg[pdfwidth=100%,align=left]
+
+== glTF Structure & Hierarchy
+
+.glTF Structure & Hierarchy
+image::figures/external-assets-hierarchy.svg[pdfwidth=100%,align=left]
+
+== JSON
+
+=== Asset A
+
+[source,json]
+----
+{
+    "asset": {
+        "version": "2.1"
+    },
+    "scene": 0,
+    "scenes": [ { "nodes": [0] } ],
+    "files": [
+        {
+            "name": "File Ref. to Asset B",
+            "uri": "asset-b.glb",
+            "mimeType": "model/gltf-binary"
+        },
+        {
+            "name": "File Ref. to Asset C",
+            "uri": "asset-c.glb",
+            "mimeType": "model/gltf-binary"
+        },
+    ],
+    "externalAssets": [
+        {
+            "name": "External Asset 1",
+            "file": 0
+        },
+        {
+            "name": "External Asset 2",
+            "file": 1
+        }
+    ],
+    "nodes": [
+        {
+            "name": "Root Node A1",
+            "children": [ 1, 2, 3 ]
+        },
+        {
+            "name": "Node A1",
+            "externalAsset": 0
+        },
+        {
+            "name": "Node A2",
+            "externalAsset": 0
+        },
+        {
+            "name": "Node A3",
+            "externalAsset": 1
+        }
+    ]
+}
+----
+
+=== Asset B
+
+[source,json]
+----
+{
+    "asset": {
+        "version": "2.1"
+    },
+    "scene": 0,
+    "scenes": [ { "nodes": [0] } ],
+    "nodes": [
+        {
+            "name": "Root Node B1",
+            "children": [ 1, 2 ]
+        },
+        {
+            "name": "Node B1",
+        },
+        {
+            "name": "Node B2",
+        }
+    ]
+}
+----
+
+=== Asset C
+
+[source,json]
+----
+{
+    "asset": {
+        "version": "2.1"
+    },
+    "scene": 0,
+    "scenes": [ { "nodes": [0, 1] } ],
+    "nodes": [
+        {
+            "name": "Root Node C1",
+            "children": [ 2 ]
+        },
+        {
+            "name": "Root Node C2",
+            "children": [ 3 ]
+        },
+        {
+            "name": "Node C1",
+        },
+        {
+            "name": "Node C2",
+        }
+    ]
+}
+----
