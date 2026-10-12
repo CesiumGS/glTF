@@ -64,8 +64,8 @@ The following example describes a voxel tileset containing two metadata values i
 
 ```json
 {
-  "extensionsUsed": ["3DTILES_tileset", "3DTILES_tileset_voxels", "EXT_structural_metadata"],
-  "extensionsRequired": ["3DTILES_tileset", "3DTILES_tileset_voxels", "EXT_structural_metadata"],
+  "extensionsUsed": ["3DTILES_tileset", "3DTILES_tileset_voxels", "3DTILES_implicit_tiling", "EXT_structural_metadata"],
+  "extensionsRequired": ["3DTILES_tileset", "3DTILES_tileset_voxels", "3DTILES_implicit_tiling", "EXT_structural_metadata"],
   "asset": {
     "version": "2.1"
   },
