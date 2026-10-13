@@ -43,9 +43,11 @@ This extension georeferences a node to the provided geographic coordinates.
 
 This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system, in which`longitude` and `latitude` are specified in degrees and `height` above (or below) the ellipsoid is specified in meters. A different coordinate reference system may be specified with [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md).
 
-The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)), such that the node is georeferenced. The exact transform is implementation-dependant but is typically a translation and rotation which converts coordinates to WGS84 ECEF ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)), in which they are geocentric (planetocentric) coordinates.
+The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)), such that the node is georeferenced.
 
 The transform is expected to georeference a node by attaching the local coordinate origin to the provided geospatial location by a translation and adjustment of the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal.
+
+The resulting coordinate reference system is implementation-dependant but it is typically WGS84 ECEF ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)), in which the coordinates are geocentric (planetocentric) coordinates.
 
 The extension assumes the local coordiante system unit of length is 1 meter on all axes. The extension applies a rotation which has the following results:
 
