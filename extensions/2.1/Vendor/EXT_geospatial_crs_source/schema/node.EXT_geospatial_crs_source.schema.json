@@ -1,0 +1,59 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "node.EXT_geospatial_crs_source.schema.json",
+    "title": "EXT_geospatial_crs_source Node extension",
+    "type": "object",
+    "description": "Supplies additional transformation matrices that convert the content from its local model space to world space coordinate within the specified coordinate system.",
+    "$ref": "glTFProperty.schema.json",
+    "properties": {
+        "matrix": {
+            "type": "array",
+            "description": "A floating-point 4x4 transformation matrix stored in column-major order.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 16,
+            "maxItems": 16,
+            "default": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ],
+        },
+        "rotation": {
+            "type": "array",
+            "description": "A unit quaternion rotation in the order (x, y, z, w), where w is the scalar.",
+            "items": {
+                "type": "number",
+                "minimum": -1.0,
+                "maximum": 1.0
+            },
+            "minItems": 4,
+            "maxItems": 4,
+            "default": [ 0.0, 0.0, 0.0, 1.0 ]
+        },
+        "scale": {
+            "type": "array",
+            "description": "A non-uniform scale, given as the scaling factors along the x, y, and z axes.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 1.0, 1.0, 1.0 ]
+        },
+        "translation": {
+            "type": "array",
+            "description": "A translation along the x, y, and z axes.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 0.0, 0.0, 0.0 ]
+        }
+    },
+    "not": {
+        "anyOf": [
+            { "required": [ "matrix", "translation" ] },
+            { "required": [ "matrix", "rotation" ] },
+            { "required": [ "matrix", "scale" ] }
+        ]
+    }
+}

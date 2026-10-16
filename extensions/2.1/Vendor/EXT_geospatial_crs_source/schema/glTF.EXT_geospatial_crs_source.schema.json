@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "glTF.EXT_geospatial_crs_source.schema.json",
+    "title": "EXT_geospatial_crs_source glTF Document extension",
+    "type": "object",
+    "description": "This extension allows an asset to specify its source coordinate reference system (CRS) and supply additional transformation matrices that convert the content from its local model space to world space coordinate within the specified coordinate system.",
+    "$ref": "glTFProperty.schema.json",
+    "properties": {
+        "format": {
+            "type": "string",
+            "description": "The coordinate reference system format, whose value must be defined by additional extensions."
+        }
+    },
+    "required": [
+        "format"
+    ]
+}
