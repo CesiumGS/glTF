@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Sean Lilley, Cesium
 - Andreas Plesch, Earthstruct
+- Safwat Halaby
 
 ## Status
 
@@ -40,15 +41,15 @@ This extension georeferences a node to the provided geographic coordinates.
 }
 ```
 
-`longitude` and `latitude` are specified in degrees. `height` above (or below) the ellipsoid is specified in meters.
+This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system, in which`longitude` and `latitude` are specified in degrees and `height` above (or below) the ellipsoid is specified in meters. A different coordinate reference system may be specified with [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md).
 
-The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)). In this case local coordinates will be transformed to geocentric (planetocentric) coordinates.
+The extension is most useful when implementations use it to apply an additional transform on the node (see [Transformation Order](./README.md#transformation-order)), such that the node is georeferenced.
 
-This extension uses WGS84 ([EPSG:4979](https://epsg.org/crs_4979/WGS-84.html)) as the default coordinate reference system. A different coordinate reference system may be specified with [`EXT_geospatial_crs`](../EXT_geospatial_crs/README.md). In this case the longitude, latitude, and height values are geographic coordinates on the provided ellipsoid instead of the WGS84 ellipsoid.
+The transform is expected to georeference a node by attaching the local coordinate origin to the provided geospatial location by a translation and adjustment of the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal.
 
-The extension georeferences a node by attaching the local coordinate origin to the provided geospatial location by a translation. The extension also adjusts the orientation of the node. It will set the orientation by a rotation around the local origin to align the local coordinate system axes with the tangent plane on the selected ellipsoid at the specified location (see figure). The tangent plane uses the [geodetic normal](https://github.com/CesiumGS/community/blob/main/GeospatialGuide/README.md#whats-the-difference-between-geocentric-and-geodetic-latitude), not the geocentric normal.
+The resulting coordinate reference system is implementation-dependant but it is typically WGS84 ECEF ([EPSG:4978](https://epsg.org/crs_4978/WGS-84.html)), in which the coordinates are geocentric (planetocentric) coordinates.
 
-This extension applies a rotation which has the following results:
+The extension assumes the local coordiante system unit of length is 1 meter on all axes. The extension applies a rotation which has the following results:
 
 - The `-x` axis (local right) faces east
 - The `+y` axis (local up) faces up (normal to the tangent plane)
@@ -63,7 +64,7 @@ The georeference transform is applied **after** the node transform.
 
 In this example the node has a local 20° heading that is applied before the georeference transform. The heading is converted into a rotation quaternion about the local y (up) axis in the example.
 
-### Node without 20° heading
+### Example: Node without 20° heading
 
 > ![](./figures/plane.jpg)
 >
@@ -83,7 +84,7 @@ In this example the node has a local 20° heading that is applied before the geo
 ```
 
 
-### Node with 20° heading
+### Example: Node with 20° heading
 
 > ![](./figures/plane-heading.jpg)
 >
