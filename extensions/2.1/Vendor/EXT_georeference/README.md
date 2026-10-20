@@ -87,7 +87,7 @@ In this example the node has a local 20° heading that is applied before the geo
 
 > ![](./figures/plane-heading.jpg)
 >
-> The node of the aircraft rotated left to heading 20°
+> The node of the aircraft rotated clockwise to heading 20°
 
 
 ```json
