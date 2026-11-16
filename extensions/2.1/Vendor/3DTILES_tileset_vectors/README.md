@@ -79,7 +79,7 @@ A glTF tileset may be extended with `3DTILES_tileset_vectors`. This asset **MUST
     "3DTILES_tileset": {
       "geometricError": 500.0
     },
-    "3DTILES_tileset_vectors": { }
+    "3DTILES_tileset_vectors": { "vector": true }
   }
 }
 ```
@@ -114,6 +114,7 @@ When the `3DTILES_tileset_vectors` extension is attached to a tileset, a boolean
       "geometricError": 500.0
     },
     "3DTILES_tileset_vectors": {
+      "vector": true,
       "clip": true
     }
   }
